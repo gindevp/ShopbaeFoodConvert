@@ -15,8 +15,9 @@ public class AccountController {
 	private IAccountService accountService;
 	@RequestMapping("/")
 	public String find(Model model) {
-		Account a= new Account(6L,"ddddddfd","sdf",true,"hsf","084");
-		accountService.save(a);
+		Account a= new Account();
+		a.setId(23L);
+		accountService.delete(a);
 		model.addAttribute("account",accountService.findAll());
 		return "view";
 	}

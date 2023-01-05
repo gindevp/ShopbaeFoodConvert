@@ -2,8 +2,6 @@ package shopbae.food.repository;
 
 import java.util.List;
 
-import javax.persistence.Query;
-
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +20,6 @@ public class AccountRepository implements IAccountRepository{
 	@Override
 	public Account findById(Long id) {
 		Session session= sessionFactory.getCurrentSession();
-		System.out.println(session.get(Account.class, id));
 		return session.get(Account.class, id);
 	}
 
@@ -30,10 +27,7 @@ public class AccountRepository implements IAccountRepository{
 	public void save(Account t) {
 		// TODO Auto-generated method stub
 		Session session= sessionFactory.getCurrentSession();
-		String hql = "INSERT INTO Account(1L,'ddddddfd',true,'sdf','hsf','084')";
-	Query query = session.createQuery(hql);
-	int result = query.executeUpdate();
-	System.out.println("Rows affected: " + result);
+		session.save(t);
 	}
 
 	@Override

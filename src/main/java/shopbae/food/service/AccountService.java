@@ -21,19 +21,19 @@ private IAccountRepository accountRepository;
 	@Override
 	public void save(Account t) {
 		// TODO Auto-generated method stub
-		
+		accountRepository.save(t);
 	}
 
 	@Override
 	public void update(Account t) {
 		// TODO Auto-generated method stub
-		
+		accountRepository.update(t);
 	}
 
 	@Override
 	public void delete(Account t) {
 		// TODO Auto-generated method stub
-		
+		accountRepository.delete(t);
 	}
 
 	@Override

@@ -90,10 +90,18 @@ public class Account {
 	}
 	public Account() {
 	}
-
+	
 	public Account(Long id, @NotBlank String userName, @NotBlank String password, boolean isEnabled,
 			@NotBlank String email, String otp) {
 		this.id = id;
+		this.userName = userName;
+		this.password = password;
+		this.isEnabled = isEnabled;
+		this.email = email;
+		this.otp = otp;
+	}
+	public Account(@NotBlank String userName, @NotBlank String password, boolean isEnabled,
+			@NotBlank String email, String otp) {
 		this.userName = userName;
 		this.password = password;
 		this.isEnabled = isEnabled;
