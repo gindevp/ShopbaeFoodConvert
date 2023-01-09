@@ -16,29 +16,29 @@ import shopbae.food.model.Account;
 import shopbae.food.service.IAccountService;
 
 @Controller
-//@RequestMapping("/account")
+@RequestMapping("/account")
 public class AccountController {
 	@Autowired 
 	private IAccountService accountService;
 	@RequestMapping("/")
 	public String find(Model model) {
 		model.addAttribute("account",accountService.findAll());
-		return "account-list";
+		return "account/account-list";
 	}
 	@GetMapping("/login")
 	public String loginForm() {
-		return "login";
+		return "account/login";
 	}
 	@GetMapping("/add")
 	public String add(Model model) {
 		model.addAttribute("account",new Account());
-		return "account-save";
+		return "account/account-save";
 	}
 	@RequestMapping("/update/{id}")
 	  public String update(@PathVariable Long id, Model model) {
 	    Account account = accountService.findById(id);
 	    model.addAttribute("account", account);
-	    return "account-update";
+	    return "account/account-update";
 	  }
 	  @PostMapping("/save")
 	  public String doSave(@ModelAttribute("Account") Account account, Model model) {
@@ -65,6 +65,6 @@ public class AccountController {
 	  public String findAccountByName(@RequestParam(name= "name") String name, Model model) {
 	    List<Account> account = accountService.findByName(name);
 	    model.addAttribute("account", account);
-	    return "account-list";
+	    return "account/account-list";
 	  }
 }

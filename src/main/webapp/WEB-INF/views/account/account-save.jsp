@@ -4,7 +4,7 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <html>
 <head>
-<title>Helo Spring MVC + JDBC</title>
+<title>Add account</title>
 </head>
 <body>
 
