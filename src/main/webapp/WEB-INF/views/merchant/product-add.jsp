@@ -18,7 +18,7 @@
 &nbsp;
 &nbsp;
 &nbsp;
-<form [formGroup]="createForm" (ngSubmit)="create()" class="container" >
+<!-- <form [formGroup]="createForm" (ngSubmit)="create()" class="container" >
   <div class="mb-3 row">
     <label for="name" class="col-sm-2 col-form-label">Tên</label>
     <div class="col-sm-10">
@@ -31,9 +31,9 @@
           <p style="color: red"> Tên phải nhiều hơn 3 ký tự </p>
         </div>
       </div>
-        <!--    <div [hidden]="!name?.errors?.['pattern']">-->
-        <!--      <p style="color: red"> Tên chữ không được dùng ký tự khác  </p>-->
-        <!--    </div>-->
+           <div [hidden]="!name?.errors?.['pattern']">
+             <p style="color: red"> Tên chữ không được dùng ký tự khác  </p>
+           </div>
 
     </div>
 
@@ -83,16 +83,16 @@
     </div>
   </div>
 
-<!--    <div [hidden]="!shortDescription?.errors?.['pattern']">-->
-<!--      <p style="color: red"> Only characters are allowed </p>-->
-<!--    </div>-->
+   <div [hidden]="!shortDescription?.errors?.['pattern']">
+     <p style="color: red"> Only characters are allowed </p>
+   </div>
   </div>
 
 
   <button class="btn btn-dark" routerLink="/merchant/product-list">Hủy</button>
 &nbsp;
   <button class="btn btn-danger" [disabled]="disable">Thêm</button>
-</form>
+</form> -->
 
 </body>
 </html>
