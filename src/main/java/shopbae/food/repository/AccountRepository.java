@@ -47,7 +47,14 @@ public class AccountRepository implements IAccountRepository{
 	@Override
 	public List<Account> findAll() {
 		Session session= sessionFactory.getCurrentSession();
-		return session.createQuery("FROM account",Account.class).getResultList();
+		return session.createQuery("FROM account ",Account.class).getResultList();
+	}
+
+	@Override
+	public List<Account> findByName(String name) {
+		// TODO Auto-generated method stub
+		Session session= sessionFactory.getCurrentSession();
+		return session.createQuery("FROM account a where a.userName like concat('%','"+name+"','%')",Account.class).getResultList();
 	}
 
 }

@@ -4,16 +4,19 @@ import java.util.Properties;
 
 import javax.sql.DataSource;
 
-import org.hibernate.cfg.Environment;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
+import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 @Configuration
+@PropertySource("classpath:application.properties")
 public class HibernateCofig {
+	@Autowired
+	private Environment env;
 	@Bean
 	public LocalSessionFactoryBean getSessionFactory() {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
@@ -25,10 +28,10 @@ public class HibernateCofig {
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource= new DriverManagerDataSource();
-		dataSource.setDriverClassName("oracle.jdbc.driver.OracleDriver");
-		dataSource.setUrl("jdbc:oracle:thin:@localhost:1521:orcl2");
-		dataSource.setUsername("root");
-		dataSource.setPassword("123456");
+		dataSource.setDriverClassName(env.getProperty("hibernate.connection.driverClass"));
+		dataSource.setUrl(env.getProperty("hibernate.connection.url"));
+		dataSource.setUsername(env.getProperty("hibernate.connection.username"));
+		dataSource.setPassword(env.getProperty("hibernate.connection.password"));
 		return dataSource;
 	}
 	public Properties hibernateProperties() {

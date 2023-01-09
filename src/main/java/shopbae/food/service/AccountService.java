@@ -42,4 +42,10 @@ private IAccountRepository accountRepository;
 		return accountRepository.findAll();
 	}
 
+	@Override
+	public List<Account> findByName(String name) {
+		// TODO Auto-generated method stub
+		return accountRepository.findByName(name);
+	}
+
 }
