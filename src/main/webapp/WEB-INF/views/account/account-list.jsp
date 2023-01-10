@@ -8,7 +8,7 @@
 <title>Insert title here</title>
 </head>
 <body>
-<form action="/ShobaeFood/search" method = "get">
+<form action="/ShobaeFood/account/search" method = "get">
 <label for="name">Name: </label>
 <input type="text" name= "name" id= "name">
 <button>Search</button>
@@ -25,7 +25,7 @@
       <th>Edit</th>
       <th>Delete</th>
     </tr>
-    <c:forEach var="q" items="${account}" >
+    <c:forEach var="q" items="${accounts}" >
   	<tr >
   		<td>${q.id}</td>
   		<td>${q.userName}</td>

@@ -17,7 +17,9 @@ html {
   border-radius: 5px;
   transform: translateX(20px);
 }
-
+header{
+background-color: red
+}
 .selected:hover{
   color: white;
 }
@@ -32,6 +34,11 @@ nav a {
   border-radius: 5px;
   transform: translateX(20px);
 }
+.container-header {
+
+    background-color: #c1531975;
+
+}
 
 </style>
 <header class="main-header">
@@ -40,7 +47,7 @@ nav a {
     <div class="container">
       <div class="header-content navbar row  justify-content-between align-items-center">
         <div class="logo-now col-auto"><span><a href="index.html"><img
-          src="./assets/img/shopeefoodvn.png"
+          src="<c:url value = "/static/img/shopeefoodvn.png"/>"
           alt="ShopeeFood"></a></span></div>
 
         <div class="main-nav col"><span>Kênh người bán</span></div>

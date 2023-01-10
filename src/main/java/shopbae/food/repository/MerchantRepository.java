@@ -11,6 +11,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 import shopbae.food.model.Merchant;
+import shopbae.food.model.Product;
 @Repository
 @Transactional
 @EnableTransactionManagement
@@ -50,6 +51,13 @@ public class MerchantRepository implements IMerchantRepository{
 		// TODO Auto-generated method stub
 		Session session= sessionFactory.getCurrentSession();
 		return session.createQuery("FROM merchant ",Merchant.class).getResultList();
+	}
+
+	@Override
+	public List<Merchant> findByName(String name) {
+		// TODO Auto-generated method stub
+		Session session= sessionFactory.getCurrentSession();
+		return session.createQuery("FROM merchant a where a.name like concat('%','"+name+"','%')",Merchant.class).getResultList();
 	}
 
 }

@@ -22,7 +22,7 @@ public class AccountController {
 	private IAccountService accountService;
 	@RequestMapping("/")
 	public String find(Model model) {
-		model.addAttribute("account",accountService.findAll());
+		model.addAttribute("accounts",accountService.findAll());
 		return "account/account-list";
 	}
 	@GetMapping("/login")
@@ -62,9 +62,9 @@ public class AccountController {
 	    return "redirect:/";
 	  }
 	  @GetMapping("/search")
-	  public String findAccountByName(@RequestParam(name= "name") String name, Model model) {
+	  public String findAccountByName(@RequestParam String name, Model model) {
 	    List<Account> account = accountService.findByName(name);
-	    model.addAttribute("account", account);
+	    model.addAttribute("accounts", account);
 	    return "account/account-list";
 	  }
 }

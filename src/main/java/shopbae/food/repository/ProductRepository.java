@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-
+import shopbae.food.model.Account;
 import shopbae.food.model.Product;
 @Repository
 @Transactional
@@ -50,6 +50,13 @@ public class ProductRepository implements IProductRepository{
 		// TODO Auto-generated method stub
 		Session session= sessionFactory.getCurrentSession();
 		return session.createQuery("FROM product",Product.class).getResultList();
+	}
+
+	@Override
+	public List<Product> findByName(String name) {
+		// TODO Auto-generated method stub
+		Session session= sessionFactory.getCurrentSession();
+		return session.createQuery("FROM product a where a.name like concat('%','"+name+"','%')",Product.class).getResultList();
 	}
 
 }

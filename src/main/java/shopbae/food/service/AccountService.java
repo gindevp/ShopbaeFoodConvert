@@ -5,13 +5,14 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-
 import shopbae.food.model.Account;
 import shopbae.food.repository.IAccountRepository;
+
 @Service
-public class AccountService implements IAccountService{
-@Autowired
-private IAccountRepository accountRepository;
+public class AccountService implements IAccountService {
+	@Autowired
+	private IAccountRepository accountRepository;
+
 	@Override
 	public Account findById(Long id) {
 		// TODO Auto-generated method stub

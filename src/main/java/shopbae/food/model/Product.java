@@ -37,6 +37,24 @@ public class Product {
 		this.deleteFlag = deleteFlag;
 		this.merchant = merchant;
 	}
+	
+	public Product(String name, String shortDescription, Double oldPrice, Double newPrice, String image) {
+		this.name = name;
+		this.shortDescription = shortDescription;
+		this.oldPrice = oldPrice;
+		this.newPrice = newPrice;
+		this.image = image;
+	}
+
+	public Product(Long id, String name, String shortDescription, Double oldPrice, Double newPrice, String image) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.shortDescription = shortDescription;
+		this.oldPrice = oldPrice;
+		this.newPrice = newPrice;
+		this.image = image;
+	}
 
 	public Product() {
 	}

@@ -42,4 +42,10 @@ public class MerchantService implements IMerchantService {
 		return merchantRepository.findAll();
 	}
 
+	@Override
+	public List<Merchant> findByName(String name) {
+		// TODO Auto-generated method stub
+		return merchantRepository.findByName(name);
+	}
+
 }
