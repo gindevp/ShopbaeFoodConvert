@@ -60,4 +60,18 @@ public class MerchantRepository implements IMerchantRepository{
 		return session.createQuery("FROM merchant a where a.name like concat('%','"+name+"','%')",Merchant.class).getResultList();
 	}
 
+	@Override
+	public List<Merchant> getAllByMerchantStatus(String status) {
+		// TODO Auto-generated method stub
+		Session session= sessionFactory.getCurrentSession();
+		return session.createQuery("From merchant a where a.status='"+status+"'",Merchant.class).getResultList();
+	}
+
+	@Override
+	public List<Merchant> findAllMerchantAndNameContainer(String name) {
+		// TODO Auto-generated method stub
+		Session session= sessionFactory.getCurrentSession();
+		return session.createQuery("From merchant a where a.status='active' and a.name like concat('%','"+name+"','%')" ,Merchant.class).getResultList();
+	}
+
 }

@@ -34,11 +34,7 @@ nav a {
   border-radius: 5px;
   transform: translateX(20px);
 }
-.container-header {
 
-    background-color: #c1531975;
-
-}
 
 </style>
 <header class="main-header">

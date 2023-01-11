@@ -8,7 +8,7 @@ public class AppInit extends AbstractAnnotationConfigDispatcherServletInitialize
 	protected Class<?>[] getRootConfigClasses() {
 		// TODO Auto-generated method stub
 		return new Class[] {
-				HibernateCofig.class
+				
 		};
 	}
 
@@ -16,7 +16,7 @@ public class AppInit extends AbstractAnnotationConfigDispatcherServletInitialize
 	protected Class<?>[] getServletConfigClasses() {
 		// TODO Auto-generated method stub
 		return new Class[] {
-				AppConfig.class
+				AppConfig.class,HibernateCofig.class
 		};
 	}
 

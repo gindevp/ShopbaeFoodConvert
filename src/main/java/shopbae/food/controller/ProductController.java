@@ -22,7 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import shopbae.food.model.Account;
 import shopbae.food.model.Product;
-import shopbae.food.model.ProductForm;
+import shopbae.food.model.dto.ProductForm;
 import shopbae.food.service.IProductService;
 
 @Controller
@@ -68,7 +68,8 @@ public class ProductController {
 	  public String doDeleter(@PathVariable Long id, Model model) {
 		  Product a= new Product();
 		  a.setId(id);
-	    productService.delete(a);
+		  a.setDeleteFlag(false);
+	    productService.update(a);
 	    model.addAttribute("products", productService.findAll());
 	    return "redirect:/merchant/";
 	  }

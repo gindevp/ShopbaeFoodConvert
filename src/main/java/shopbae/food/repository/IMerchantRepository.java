@@ -8,4 +8,6 @@ import shopbae.food.service.IGeneral;
 
 public interface IMerchantRepository extends IGeneral<Merchant> {
 	List<Merchant> findByName(String name);
+	List<Merchant> getAllByMerchantStatus(String status);
+	List<Merchant> findAllMerchantAndNameContainer(String name);
 }

@@ -24,13 +24,13 @@ public class MerchantController {
 
 	@RequestMapping("/")
 	public String merchant(Model model) {
-
+		model.addAttribute(merchantService.getAllByMerchantStatus("active"));
 		return "merchant/merchant-page";
 	}
 
 	@GetMapping("/search")
 	public String findMerchantByName(@RequestParam String name, Model model) {
-		List<Merchant> merchant = merchantService.findByName(name);
+		List<Merchant> merchant = merchantService.findAllMerchantAndNameContainer(name);
 		model.addAttribute("merchant", merchant);
 		return "merchant/merchant-list";
 	}

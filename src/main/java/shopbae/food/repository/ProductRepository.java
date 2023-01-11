@@ -59,4 +59,16 @@ public class ProductRepository implements IProductRepository{
 		return session.createQuery("FROM product a where a.name like concat('%','"+name+"','%')",Product.class).getResultList();
 	}
 
+	@Override
+	public List<Product> getAllByDeleteFlagTrueAndMerchant(Long id) {
+		Session session= sessionFactory.getCurrentSession();
+		return session.createQuery("From product a where a.delete_flag = true and a.merchant_id ="+id,Product.class).getResultList();
+	}
+
+	@Override
+	public List<Product> fAllByDeleFlagTAndMerAndNameContai(Long id, String name) {
+		Session session= sessionFactory.getCurrentSession();
+		return session.createQuery("From Product p where p.delete_flag = true and p.merchant_id = "+id+" and p.name like concat('%','"+name+"', '%')",Product.class).getResultList();
+	}
+
 }

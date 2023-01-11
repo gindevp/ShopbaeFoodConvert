@@ -48,4 +48,16 @@ public class MerchantService implements IMerchantService {
 		return merchantRepository.findByName(name);
 	}
 
+	@Override
+	public List<Merchant> getAllByMerchantStatus(String status) {
+		// TODO Auto-generated method stub
+		return merchantRepository.getAllByMerchantStatus(status);
+	}
+
+	@Override
+	public List<Merchant> findAllMerchantAndNameContainer(String name) {
+		// TODO Auto-generated method stub
+		return merchantRepository.findAllMerchantAndNameContainer(name);
+	}
+
 }

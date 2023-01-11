@@ -49,4 +49,16 @@ public class ProductService implements IProductService {
 		return productRepository.findByName(name);
 	}
 
+	@Override
+	public List<Product> getAllByDeleteFlagTrueAndMerchant(Long id) {
+		// TODO Auto-generated method stub
+		return productRepository.getAllByDeleteFlagTrueAndMerchant(id);
+	}
+
+	@Override
+	public List<Product> fAllByDeleFlagTAndMerAndNameContai(Long id, String name) {
+		// TODO Auto-generated method stub
+		return productRepository.fAllByDeleFlagTAndMerAndNameContai(id, name);
+	}
+
 }

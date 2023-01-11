@@ -1,4 +1,6 @@
 eclipse.preferences.version=1
+encoding//src/main/webapp/WEB-INF/views/account/login.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/merchant/merchant-page.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/merchant/product-add.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/merchant/product-list.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/page/home.jsp=UTF-8

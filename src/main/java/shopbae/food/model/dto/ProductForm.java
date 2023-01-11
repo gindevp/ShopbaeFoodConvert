@@ -1,4 +1,4 @@
-package shopbae.food.model;
+package shopbae.food.model.dto;
 
 import org.springframework.web.multipart.MultipartFile;
 
