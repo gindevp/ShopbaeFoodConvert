@@ -1,7 +1,5 @@
 package shopbae.food.repository;
 
-import java.util.List;
-
 
 
 import shopbae.food.model.Account;

@@ -9,7 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
-import shopbae.food.model.Account;
+
 import shopbae.food.model.Product;
 @Repository
 @Transactional
@@ -53,22 +53,22 @@ public class ProductRepository implements IProductRepository{
 	}
 
 	@Override
-	public List<Product> findByName(String name) {
+	public Product findByName(String name) {
 		// TODO Auto-generated method stub
 		Session session= sessionFactory.getCurrentSession();
-		return session.createQuery("FROM product a where a.name like concat('%','"+name+"','%')",Product.class).getResultList();
+		return session.createQuery("FROM product a where a.name="+name,Product.class).getSingleResult();
 	}
 
 	@Override
 	public List<Product> getAllByDeleteFlagTrueAndMerchant(Long id) {
 		Session session= sessionFactory.getCurrentSession();
-		return session.createQuery("From product a where a.delete_flag = true and a.merchant_id ="+id,Product.class).getResultList();
+		return session.createQuery("From product a where a.deleteFlag = true and a.merchant ="+id,Product.class).getResultList();
 	}
 
 	@Override
 	public List<Product> fAllByDeleFlagTAndMerAndNameContai(Long id, String name) {
 		Session session= sessionFactory.getCurrentSession();
-		return session.createQuery("From Product p where p.delete_flag = true and p.merchant_id = "+id+" and p.name like concat('%','"+name+"', '%')",Product.class).getResultList();
+		return session.createQuery("From product p where p.deleteFlag = true and p.merchant = "+id+" and p.name like concat('%','"+name+"', '%')",Product.class).getResultList();
 	}
 
 }

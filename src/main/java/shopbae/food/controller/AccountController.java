@@ -1,6 +1,6 @@
 package shopbae.food.controller;
 
-import java.util.List;
+
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -10,16 +10,20 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
 
 import shopbae.food.model.Account;
+import shopbae.food.model.Merchant;
 import shopbae.food.service.IAccountService;
+import shopbae.food.service.IMerchantService;
 
 @Controller
 @RequestMapping("/account")
 public class AccountController {
 	@Autowired
 	private IAccountService accountService;
+	@Autowired
+	private IMerchantService merchantService;
 
 	@RequestMapping("/")
 	public String find(Model model) {
@@ -71,4 +75,14 @@ public class AccountController {
 //	    model.addAttribute("accounts", account);
 //	    return "account/account-list";
 //	  }
+//	@RequestMapping
+//	public String d(Model model) {
+//		Merchant merchant= new Merchant();
+//		Account account= new Account();
+//		account.setId(43L);
+//		merchant.setName("hihai");
+//		merchant.setAccount(account);
+//		merchantService.save(merchant);
+//		return "account/account-list";
+//	}
 }

@@ -9,7 +9,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import shopbae.food.model.Account;
 import shopbae.food.model.Merchant;
 import shopbae.food.service.IMerchantService;
 import shopbae.food.service.IProductService;
@@ -33,5 +32,15 @@ public class MerchantController {
 		List<Merchant> merchant = merchantService.findAllMerchantAndNameContainer(name);
 		model.addAttribute("merchant", merchant);
 		return "merchant/merchant-list";
+	}
+	@GetMapping("/dashboard")
+	public String chart( Model model) {
+		model.addAttribute("page","dashboard.jsp");
+		return "merchant/merchant-layout";
+	}
+	@GetMapping("/merchant-detail")
+	public String info( Model model) {
+		model.addAttribute("page","merchant-info.jsp");
+		return "merchant/merchant-layout";
 	}
 }

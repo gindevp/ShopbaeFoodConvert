@@ -19,7 +19,7 @@
 &nbsp;
 &nbsp;
 &nbsp;
-<form:form action="save" method="POST"
+<form:form action="/ShobaeFood/merchant/product/edit/save" method="POST"
     modelAttribute="productForm" class="container" enctype="multipart/form-data">
 
   
@@ -93,7 +93,7 @@
    </div> -->
   </div> 
 
- <button class="btn btn-dark" src='<c:url value = "/ShobaeFood/merchant/"/>'>Hủy</button>
+ <button class="btn btn-dark" src='/ShobaeFood/merchant/product/'>Hủy</button>
 &nbsp;
   <button class="btn btn-danger" type="submit">Sửa</button>
 </form:form>

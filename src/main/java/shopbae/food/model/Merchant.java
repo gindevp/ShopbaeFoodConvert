@@ -47,6 +47,18 @@ public class Merchant {
 		this.account = account;
 	}
 
+	public Merchant(String name, String phone, String address, String avatar, String openTime, String closeTime,
+			String status, Account account) {
+		this.name = name;
+		this.phone = phone;
+		this.address = address;
+		this.avatar = avatar;
+		this.openTime = openTime;
+		this.closeTime = closeTime;
+		this.status = status;
+		this.account = account;
+	}
+
 	public Long getId() {
 		return id;
 	}

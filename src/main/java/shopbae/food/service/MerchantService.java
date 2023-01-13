@@ -43,7 +43,7 @@ public class MerchantService implements IMerchantService {
 	}
 
 	@Override
-	public List<Merchant> findByName(String name) {
+	public Merchant findByName(String name) {
 		// TODO Auto-generated method stub
 		return merchantRepository.findByName(name);
 	}
@@ -58,6 +58,13 @@ public class MerchantService implements IMerchantService {
 	public List<Merchant> findAllMerchantAndNameContainer(String name) {
 		// TODO Auto-generated method stub
 		return merchantRepository.findAllMerchantAndNameContainer(name);
+	}
+
+	@Override
+	public void saveMerchantToRegister(String address, String avatar, String name, String phone, String status,
+			Long account_id) {
+		// TODO Auto-generated method stub
+		merchantRepository.saveMerchantToRegister(address, avatar, name, phone, status, account_id);
 	}
 
 }

@@ -1,6 +1,5 @@
 package shopbae.food.controller;
 
-import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,7 +20,7 @@ public class AppUserController {
 	private IAppUserService appUserService;
 	@GetMapping("/search")
 	public String findUserByName(@RequestParam String name, Model model) {
-		List<AppUser> appUsers = appUserService.findByName(name);
+		AppUser appUsers = appUserService.findByName(name);
 		model.addAttribute("appuser", appUsers);
 		return "user/user-list";
 	}

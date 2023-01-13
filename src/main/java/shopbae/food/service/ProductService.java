@@ -44,7 +44,7 @@ public class ProductService implements IProductService {
 	}
 
 	@Override
-	public List<Product> findByName(String name) {
+	public Product findByName(String name) {
 		// TODO Auto-generated method stub
 		return productRepository.findByName(name);
 	}

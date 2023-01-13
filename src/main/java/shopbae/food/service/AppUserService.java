@@ -44,9 +44,16 @@ public class AppUserService implements IAppUserService {
 	}
 
 	@Override
-	public List<AppUser> findByName(String name) {
+	public AppUser findByName(String name) {
 		// TODO Auto-generated method stub
 		return appUserRepository.findByName(name);
+	}
+
+	@Override
+	public void saveUserToRegister(String address, String avatar, String name, String phone, String status,
+			Long account_id) {
+		// TODO Auto-generated method stub
+		appUserRepository.saveUserToRegister(address, avatar, name, phone, status, account_id);
 	}
 
 }

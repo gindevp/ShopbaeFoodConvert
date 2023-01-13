@@ -9,6 +9,7 @@
 <title>Insert title here</title>
 </head>
 <body>
+
 &nbsp;
 &nbsp;
 &nbsp;
@@ -93,7 +94,8 @@
    </div> -->
   </div> 
 
- <button class="btn btn-dark" src='<c:url value = "/ShobaeFood/merchant/"/>'>Hủy</button>
+<button class="btn btn-dark" src='<c:url value = "/merchant/product"/>'>Hủy</button>
+
 &nbsp;
   <button class="btn btn-danger" type="submit">Thêm</button>
 </form:form>
