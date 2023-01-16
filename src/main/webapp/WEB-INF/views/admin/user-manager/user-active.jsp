@@ -10,7 +10,6 @@
       <th scope="col">Tên</th>
       <th scope="col">Điện thoại</th>
       <th scope="col">Địa chỉ</th>
-      <th scope="col" >Thời gian</th>
       <th scope="col" colspan="2">Khóa</th>
     </tr>
   
@@ -24,9 +23,8 @@
       <td class="merchant-item">${merchant.name}</td>
       <td class="merchant-item">${merchant.phone}</td>
       <td class="merchant-item">${merchant.address}</td>
-      <td class="merchant-item" size="50px">Mở:${merchant.openTime}  Đóng:${merchant.closeTime}</td>
 <!--      <td class="merchant-item">{{merchant.closeTime}}</td>-->
-      <td class="action-icon"><a href="${ pageContext.request.contextPath }/admin/merchant/block/${merchant.id}"><i class="fa-regular fas fa-lock"></i></a></td>
+      <td class="action-icon"><a href="${ pageContext.request.contextPath }/admin/user/block/${merchant.id}"><i class="fa-regular fas fa-lock"></i></a></td>
     </tr>
 </c:forEach>
   </table>

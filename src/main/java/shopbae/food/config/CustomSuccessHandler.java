@@ -19,12 +19,15 @@ import org.springframework.stereotype.Component;
 
 import shopbae.food.model.Account;
 import shopbae.food.service.IAccountService;
+import shopbae.food.service.IMerchantService;
 
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 	@Autowired
 	private IAccountService accountService;
+	@Autowired
+	private IMerchantService merchantService;
 
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
@@ -41,7 +44,11 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		HttpSession session = request.getSession();
 		session.setMaxInactiveInterval(15);
 		Account account = accountService.findByName(authentication.getName());
-		session.setAttribute("user", account);
+		System.out.println("alolo"+account.getId());
+		session.setAttribute("account", account);
+		if(merchantService.findByAccount(account.getId())!=null) {
+					session.setAttribute("merchant", merchantService.findByAccount(account.getId()));
+		}
 		session.setAttribute("username", account.getUserName());
 		session.setAttribute("authorities", authentication.getAuthorities());
 
@@ -69,7 +76,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		}
 		
 		if (isMerchant(roles)) {
-			url = "/home";
+			url = "/merchant";
 			return url;
 		}
 		

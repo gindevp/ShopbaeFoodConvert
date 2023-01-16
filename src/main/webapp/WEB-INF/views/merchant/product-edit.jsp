@@ -93,7 +93,7 @@
    </div> -->
   </div> 
 
- <button class="btn btn-dark" src='/ShobaeFood/merchant/product/'>Hủy</button>
+ <a class="btn btn-dark" href='${ pageContext.request.contextPath }/merchant/product/'>Hủy</a>
 &nbsp;
   <button class="btn btn-danger" type="submit">Sửa</button>
 </form:form>

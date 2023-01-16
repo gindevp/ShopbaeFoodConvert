@@ -19,7 +19,7 @@
                         class="btn btn-search"><span class="fa fa-search"></span></button>
               </a></div>
             </div>
-          <div class="category-list-filter"><a href="/ShobaeFood/all-merchant"><span
+          <div class="category-list-filter"><a href="${ pageContext.request.contextPath }/merchantp/all"><span
               class="category-item ">All</span></a><a (click)="quickSearch('Đồ ăn')"><span
               class="category-item ">Đồ ăn</span></a><a (click)="quickSearch('Đồ uống')"><span class="category-item ">Đồ uống</span></a><a
               (click)="quickSearch('Đồ chay')"><span
@@ -146,9 +146,9 @@
 <%--              List shops foreach--%>
               <c:forEach var="shops" items="${merchants}">
               <div class="item-restaurant"><a  class="item-content"
-                                              href="/ShobaeFood/merchant-detail/${shops.id}">
+                                              href="/ShobaeFood/merchantp/detail/${shops.id}">
                 <div class="img-restaurant"><img
-                        src="static/storage/${shops.avatar}"
+                        src="${ pageContext.request.contextPath }/static/storage/${shops.avatar}"
                         class=""></div>
                 <div class="info-restaurant">
                   <div class="info-basic-res">

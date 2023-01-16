@@ -61,10 +61,11 @@ public class MerchantService implements IMerchantService {
 	}
 
 	@Override
-	public void saveMerchantToRegister(String address, String avatar, String name, String phone, String status,
-			Long account_id) {
+	public Merchant findByAccount(Long id) {
 		// TODO Auto-generated method stub
-		merchantRepository.saveMerchantToRegister(address, avatar, name, phone, status, account_id);
+		return merchantRepository.findByAccount(id);
 	}
+
+	
 
 }

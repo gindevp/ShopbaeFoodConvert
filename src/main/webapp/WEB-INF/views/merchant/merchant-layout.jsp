@@ -42,7 +42,7 @@ nav a {
   <div class="container-header">
     <div class="container">
       <div class="header-content navbar row  justify-content-between align-items-center">
-        <div class="logo-now col-auto"><span><a href="index.html"><img
+        <div class="logo-now col-auto"><span><a href="${ pageContext.request.contextPath }/home"><img
           src="<c:url value = "/static/img/shopeefoodvn.png"/>"
           alt="ShopeeFood"></a></span></div>
 
@@ -155,7 +155,7 @@ nav a {
       <div class="position-sticky pt-3 sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item" >
-            <a class="nav-link active" aria-current="page" href="/ShobaeFood/merchant/dashboard">
+            <a class="nav-link active nav-item-hover" aria-current="page" href="/ShobaeFood/merchant">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-house-door-fill" viewBox="0 0 16 16">
                 <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z"/>
               </svg><span data-feather="home" class="align-text-bottom"></span>
@@ -190,7 +190,7 @@ nav a {
             </a>
           </li>
           <li class="nav-item " >
-            <a class="nav-link nav-item-hover" href="/ShobaeFood/merchant/merchant-detail">
+            <a class="nav-link nav-item-hover" href="/ShobaeFood/merchant/detail">
               <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-postage" viewBox="0 0 16 16">
                 <path d="M4.75 3a.75.75 0 0 0-.75.75v8.5c0 .414.336.75.75.75h6.5a.75.75 0 0 0 .75-.75v-8.5a.75.75 0 0 0-.75-.75h-6.5ZM11 12H5V4h6v8Z"/>
                 <path d="M3.5 1a1 1 0 0 0 1-1h1a1 1 0 0 0 2 0h1a1 1 0 0 0 2 0h1a1 1 0 1 0 2 0H15v1a1 1 0 1 0 0 2v1a1 1 0 1 0 0 2v1a1 1 0 1 0 0 2v1a1 1 0 1 0 0 2v1a1 1 0 1 0 0 2v1h-1.5a1 1 0 1 0-2 0h-1a1 1 0 1 0-2 0h-1a1 1 0 1 0-2 0h-1a1 1 0 1 0-2 0H1v-1a1 1 0 1 0 0-2v-1a1 1 0 1 0 0-2V9a1 1 0 1 0 0-2V6a1 1 0 0 0 0-2V3a1 1 0 0 0 0-2V0h1.5a1 1 0 0 0 1 1ZM3 3v10a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V3a1 1 0 0 0-1-1H4a1 1 0 0 0-1 1Z"/>

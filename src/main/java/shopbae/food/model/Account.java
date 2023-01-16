@@ -4,6 +4,7 @@ package shopbae.food.model;
 import java.util.Set;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -26,7 +27,7 @@ public class Account {
     private AppUser user;
     @OneToOne(mappedBy = "account")
     private Merchant merchant;
-    @OneToMany(mappedBy = "account")
+    @OneToMany(mappedBy = "account",fetch = FetchType.EAGER)
     private Set<AccountRoleMap> accountRoleMapSet;
     
 	public Account() {
@@ -50,6 +51,16 @@ public class Account {
 		this.email = email;
 		this.otp = otp;
 		this.accountRoleMapSet = accountRoleMapSet;
+	}
+
+
+
+
+	public Account(String userName, String password, boolean isEnabled, String email) {
+		this.userName = userName;
+		this.password = password;
+		this.isEnabled = isEnabled;
+		this.email = email;
 	}
 
 

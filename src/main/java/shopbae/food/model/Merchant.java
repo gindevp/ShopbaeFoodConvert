@@ -58,6 +58,17 @@ public class Merchant {
 		this.status = status;
 		this.account = account;
 	}
+	
+
+	public Merchant(String name, String phone, String address, String avatar, String status, Account account) {
+		super();
+		this.name = name;
+		this.phone = phone;
+		this.address = address;
+		this.avatar = avatar;
+		this.status = status;
+		this.account = account;
+	}
 
 	public Long getId() {
 		return id;

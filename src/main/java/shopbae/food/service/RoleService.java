@@ -1,10 +1,11 @@
 package shopbae.food.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import shopbae.food.model.AppRoles;
 import shopbae.food.repository.IRoleRepository;
-
+@Service
 public class RoleService implements IRoleService {
 	@Autowired
 	private IRoleRepository roleRepository;
@@ -16,7 +17,7 @@ public class RoleService implements IRoleService {
 	}
 
 	@Override
-	public void setDefaultRole(Long accountId, Integer roleId) {
+	public void setDefaultRole(Long accountId, Long roleId) {
 		// TODO Auto-generated method stub
 		roleRepository.setDefaultRole(accountId, roleId);
 	}

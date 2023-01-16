@@ -19,7 +19,7 @@
         
         </div>
         
-        <form th:action="@{/login}" method="post">
+        <form action="${ pageContext.request.contextPath }/login" method="post">
           <div class="form-login-input">
              <span th:text= "${mess}"></span>
             <div class="field-group">
@@ -39,13 +39,13 @@
             <div class="form-group clearfix">
               <div class="float-left"><input type="checkbox" id="RememberMe" checked=""><label for="RememberMe">Lưu
                 thông tin đăng nhập</label></div>
-              <span class="float-right"><a th:href="@{/forgotpass}">Quên mật
+              <span class="float-right"><a href="${ pageContext.request.contextPath }/forgotpass">Quên mật
                                     khẩu?</a></span>
             </div>
-            <button class="btn btn-block btn-submit" >Đăng nhập</button>
+            <button class="btn btn-block btn-submit" type="submit">Đăng nhập</button>
 
          <!--    <a th:href="@{/register/merchant}" class="btn btn-block btn-dark">Đăng ký</a> -->
-            <a href="register-user" class="btn btn-block btn-dark">Đăng ký</a>
+            <a href="${ pageContext.request.contextPath }/register/user" class="btn btn-block btn-dark">Đăng ký</a>
           </div>
           <br>
 

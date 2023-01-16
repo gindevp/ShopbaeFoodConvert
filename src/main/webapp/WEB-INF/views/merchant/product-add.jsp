@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"> 
     <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <!DOCTYPE html>
 <html>
@@ -94,7 +94,7 @@
    </div> -->
   </div> 
 
-<button class="btn btn-dark" src='<c:url value = "/merchant/product"/>'>Hủy</button>
+<a class="btn btn-dark" href="${ pageContext.request.contextPath }/merchant/product">Hủy</a>
 
 &nbsp;
   <button class="btn btn-danger" type="submit">Thêm</button>

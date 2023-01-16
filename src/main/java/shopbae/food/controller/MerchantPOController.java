@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.util.List;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -25,28 +27,40 @@ import shopbae.food.model.dto.ProductForm;
 import shopbae.food.service.IProductService;
 
 @Controller
-@RequestMapping("/merchant/product")
-public class ProductController {
+@RequestMapping("/merchant")
+public class MerchantPOController {
 	@Autowired
 	private IProductService productService;
+	@Autowired
+	
 	@Value("${file-upload}")
 	private String fileUpload;
 
-	@RequestMapping
-	public String product(Model model) {
-		model.addAttribute("products", productService.getAllByDeleteFlagTrueAndMerchant(1L));
+	@GetMapping
+	public String chart( Model model) {
+		model.addAttribute("page","dashboard.jsp");
+		return "merchant/merchant-layout";
+	}
+	@GetMapping("/detail")
+	public String info( Model model) {
+		model.addAttribute("page","merchant-info.jsp");
+		return "merchant/merchant-layout";
+	}
+	@RequestMapping("/product")
+	public String product(Model model, HttpSession httpSession) {
+		model.addAttribute("products", productService.getAllByDeleteFlagTrueAndMerchant(((Merchant) httpSession.getAttribute("merchant")).getId()));
 		model.addAttribute("page", "product-list.jsp");
 		return "merchant/merchant-layout";
 	}
 
-	@RequestMapping("/add")
+	@RequestMapping("/product/add")
 	public String productAdd(Model model) {
 		model.addAttribute("productForm", new ProductForm());
 		model.addAttribute("page", "product-add.jsp");
 		return "merchant/merchant-layout";
 	}
 
-	@PostMapping("/save")
+	@PostMapping("/product/save")
 	public String saveProduct(@ModelAttribute ProductForm productForm) {
 		System.out.println("Upload");
 		MultipartFile multipartFile = productForm.getImage();
@@ -70,7 +84,7 @@ public class ProductController {
 		return "redirect:/merchant/product/";
 	}
 
-	@RequestMapping("/delete/{id}")
+	@RequestMapping("/product/delete/{id}")
 	public String doDeleter(@PathVariable Long id, Model model) {
 		Product a = productService.findById(id);
 		a.setId(id);
@@ -80,7 +94,7 @@ public class ProductController {
 		return "redirect:/merchant/product/";
 	}
 
-	@RequestMapping("/edit/{id}")
+	@RequestMapping("/product/edit/{id}")
 	public String update(@PathVariable Long id, Model model) {
 		Product product = productService.findById(id);
 		ProductForm productForm = new ProductForm(product.getId(), product.getName(), product.getShortDescription(),
@@ -90,7 +104,7 @@ public class ProductController {
 		return "merchant/merchant-layout";
 	}
 
-	@PostMapping("/edit/save")
+	@PostMapping("/product/edit/save")
 	public String editProduct(@ModelAttribute ProductForm productForm) {
 		System.out.println("eidt " + productForm);
 		MultipartFile multipartFile = productForm.getImage();
@@ -113,11 +127,12 @@ public class ProductController {
 		return "redirect:/merchant/product/";
 	}
 
-	@GetMapping("/search")
+	@GetMapping("/product/search")
 	public String findProductByName(@RequestParam String name, Model model) {
 		List<Product> product = productService.fAllByDeleFlagTAndMerAndNameContai(1L, name);
 		model.addAttribute("products", product);
 		model.addAttribute("page", "product-list.jsp");
 		return "merchant/merchant-layout";
 	}
+	
 }

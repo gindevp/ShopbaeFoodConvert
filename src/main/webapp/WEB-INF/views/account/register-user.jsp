@@ -1,5 +1,6 @@
  <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <div class="now-login">
       <div class="content">
         <div class="title">Đăng ký người dùng</div>
@@ -22,12 +23,12 @@
           </form>
         </div>
         <!--        <p class="text">Hoặc đăng nhập bằng tài khoản của bạn</p>-->
-        <form [formGroup]="registerForm" (ngSubmit)="register()">
+        <form:form action="${ pageContext.request.contextPath }/register/user" modelAttribute="accountRegisterDTO" method="post">
           <div class="form-login-input">
             <div class="field-group">
-              <div class="input-group"><i class="far fa-user"></i><input type="text"
+              <div class="input-group"><i class="far fa-user"></i><form:input type="text"
                                                                          placeholder="Tên đăng ký" value=""
-                                                                         formControlName="userName">
+                                                                         path="userName"></form:input>
     <!--             <div *ngIf="!userName?.valid && (userName?.dirty || userName?.touched)">
                   <div [hidden]="!userName?.errors?.['required']">
                     <p style="color: red"> Tên không được trống </p>
@@ -41,8 +42,8 @@
                 </div>
               </div>
               <div class="field-group">
-              <div class="input-group"><i class="fas fa-lock"></i><input type="password" placeholder="Mật khẩu"
-                                                                         value="" formControlName="password">
+              <div class="input-group"><i class="fas fa-lock"></i><form:input type="password" placeholder="Mật khẩu"
+                                                                         value="" path="password"></form:input>
                 <!-- <div *ngIf="!password?.valid && (password?.dirty || password?.touched)">
                   <div [hidden]="!password?.errors?.['required']">
                     <p style="color: red"> Mật khẩu không được trống </p>
@@ -54,8 +55,8 @@
               </div>
 </div>
 <div class="field-group">
-              <div class="input-group"><i class="far fa-envelope"></i><input type="text" placeholder="Nhập email"
-                                                                             value="" formControlName="email">
+              <div class="input-group"><i class="far fa-envelope"></i><form:input type="text" placeholder="Nhập email"
+                                                                             value="" path="email"></form:input>
                 <!-- <div *ngIf="!email?.valid && (email?.dirty || email?.touched)">
                   <div [hidden]="!email?.errors?.['required']">
                     <p style="color: red"> Email không được trống </p>
@@ -71,9 +72,9 @@
                 </div>
               </div>
               <div class="field-group">
-              <div class="input-group"><i class="far fa-user"></i><input type="text"
+              <div class="input-group"><i class="far fa-user"></i><form:input type="text"
                                                                          placeholder="Nhập tên chủ tài khoản"
-                                                                         value="" formControlName="name">
+                                                                         value="" path="name"></form:input>
                 <!-- <div *ngIf="!name?.valid && (name?.dirty || name?.touched)">
                   <div [hidden]="!name?.errors?.['required']">
                     <p style="color: red"> Tên không được trống </p>
@@ -85,8 +86,8 @@
                 </div>
               </div>
               <div class="field-group">
-              <div class="input-group"><i class="fas fa-phone"></i><input type="text" placeholder="Nhập số điện thoại"
-                                                                          value="" formControlName="phone">
+              <div class="input-group"><i class="fas fa-phone"></i><form:input type="text" placeholder="Nhập số điện thoại"
+                                                                          value="" path="phone"></form:input>
                <!--  <div *ngIf="!phone?.valid && (phone?.dirty || phone?.touched)">
                   <div [hidden]="!phone?.errors?.['required']">
                     <p style="color: red"> Số điện thoại không được trống </p>
@@ -100,8 +101,8 @@
                 </div>
               </div>
               <div class="field-group">
-              <div class="input-group"><i class="fas fa-home"></i><input type="text" placeholder="Nhập địa chỉ"
-                                                                         value="" formControlName="address">
+              <div class="input-group"><i class="fas fa-home"></i><form:input type="text" placeholder="Nhập địa chỉ"
+                                                                         value="" path="address"></form:input>
                 <!-- <div *ngIf="!address?.valid && (address?.dirty || address?.touched)">
                   <div [hidden]="!address?.errors?.['required']">
                     <p style="color: red"> Địa chỉ không được trống </p>
@@ -121,7 +122,7 @@
             <!--          </div>-->
             <button class="btn btn-block btn-submit">Đăng ký</button>
           </div>
-        </form>
+        </form:form>
         ${message}
         <br>
         <div class="login-mess-policy">Chúng tôi không sử dụng thông tin của bạn với bất kỳ mục đích nào. Bằng cách đăng

@@ -11,6 +11,5 @@ public interface IMerchantService extends IGeneral<Merchant> {
 
 	List<Merchant> findAllMerchantAndNameContainer(String name);
 
-	void saveMerchantToRegister(String address, String avatar, String name, String phone, String status,
-			Long account_id);
+	Merchant findByAccount(Long id);
 }

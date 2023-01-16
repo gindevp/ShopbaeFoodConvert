@@ -33,7 +33,7 @@
       <div class="container-header">
         <div class="container">
           <div class="header-content navbar row  justify-content-between align-items-center">
-            <div class="logo-now col-auto"><span><a href="index.html"><img
+            <div class="logo-now col-auto"><span><a href="${ pageContext.request.contextPath }/home"><img
          src="<c:url value = "/static/img/shopeefoodvn.png"/>"
               alt="ShopBaeFood"></a></span></div>
           </div>

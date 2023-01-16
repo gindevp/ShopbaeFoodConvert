@@ -50,10 +50,10 @@ public class AppUserService implements IAppUserService {
 	}
 
 	@Override
-	public void saveUserToRegister(String address, String avatar, String name, String phone, String status,
-			Long account_id) {
+	public List<AppUser> getAllByStatus(String status) {
 		// TODO Auto-generated method stub
-		appUserRepository.saveUserToRegister(address, avatar, name, phone, status, account_id);
+		return appUserRepository.getAllByStatus(status);
 	}
+
 
 }

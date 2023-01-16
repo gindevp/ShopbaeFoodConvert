@@ -2,7 +2,7 @@ package shopbae.food.repository;
 
 import java.util.List;
 
-import javax.persistence.Query;
+
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -80,20 +80,17 @@ public class MerchantRepository implements IMerchantRepository {
 	}
 
 	@Override
-	public void saveMerchantToRegister(String address, String avatar, String name, String phone, String status,
-			Long account_id) {
+	public Merchant findByAccount(Long id) {
 		// TODO Auto-generated method stub
-		Session session = this.sessionFactory.getCurrentSession();
-		Query query = session
-				.createSQLQuery("Call INSERT_MERCHANT(:address ,:avatar,:name,:phone,:status, :account_id)")
-				.addEntity(Merchant.class);
-		query.setParameter("address", address);
-		query.setParameter("avatar", avatar);
-		query.setParameter("name", name);
-		query.setParameter("phone", phone);
-		query.setParameter("status", status);
-		query.setParameter("account_id", account_id);
-		query.executeUpdate();
+		Session session = sessionFactory.getCurrentSession();
+		try {
+			return session.createQuery("FROM merchant a where a.account =" + id, Merchant.class).getSingleResult();
+		}catch (Exception e) {
+			// TODO: handle exception
+			e.printStackTrace();
+			return null;
+		}
+		
 	}
 
 }
