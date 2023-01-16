@@ -48,7 +48,13 @@ public class MerchantPOController {
 	}
 	@RequestMapping("/product")
 	public String product(Model model, HttpSession httpSession) {
-		model.addAttribute("products", productService.getAllByDeleteFlagTrueAndMerchant(((Merchant) httpSession.getAttribute("merchant")).getId()));
+		try {
+			model.addAttribute("products", productService.getAllByDeleteFlagTrueAndMerchant(((Merchant) httpSession.getAttribute("merchant")).getId()));
+		} catch (Exception e) {
+			// TODO: handle exception
+			return "redirect:/home";
+		}
+		
 		model.addAttribute("page", "product-list.jsp");
 		return "merchant/merchant-layout";
 	}
