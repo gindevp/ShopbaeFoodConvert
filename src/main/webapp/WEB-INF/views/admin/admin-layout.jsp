@@ -55,12 +55,12 @@ nav a {
             <div class="main-nav col"><span>Kênh Admin</span></div>
 
             <div class="user-acc col-auto user-acc-wr">
-              <div *ngIf="message === 'chua dang nhap'; then thenBlockAcc else elseBlockAcc"></div>
-              <ng-template #thenBlockAcc>
-                <a href="/ShopbaeFood/logout"><button type="button"  class="btn btn-none-bg btn-login">
+
+
+                <a href="${ pageContext.request.contextPath }/logout"><button type="button"  class="btn btn-none-bg btn-login">
                   <span class="font14">Đăng xuất</span>
                 </button></a>
-              </ng-template>
+
 
 <!--               <ng-template #elseBlockAcc>
                 <div class="user-acc-contain">

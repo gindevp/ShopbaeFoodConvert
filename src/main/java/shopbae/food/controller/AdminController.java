@@ -19,6 +19,11 @@ public class AdminController {
 	private IMerchantService merchantService;
     @Autowired
     private IAppUserService appUserService;
+    
+    @GetMapping("")
+    public String defaultt() {
+    	return "redirect:/admin/merchant";
+    }
 	
 	@GetMapping("/merchant")
 	public String merActive(Model model) {

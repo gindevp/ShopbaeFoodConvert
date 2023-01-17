@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css"> 
+   <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form"%>
 <style>
 
 .desc{
@@ -91,12 +92,13 @@
   margin:16px 100px;
 }
 </style>
-<div class="container-fluid m-md-5 border" style=" width: 800px;">
+<div class="container m-md-5 border" style=" width: 800px;">
 
   <div class="row">
     <div class="title title-strong">Tài Khoản</div>
-    <div class="desc">Thay đổi thiết lập cơ bản</div>
+
   </div>
+  <form:form modelAttribute="merchant">
   <div class="setting-card">
     <div class="setting-card-inner">
       <div class="">
@@ -113,12 +115,10 @@
               <div class="account-profile">
                 <div class="account-profile-item">
                   <label for="image">
-                    <img [src]="imgSrc" class="account-profile-avatar" >
+                    
                   </label>
-                  <input type="file" id="image" hidden [disabled]="disabeled" (change)="showPreview($event)" (change)="showimg()" >
-                  <input class="account-profile-text" style="margin-left: 8px;" [disabled]="disabeled" [(ngModel)]="account.merchant.name" value="${account.merchant.name}" >
-
-                 <div> <img [src]="imgSrc" class="img" height="125" width="100" alt="Img" style='display:{{show}}'><br></div>
+                  <form:input path="avatar" type="file" id="image"   ></form:input>
+                  <form:input path="name" class="text" style="margin-left: 8px;" ></form:input>
 
                 </div>
               </div>
@@ -144,7 +144,7 @@
               <div class="title">Số điện thoại</div>
             </div>
             <div class="info">
-              <input class="info-input" [disabled]="disabeled" [(ngModel)]="account.merchant.phone" value="{{account.merchant.phone}}">
+              <form:input class="info-input" path="phone"></form:input>
             </div>
           </div>
         </div>
@@ -160,7 +160,7 @@
               <div class="title">Email</div>
             </div>
             <div class="info">
-              <input class="info-input" [disabled]="disabeled" [(ngModel)]="account.email" value="{{account.email}}">
+              <form:input class="info-input"  path="email"></form:input>
             </div>
           </div>
         </div>
@@ -192,9 +192,9 @@
               <div class="title">Giờ hoạt động</div>
             </div>
             <div class="info">
-              <input class="info-input-opentime info-input" [disabled]="disabeled" [(ngModel)]="account.merchant.openTime" value="{{account.merchant.openTime}}">
+              <form:input class="info-input-opentime info-input" path="openTime"></form:input>
               <span>--</span>
-              <input class="info-input-closetime info-input" [disabled]="disabeled" [(ngModel)]="account.merchant.closeTime" value="{{account.merchant.closeTime}}">
+              <form:input class="info-input-closetime info-input"  path="closeTime"></form:input>
             </div>
 
           </div>
@@ -203,7 +203,7 @@
       </div>
     </div>
   </div>
-
+</form:form>
 <div style="align-content: center">
   <button [disabled]="!disabeled" type="button" class="right-button" (click)="showFormUpdate()">
     <span><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-pencil-fill" viewBox="0 0 16 16">

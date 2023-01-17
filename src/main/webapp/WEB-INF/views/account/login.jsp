@@ -34,7 +34,7 @@
                 <input type="password" name="password" placeholder="Mật khẩu">
                 </div>
              </div>
-            
+            <h1>${error}</h1>
 
             <div class="form-group clearfix">
               <div class="float-left"><input type="checkbox" id="RememberMe" checked=""><label for="RememberMe">Lưu

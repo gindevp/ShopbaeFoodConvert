@@ -50,15 +50,15 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-		.antMatchers("/**").permitAll()
-//		antMatchers("/login", "/register/**", "/home", "/static/**","/merchantp/**").permitAll()
-//		.antMatchers("/admin/**").hasRole("ADMIN")
-//		.antMatchers("/merchant/**").hasRole("MERCHANT")
-//		.antMatchers("/**").hasAnyRole("ADMIN")
-//		.and().formLogin()
-//		.loginPage("/login")
-//		.usernameParameter("userName")
-//		.successHandler(customSuccessHandler)
+//		.antMatchers("/**").permitAll()
+		.antMatchers("/login", "/register/**", "/home", "/static/**","/merchantp/**","/mail/**").permitAll()
+		.antMatchers("/admin/**").hasRole("ADMIN")
+		.antMatchers("/merchant/**").hasRole("MERCHANT")
+		.antMatchers("/**").hasAnyRole("ADMIN")
+		.and().formLogin()
+		.loginPage("/login")
+		.usernameParameter("userName")
+		.successHandler(customSuccessHandler)
 		.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
 		.and().csrf().disable();
 

@@ -38,7 +38,7 @@ nav a {
 
 </style>
 <header class="main-header">
-
+ 
   <div class="container-header">
     <div class="container">
       <div class="header-content navbar row  justify-content-between align-items-center">
@@ -52,7 +52,9 @@ nav a {
             <img class="user-acc-img" src="" alt="">
             <span></span>
             <div class="user-acc-dropdown">
-              <span ><i class="fa-solid fa-right-to-bracket"></i> Đăng xuất</span>
+             <a href="${ pageContext.request.contextPath }/logout"><button type="button"  class="btn btn-none-bg btn-login">
+                  <span class="font14">Đăng xuất</span>
+                </button></a>
             </div>
           </div>
 

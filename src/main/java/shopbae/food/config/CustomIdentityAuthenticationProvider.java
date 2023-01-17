@@ -49,8 +49,16 @@ public class CustomIdentityAuthenticationProvider implements AuthenticationProvi
 		UserDetails userDetails = isValidUser(username, password);
 		Account account = accountService.findByName(username);
 		if (userDetails != null) {
-			if (account.getUser() != null && "block".equals(account.getUser().getStatus())) {
-				throw new BadCredentialsException("Tài khoản của bạn đã bị khóa !!");
+			if (account.getUser() != null) {
+				if ("pending".equals(account.getUser().getStatus())) {
+					throw new BadCredentialsException("Tài khoản đang chờ admin duyệt !!");
+				}
+				if ("block".equals(account.getUser().getStatus())) {
+					throw new BadCredentialsException("Tài khoản của bạn đã bị khóa !!");
+				}
+				if ("refuse".equals(account.getUser().getStatus())) {
+					throw new BadCredentialsException("Admin từ chối đăng ký Merchant !!");
+				}
 			}
 
 			if (account.getMerchant() != null) {

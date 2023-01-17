@@ -42,9 +42,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		}
 
 		HttpSession session = request.getSession();
-		session.setMaxInactiveInterval(15);
+		session.setMaxInactiveInterval(1500);
 		Account account = accountService.findByName(authentication.getName());
-		System.out.println("alolo"+account.getId());
 		session.setAttribute("account", account);
 		if(merchantService.findByAccount(account.getId())!=null) {
 					session.setAttribute("merchant", merchantService.findByAccount(account.getId()));

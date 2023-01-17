@@ -2,6 +2,7 @@ package shopbae.food.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpSession;
@@ -21,9 +22,12 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
+import shopbae.food.model.Account;
 import shopbae.food.model.Merchant;
 import shopbae.food.model.Product;
+import shopbae.food.model.dto.AccountRegisterDTO;
 import shopbae.food.model.dto.ProductForm;
+import shopbae.food.service.AccountService;
 import shopbae.food.service.IProductService;
 
 @Controller
@@ -32,18 +36,35 @@ public class MerchantPOController {
 	@Autowired
 	private IProductService productService;
 	@Autowired
-	
+	AccountService accountService;
 	@Value("${file-upload}")
 	private String fileUpload;
 
 	@GetMapping
-	public String chart( Model model) {
+	public String chart( Model model, HttpSession httpSession) {
+		List<Product> product= new ArrayList<>();
+		try {
+			product= productService.getAllByDeleteFlagTrueAndMerchant(((Merchant) httpSession.getAttribute("merchant")).getId());
+		} catch (Exception e) {
+			// TODO: handle exception
+			return "redirect:/home";
+		}
+		List<Object> name= new ArrayList<>() ;
+		List<Object> num= new ArrayList<>();
+		product.stream().forEach(c -> name.add(c.getName()));
+		product.stream().forEach(c -> num.add(c.getQuantity()));
+		model.addAttribute("name", name);
+		model.addAttribute("num", num);
 		model.addAttribute("page","dashboard.jsp");
 		return "merchant/merchant-layout";
 	}
 	@GetMapping("/detail")
-	public String info( Model model) {
+	public String info( Model model, HttpSession httpSession) {
 		model.addAttribute("page","merchant-info.jsp");
+		Long mId= ((Merchant) httpSession.getAttribute("merchant")).getId();
+		model.addAttribute("merchant",mId);
+		Account account= accountService.findById(mId);
+		// tạo changedto để binding dữ liệu của cả merchant và account
 		return "merchant/merchant-layout";
 	}
 	@RequestMapping("/product")
@@ -67,7 +88,7 @@ public class MerchantPOController {
 	}
 
 	@PostMapping("/product/save")
-	public String saveProduct(@ModelAttribute ProductForm productForm) {
+	public String saveProduct(@ModelAttribute ProductForm productForm, HttpSession httpSession) {
 		System.out.println("Upload");
 		MultipartFile multipartFile = productForm.getImage();
 		String fileName = multipartFile.getOriginalFilename();
@@ -80,7 +101,7 @@ public class MerchantPOController {
 				productForm.getNewPrice(), productForm.getOldPrice(), fileName);
 		product.setDeleteFlag(true);
 		Merchant merchant = new Merchant();
-		merchant.setId(1L);
+		merchant.setId( ((Merchant) httpSession.getAttribute("merchant")).getId());
 		product.setMerchant(merchant);
 		productService.save(product);
 //		ModelAndView modelAndView = new ModelAndView("merchant/merchant-layout");
@@ -111,7 +132,7 @@ public class MerchantPOController {
 	}
 
 	@PostMapping("/product/edit/save")
-	public String editProduct(@ModelAttribute ProductForm productForm) {
+	public String editProduct(@ModelAttribute ProductForm productForm, HttpSession httpSession) {
 		System.out.println("eidt " + productForm);
 		MultipartFile multipartFile = productForm.getImage();
 		String fileName = multipartFile.getOriginalFilename();
@@ -124,7 +145,7 @@ public class MerchantPOController {
 				productForm.getNewPrice(), productForm.getOldPrice(), fileName);
 		product.setDeleteFlag(true);
 		Merchant merchant = new Merchant();
-		merchant.setId(1L);
+		merchant.setId(((Merchant) httpSession.getAttribute("merchant")).getId());
 		product.setMerchant(merchant);
 		productService.update(product);
 //		ModelAndView modelAndView = new ModelAndView("merchant/merchant-layout");

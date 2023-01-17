@@ -43,7 +43,7 @@ public class LoginRegisterHomeController {
 	IAppUserService userSevice;
 
 	@GetMapping("/login")
-	public String showLoginForm(Model model) {
+	public String showLoginForm(Model model,HttpSession httpSession) {
 		model.addAttribute("page", "login.jsp");
 		return "account/account-layout";
 
@@ -96,7 +96,7 @@ public class LoginRegisterHomeController {
 		return "page/home-layout";
 	}
 
-	@GetMapping(value = { "/home" })
+	@GetMapping("/home")
 	public String home(Model model, HttpSession session) {
 		String userName = (String) session.getAttribute("username");
 		Account account = accountService.findByName(userName);
@@ -148,9 +148,9 @@ public class LoginRegisterHomeController {
 	}
 
 	@PostMapping("/register/user")
-	public String addUser(@ModelAttribute AccountRegisterDTO accountRegisterDTO) {
-
-		String status = "pending";
+	public String addUser(@ModelAttribute AccountRegisterDTO accountRegisterDTO,Model model) {
+try {
+	String status = "pending";
 		boolean isEnabled = true;
 		String pass = passwordEncoder.encode(accountRegisterDTO.getPassword());
 		Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled, accountRegisterDTO.getEmail());
@@ -163,10 +163,17 @@ public class LoginRegisterHomeController {
 				accountRegisterDTO.getPhone(), avatar, status, account2));
 
 		return "redirect:/login";
+} catch (Exception e) {
+	// TODO: handle exception
+	model.addAttribute("page", "register-user.jsp");
+	model.addAttribute("err", "trùng username");
+	return "account/account-layout";
+}
+		
 	}
 	@PostMapping("/register/merchant")
-	public String addMerchant(@ModelAttribute AccountRegisterDTO accountRegisterDTO) {
-
+	public String addMerchant(@ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model) {
+try {
 		String status = "pending";
 		boolean isEnabled = true;
 		String pass = passwordEncoder.encode(accountRegisterDTO.getPassword());
@@ -179,5 +186,11 @@ public class LoginRegisterHomeController {
 		merchantService.save(new Merchant(accountRegisterDTO.getName(), accountRegisterDTO.getPhone(), accountRegisterDTO.getAddress(), avatar, status, account2));
 
 		return "redirect:/login";
+} catch (Exception e) {
+	// TODO: handle exception
+	model.addAttribute("page", "register-merchant.jsp");
+	model.addAttribute("err", "trùng username");
+	return "account/account-layout";
+}
 	}
 }

@@ -24,7 +24,7 @@
         </div>
         <!--        <p class="text">Hoặc đăng nhập bằng tài khoản của bạn</p>-->
         <form:form action="${ pageContext.request.contextPath }/register/user" modelAttribute="accountRegisterDTO" method="post">
-          <div class="form-login-input">
+          <div class="form-login-input"><span style="color: red">${err}</span>
             <div class="field-group">
               <div class="input-group"><i class="far fa-user"></i><form:input type="text"
                                                                          placeholder="Tên đăng ký" value=""
@@ -123,7 +123,7 @@
             <button class="btn btn-block btn-submit">Đăng ký</button>
           </div>
         </form:form>
-        ${message}
+        
         <br>
         <div class="login-mess-policy">Chúng tôi không sử dụng thông tin của bạn với bất kỳ mục đích nào. Bằng cách đăng
           nhập hoặc đăng ký, bạn đồng ý với <a
