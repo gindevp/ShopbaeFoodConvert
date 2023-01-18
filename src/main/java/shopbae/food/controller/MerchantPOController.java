@@ -26,8 +26,10 @@ import shopbae.food.model.Account;
 import shopbae.food.model.Merchant;
 import shopbae.food.model.Product;
 import shopbae.food.model.dto.AccountRegisterDTO;
+import shopbae.food.model.dto.ChangeDTO;
 import shopbae.food.model.dto.ProductForm;
 import shopbae.food.service.AccountService;
+import shopbae.food.service.IMerchantService;
 import shopbae.food.service.IProductService;
 
 @Controller
@@ -35,6 +37,8 @@ import shopbae.food.service.IProductService;
 public class MerchantPOController {
 	@Autowired
 	private IProductService productService;
+	@Autowired
+	private IMerchantService merchantService;
 	@Autowired
 	AccountService accountService;
 	@Value("${file-upload}")
@@ -61,9 +65,39 @@ public class MerchantPOController {
 	@GetMapping("/detail")
 	public String info( Model model, HttpSession httpSession) {
 		model.addAttribute("page","merchant-info.jsp");
-		Long mId= ((Merchant) httpSession.getAttribute("merchant")).getId();
-		model.addAttribute("merchant",mId);
-		Account account= accountService.findById(mId);
+		Merchant merchant= (Merchant) httpSession.getAttribute("merchant");
+		ChangeDTO changeDTO= new ChangeDTO();
+		changeDTO.setName(merchant.getName());
+		changeDTO.setEmail(merchant.getAccount().getEmail());
+		changeDTO.setPhone(merchant.getPhone());
+		changeDTO.setOpenTime(merchant.getOpenTime());
+		changeDTO.setCloseTime(merchant.getCloseTime());
+		model.addAttribute("changeDTO",changeDTO);
+		// tạo changedto để binding dữ liệu của cả merchant và account
+		return "merchant/merchant-layout";
+	}
+	@PostMapping("/detail")
+	public String infoSave( @ModelAttribute ChangeDTO changeDTO, Model model, HttpSession httpSession) {
+		model.addAttribute("page","merchant-info.jsp");
+		MultipartFile multipartFile = changeDTO.getAvatar();
+		String fileName = multipartFile.getOriginalFilename();
+		try {
+			FileCopyUtils.copy(changeDTO.getAvatar().getBytes(), new File(fileUpload + fileName));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
+		Merchant merchant= (Merchant) httpSession.getAttribute("merchant");
+		Account account= merchant.getAccount();
+		merchant.setName(changeDTO.getName());
+		merchant.setPhone(changeDTO.getPhone());
+		merchant.setOpenTime(changeDTO.getOpenTime());
+		merchant.setCloseTime(changeDTO.getCloseTime());
+		merchant.setAvatar(fileName);
+		merchantService.update(merchant);
+		account.setEmail(changeDTO.getEmail());
+		accountService.update(account);
+		model.addAttribute("message","done");
 		// tạo changedto để binding dữ liệu của cả merchant và account
 		return "merchant/merchant-layout";
 	}

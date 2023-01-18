@@ -28,7 +28,6 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private CustomIdentityAuthenticationProvider customIdentityAuthenticationProvider;
 
-
 	@Override
 	@Bean
 	public AuthenticationManager authenticationManagerBean() throws Exception {
@@ -38,9 +37,8 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.authenticationProvider(customIdentityAuthenticationProvider);
-		auth.userDetailsService((UserDetailsService) accountService).passwordEncoder(passwordEncoder());
+//		auth.userDetailsService((UserDetailsService) accountService).passwordEncoder(passwordEncoder());
 	}
-
 
 	@Bean
 	public PasswordEncoder passwordEncoder() {
@@ -51,16 +49,12 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 //		.antMatchers("/**").permitAll()
-		.antMatchers("/login", "/register/**", "/home", "/static/**","/merchantp/**","/mail/**").permitAll()
-		.antMatchers("/admin/**").hasRole("ADMIN")
-		.antMatchers("/merchant/**").hasRole("MERCHANT")
-		.antMatchers("/**").hasAnyRole("ADMIN")
-		.and().formLogin()
-		.loginPage("/login")
-		.usernameParameter("userName")
-		.successHandler(customSuccessHandler)
-		.and().logout().logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
-		.and().csrf().disable();
+				.antMatchers("/login", "/register/**", "/home", "/static/**", "/merchantp/**", "/mail/**",
+						"/forgotpass/**", "/change-pass/**", "/cart/**","/user-info")
+				.permitAll().antMatchers("/admin/**").hasRole("ADMIN").antMatchers("/merchant/**").hasRole("MERCHANT")
+				.antMatchers("/**").hasAnyRole("ADMIN").and().formLogin().loginPage("/login")
+				.usernameParameter("userName").successHandler(customSuccessHandler).and().logout()
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).and().csrf().disable();
 
 //		   http
 //	        .sessionManagement(session -> session

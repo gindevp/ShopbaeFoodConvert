@@ -15,6 +15,7 @@
 
 </head>
 <style>
+
   .font15 {
     font-size: 15px;
   }
@@ -36,10 +37,19 @@
             <div class="logo-now col-auto"><span><a href="${ pageContext.request.contextPath }/home"><img
          src="<c:url value = "/static/img/shopeefoodvn.png"/>"
               alt="ShopBaeFood"></a></span></div>
+               <div class="user-acc col-auto">
+               
+               <c:if test="${page == 'forgotpass.jsp'|| page =='confirm-otp.jsp' }">
+              <a href="/ShobaeFood/login"><button type="button" class="btn btn-none-bg btn-login">
+                <span class="font14">Đăng nhập</span>
+              </button></a></c:if>
+            </div>
           </div>
+          
+          
         </div>
       </div>
-      
+     
   
     </header>
    

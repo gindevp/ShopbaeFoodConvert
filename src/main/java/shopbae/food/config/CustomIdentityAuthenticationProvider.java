@@ -30,11 +30,9 @@ public class CustomIdentityAuthenticationProvider implements AuthenticationProvi
 	UserDetails isValidUser(String username, String password) {
 		Account account = accountService.findByName(username);
 		if (account != null && username.equalsIgnoreCase(account.getUserName())
-				&& password.equals(account.getPassword())) {
-			List<GrantedAuthority> authorities = account.getAccountRoleMapSet().stream()
-					.map(role -> new SimpleGrantedAuthority(role.getRole().getName())).collect(Collectors.toList());
+				&& passwordEncoder.matches(password, account.getPassword())) {
 
-			UserDetails user = User.withUsername(username).password(password).authorities(authorities).build();
+			UserDetails user = accountService.loadUserByUsername(username);
 
 			return user;
 		}

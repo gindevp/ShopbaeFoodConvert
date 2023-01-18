@@ -14,10 +14,10 @@
 
         <!--        form login-->
         
-        <div th:if= "${param.error}" >
+
       <%--   <p style="color:red">[[${session.SPRING_SECURITY_LAST_EXCEPTION.message}]]</p> --%>
         
-        </div>
+   
         
         <form action="${ pageContext.request.contextPath }/login" method="post">
           <div class="form-login-input">
@@ -34,7 +34,13 @@
                 <input type="password" name="password" placeholder="Mật khẩu">
                 </div>
              </div>
-            <h1>${error}</h1>
+            <c:if test="${not empty sessionScope.SPRING_SECURITY_LAST_EXCEPTION}">
+    <!-- Display error message --> 
+    <p style="color:red">${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}</p>
+ 
+</c:if>
+        
+    
 
             <div class="form-group clearfix">
               <div class="float-left"><input type="checkbox" id="RememberMe" checked=""><label for="RememberMe">Lưu

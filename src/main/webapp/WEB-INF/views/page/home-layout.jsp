@@ -24,6 +24,7 @@
   <script src="https://www.google.com/recaptcha/api.js"></script>
   <script src="https://apis.google.com/js/platform.js" gapi_processed="true"></script>
   <!-- Google Tag Manager -->
+  <script src="https://kit.fontawesome.com/bb6a3cf0b7.js" crossorigin="anonymous"></script>
   <script>
     (function (w, d, s, l, i) {
       w[l] = w[l] || [];
@@ -4273,28 +4274,28 @@ input.required-data, select.required-data {
                 cưng</a>
             </div>
 
-<c:if test="${message == 'chua dang nhap'}">
+<c:if test="${sessionScope.message == 'chua dang nhap'}">
             <div class="user-acc col-auto">
               <a href="/ShobaeFood/login"><button type="button" class="btn btn-none-bg btn-login">
-                <span class="font14">Đăng nhập</span>
+                <span class="font14">Đăng nhập<c:out value=""/></span>
               </button></a>
             </div>
             </c:if>
         
             
-            <c:if test="${message != 'chua dang nhap'}">
+            <c:if test="${sessionScope.message != 'chua dang nhap'}">
             <div class="user-acc-contain">
-                  <img class="user-acc-img" src="${ pageContext.request.contextPath }/static/storage/${avatar}" alt="avatar">
+                  <img class="user-acc-img" src="${ pageContext.request.contextPath }/static/storage/${sessionScope.avatar}" alt="avatar">
                   <span>${name}</span>
                   <div class="user-acc-dropdown">
 
                     
-                    <c:if test="${role =='merchant'}">
+                    <c:if test="${sessionScope.role =='merchant'}">
                       <a class="user-acc-admin" style="font-size: 11px" href="${ pageContext.request.contextPath }/merchant"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-shop-window" viewBox="0 0 16 16">
   <path d="M2.97 1.35A1 1 0 0 1 3.73 1h8.54a1 1 0 0 1 .76.35l2.609 3.044A1.5 1.5 0 0 1 16 5.37v.255a2.375 2.375 0 0 1-4.25 1.458A2.371 2.371 0 0 1 9.875 8 2.37 2.37 0 0 1 8 7.083 2.37 2.37 0 0 1 6.125 8a2.37 2.37 0 0 1-1.875-.917A2.375 2.375 0 0 1 0 5.625V5.37a1.5 1.5 0 0 1 .361-.976l2.61-3.045zm1.78 4.275a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0 1.375 1.375 0 1 0 2.75 0V5.37a.5.5 0 0 0-.12-.325L12.27 2H3.73L1.12 5.045A.5.5 0 0 0 1 5.37v.255a1.375 1.375 0 0 0 2.75 0 .5.5 0 0 1 1 0zM1.5 8.5A.5.5 0 0 1 2 9v6h12V9a.5.5 0 0 1 1 0v6h.5a.5.5 0 0 1 0 1H.5a.5.5 0 0 1 0-1H1V9a.5.5 0 0 1 .5-.5zm2 .5a.5.5 0 0 1 .5.5V13h8V9.5a.5.5 0 0 1 1 0V13a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V9.5a.5.5 0 0 1 .5-.5z"/>
 </svg></i> Kênh bán</a>
                     </c:if>
-                    <c:if test="${role =='user'}">
+                    <c:if test="${sessionScope.role =='user'}">
                       <a class="user-acc-admin" style="font-size: 11px" href="${ pageContext.request.contextPath }/register/merchant"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-person-plus" viewBox="0 0 16 16">
   <path d="M6 8a3 3 0 1 0 0-6 3 3 0 0 0 0 6zm2-3a2 2 0 1 1-4 0 2 2 0 0 1 4 0zm4 8c0 1-1 1-1 1H1s-1 0-1-1 1-4 6-4 6 3 6 4zm-1-.004c-.001-.246-.154-.986-.832-1.664C9.516 10.68 8.289 10 6 10c-2.29 0-3.516.68-4.168 1.332-.678.678-.83 1.418-.832 1.664h10z"/>
   <path fill-rule="evenodd" d="M13.5 5a.5.5 0 0 1 .5.5V7h1.5a.5.5 0 0 1 0 1H14v1.5a.5.5 0 0 1-1 0V8h-1.5a.5.5 0 0 1 0-1H13V5.5a.5.5 0 0 1 .5-.5z"/>
@@ -4308,7 +4309,7 @@ input.required-data, select.required-data {
                     </c:if>
 
 
-                    <c:if test="${role =='admin' }">
+                    <c:if test="${sessionScope.role =='admin' }">
                       <a class="user-acc-admin" style="font-size: 11px" href="${ pageContext.request.contextPath }/admin"> <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-emoji-sunglasses" viewBox="0 0 16 16">
   <path d="M4.968 9.75a.5.5 0 1 0-.866.5A4.498 4.498 0 0 0 8 12.5a4.5 4.5 0 0 0 3.898-2.25.5.5 0 1 0-.866-.5A3.498 3.498 0 0 1 8 11.5a3.498 3.498 0 0 1-3.032-1.75zM7 5.116V5a1 1 0 0 0-1-1H3.28a1 1 0 0 0-.97 1.243l.311 1.242A2 2 0 0 0 4.561 8H5a2 2 0 0 0 1.994-1.839A2.99 2.99 0 0 1 8 6c.393 0 .74.064 1.006.161A2 2 0 0 0 11 8h.438a2 2 0 0 0 1.94-1.515l.311-1.242A1 1 0 0 0 12.72 4H10a1 1 0 0 0-1 1v.116A4.22 4.22 0 0 0 8 5c-.35 0-.69.04-1 .116z"/>
   <path d="M16 8A8 8 0 1 1 0 8a8 8 0 0 1 16 0zm-1 0A7 7 0 1 0 1 8a7 7 0 0 0 14 0z"/>
@@ -4325,6 +4326,37 @@ input.required-data, select.required-data {
 
                 </div>
 
+
+                <c:if test="${sessionScope.role == 'user'}">
+          		<div class="nav-bar-cart">
+             		 <a href="${ pageContext.request.contextPath }/cart"><i class="fa-solid fa-cart-shopping" ></i></a>
+              
+                 </div>
+             
+           <!--          <div class="cart-detail">
+                      <span class="cart-detail-span">Sản phẩm trong giỏ hàng</span>
+                      <div
+                        *ngIf="messagecart === 'khong co du lieu'; then thenBlockCartDetail else elseBlockACartDetail"></div>
+                      <ng-template #thenBlockCartDetail>
+                        <img class="nocart-img" src="https://taphoa.cz/static/media/cart-empty-img.8b677cb3.png" alt="">
+                      </ng-template>
+                      <ng-template #elseBlockACartDetail>
+                        <div class="cart-detai-item-container">
+                          <div class="cart-detai-item" *ngFor="let product of carts">
+                            <img src="{{product.product.image}}" alt="">
+                            <span class="cart-detai-item-span">{{product.product.name}}</span>
+                            <span>{{product.product.newPrice}} đ</span>
+                          </div>
+                        </div>
+                      </ng-template>
+                      <div class="cart-detail-btn">
+                        <span>Tổng: {{carts.length}} sản phẩm</span>
+                        <button class="btn btn-cart" routerLink="/cart">Xem giỏ hàng</button>
+                      </div>
+                    </div> -->
+       
+                </c:if>
+   
             </c:if>
             
           </div>
