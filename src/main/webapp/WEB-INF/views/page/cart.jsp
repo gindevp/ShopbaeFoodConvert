@@ -4,7 +4,6 @@
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
 <style>
 
-
 .gradient-custom {
   /* fallback for old browsers */
   background: #6a11cb;
@@ -325,18 +324,22 @@
             <h5 class="mb-0">Sản phẩm</h5>
           </div>
           <div class="card-body">
-            <div *ngIf="messagecart === 'khong co du lieu'; then thenBlockCart else elseBlockACart"></div>
-            <ng-template #thenBlockCart>
-              <img class="card-body-noimage" src="https://taphoa.cz/static/media/cart-empty-img.8b677cb3.png" alt="">
-            </ng-template>
-            <!-- Single item -->
-              <ng-template #elseBlockACart>
 
-                <div class="row" *ngFor="let product of carts">
+<c:if test="${message == 'khong co du lieu' }">
+
+              <img class="card-body-noimage" src="https://taphoa.cz/static/media/cart-empty-img.8b677cb3.png" alt="">
+</c:if>
+            
+            
+            
+            <!-- Single item -->
+            <c:if test="${message != 'khong co du lieu' }">
+<c:forEach var="product" items="${products}">
+                <div class="row" >
                   <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
                     <!-- Image -->
                     <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                      <img src="{{product.product.image}}"
+                      <img src="${ pageContext.request.contextPath }/static/storage/${product.product.image}"
                            class="w-100 bg-image-img" alt="Blue Jeans Jacket" />
                       <a href="#!">
                         <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
@@ -347,15 +350,15 @@
 
                   <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
                     <!-- Data -->
-                    <p><strong>{{product.product.name}}</strong></p>
-                    <p>Mô tả: {{product.product.shortDescription}}</p>
-                    <p>Đơn giá: {{product.product.newPrice}} đ</p>
+                    <p><strong>${product.product.name}</strong></p>
+                    <p>Mô tả: ${product.product.shortDescription}</p>
+                    <p>Đơn giá: ${product.product.newPrice} đ</p>
                     <button type="button" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
-                            title="Remove item" (click)="deleteProductCart(product.id)">
+                            title="Remove item" style="font-size: 1.45rem;">
                       <i class="fas fa-trash"></i>
                     </button>
                     <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip"
-                            title="Move to the wish list">
+                            title="Move to the wish list" style="font-size: 1.45rem;">
                       <i class="fas fa-heart"></i>
                     </button>
                     <!-- Data -->
@@ -367,7 +370,7 @@
 
                       <div class="form-outline">
                         <label class="form-label" for="form1">Số lượng</label>
-                        <input id="form1" min="0" name="quantity" [(ngModel)]="product.quantity" value="{{product.quantity}}" type="number" class="form-control" />
+                        <input id="form1" min="0" name="quantity"value="${product.quantity}" type="number" class="form-control" />
 
                       </div>
                     </div>
@@ -376,20 +379,20 @@
                     <!-- Price -->
                     <p class="text-start text-md-center">
                       <strong>Giá tiền: </strong>
-                      <strong>{{product.totalPrice }} đ</strong>
+                      <strong>${product.totalPrice } đ</strong>
                     </p>
                     <!-- Price -->
                   </div>
                 </div>
                 <!-- Single item -->
-
-              </ng-template>
+</c:forEach>
+              </c:if>
 
           </div>
         </div>
 
 
-        <div class="card mb-4" style="width: 1300px;">
+        <div class="card mb-4" style="width: 1110px;">
           <div class="card-body">
             <p><strong>Lịch sử mua hàng</strong></p>
 
@@ -406,26 +409,24 @@
                 </tr>
                 </thead>
                 <tbody>
-                <tr *ngFor="let order of orders">
-                  <td><img src="{{order.appUser.avatar}}" alt="" style="height: 40px;
+                <c:forEach items="${oders }" var="oder">
+                <tr>
+                  <td><img src="${order.appUser.avatar}" alt="" style="height: 40px;
         width: 40px;
         border-radius: 50%;"></td>
-                  <td class="merchant-item">{{order.appUser.name}}</td>
-                  <td class="merchant-item">{{order.totalPrice}} đ</td>
-                  <td class="merchant-item">{{order.orderdate}}</td>
-                  <td class="merchant-item" size="50px">{{order.status}} </td>
-                  <div *ngIf="order.status === 'Người bán nhận order'; then thenBlockStatus else elseBlockAStatus"></div>
-                  <ng-template #thenBlockStatus>
-                    <td class="merchant-item" size="50px" style="width: 101px;"><button class="btn-order" (click)="receiveOrderStatus(order, order.id)">Nhận hàng</button></td>
-                    <td class="merchant-item" size="50px" style="width: 80px;"><button class="btn-order" (click)="refuseOrderStatus(order, order.id)">Từ chối</button></td>
-                  </ng-template>
-                  <ng-template #elseBlockAStatus>
-                    <td class="merchant-item"></td>
-                    <td class="merchant-item" size="50px"></td>
-                  </ng-template>
+                  <td class="merchant-item">${order.appUser.name}</td>
+                  <td class="merchant-item">${order.totalPrice} đ</td>
+                  <td class="merchant-item">${order.orderdate}</td>
+                  <td class="merchant-item" size="50px">${order.status} </td>
+              
+                    <td class="merchant-item" size="150px" style="width: 101px;"><a class="btn btn-order" href="">Nhận hàng</a></td>
+                    <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="">Từ chối</a></td>
 
-                  <td class="merchant-item" size="50px"><button class="btn-order" (click)="deleteOrder(order.id)"><i class="fa-solid fa-trash"></i></button></td>
+                  
+
+                  <td class="merchant-item" size="50px"><button class="btn-order"><i class="fa-solid fa-trash"></i></button></td>
                 </tr>
+                </c:forEach>
                 </tbody>
               </table>
             </div>
@@ -458,8 +459,9 @@
 
 
             <div class="table-responsive container">
-              <div *ngIf="messagecart === 'khong co du lieu'; then thenBlockBill else elseBlockBill"></div>
-              <ng-template #thenBlockBill>
+
+<c:if test="${message =='khong co du lieu' }">
+       
                 <table class="table table-striped table-sm">
                   <thead>
                   <tr>
@@ -469,8 +471,11 @@
                   </tr>
                   </thead>
                 </table>
-              </ng-template>
-              <ng-template #elseBlockBill>
+               </c:if>
+              <form action="${ pageContext.request.contextPath }/cart/order/user/${sessionScope.userId}/merchant/${sessionScope.merchantId}" method="post">
+              <c:if test="${message !='khong co du lieu' }">
+      
+             
                 <table class="table table-striped table-sm">
                   <thead>
                   <tr>
@@ -480,31 +485,36 @@
                   </tr>
                   </thead>
                   <tbody>
-                  <tr *ngFor="let cart of carts">
-                    <td class="merchant-item">{{cart.product.name}}</td>
-                    <td class="merchant-item">{{cart.quantity}}</td>
-                    <td class="merchant-item">{{cart.price}} đ</td>
+                  
+                  <c:forEach var="cart" items="${products}">
+                  <tr >
+                    <td class="merchant-item">${cart.product.name}</td>
+                    <td class="merchant-item">${cart.quantity}</td>
+                    <td class="merchant-item">${cart.price} đ</td>
                   </tr>
+                  </c:forEach>
+                  
                   <tr>
                     <th scope="col" colspan="2">Tổng tiền </th>
-                    <th scope="col" >{{totalPrice}} đ</th>
+                    <th scope="col" >${sum} đ</th>
                   </tr>
                   <tr>
                     <td scope="col">Ghi chú </td>
-                    <td scope="col" colspan="2"><input class="note" type="text" placeholder="Ghi chú" [(ngModel)]="note"></td>
+                    <td scope="col" colspan="2"><input class="note" type="text" placeholder="Ghi chú" name="note"></td>
                   </tr>
                   <tr>
                     <td scope="col">Địa chỉ</td>
-                    <td scope="col" colspan="2"><input class="note" type="text" placeholder="Địa chỉ giao hàng" [(ngModel)]="address"></td>
+                    <td scope="col" colspan="2"><input class="note" type="text" placeholder="Địa chỉ giao hàng" name="address" ></td>
                   </tr>
                   </tbody>
                 </table>
-              </ng-template>
-
-            </div>
-            <button type="button" class="btn btn-primary btn-lg btn-block" style="margin-left: 260px" (click)="checkout()">
+           <input name="sum" value="${sum}" hidden="true"/> 
+</c:if> <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-left: 8px">
               Đặt hàng
             </button>
+</form>
+            </div>
+           
             </div>
             </div>
           </div>

@@ -222,9 +222,10 @@
                               style="font-weight: 400;position: relative;top: -9px;font-size: 10px;right: 0;">đ</span>
                             </div>
                           </div>
+                          <a href="/ShobaeFood/cart/product/${product.id}/user/${sessionScope.userId}">
                           <div class="col-auto adding-food-cart txt-right">
-                            <div class="btn-adding" (click)="addToCart(product)" >+</div>
-                          </div>
+                            <div class="btn-adding" >+</div>
+                          </div></a>
                         </div>
                       </div>
                     </div>

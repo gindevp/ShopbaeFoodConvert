@@ -50,6 +50,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		}
 		if (account.getUser() != null) {
 			session.setAttribute("user", account.getUser());
+			session.setAttribute("userId", account.getUser().getId());
 		}
 		session.setAttribute("username", account.getUserName());
 		session.setAttribute("authorities", authentication.getAuthorities());

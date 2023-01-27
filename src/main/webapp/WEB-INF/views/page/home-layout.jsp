@@ -4327,9 +4327,9 @@ input.required-data, select.required-data {
                 </div>
 
 
-                <c:if test="${sessionScope.role == 'user'}">
+                <c:if test="${sessionScope.role == 'user'&& page == 'merchant-detail.jsp'}">
           		<div class="nav-bar-cart">
-             		 <a href="${ pageContext.request.contextPath }/cart"><i class="fa-solid fa-cart-shopping" ></i></a>
+             		 <a href="${ pageContext.request.contextPath }/cart/user/${sessionScope.userId}"><i class="fa-solid fa-cart-shopping" ></i></a>
               
                  </div>
              

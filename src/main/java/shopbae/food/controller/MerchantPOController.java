@@ -55,9 +55,10 @@ public class MerchantPOController {
 		}
 		List<Object> name= new ArrayList<>() ;
 		List<Object> num= new ArrayList<>();
-		product.stream().forEach(c -> name.add(c.getName()));
+		product.stream().forEach(c -> name.add("'"+c.getName()+"'"));
 		product.stream().forEach(c -> num.add(c.getQuantity()));
 		model.addAttribute("name", name);
+		System.out.println(name);
 		model.addAttribute("num", num);
 		model.addAttribute("page","dashboard.jsp");
 		return "merchant/merchant-layout";

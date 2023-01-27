@@ -80,8 +80,9 @@ public class LoginRegisterHomeController {
 	}
 
 	@GetMapping("/merchantp/detail/{id}")
-	public String merchantDetail(@PathVariable Long id, Model model) {
+	public String merchantDetail(@PathVariable Long id, Model model, HttpSession httpSession) {
 		System.out.println(merchantService.findById(id).getStatus());
+		httpSession.setAttribute("merchantId", id);
 		if ("active".equals(merchantService.findById(id).getStatus())) {
 			model.addAttribute("merchant", merchantService.findById(id));
 			model.addAttribute("products", productService.getAllByDeleteFlagTrueAndMerchant(id));

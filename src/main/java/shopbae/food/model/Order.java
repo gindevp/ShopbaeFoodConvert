@@ -2,6 +2,7 @@ package shopbae.food.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -9,7 +10,7 @@ import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
 
-@Table(name = "orders")
+@Entity(name = "orders")
 public class Order {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,6 +28,32 @@ public class Order {
     private String status;
     private Long merchant_id;
     private double totalPrice;
+    
+    
+	public Order() {
+
+	}
+	public Order(Long id, AppUser appUser, String note, LocalDateTime orderdate, String status, Long merchant_id,
+			double totalPrice) {
+
+		this.id = id;
+		this.appUser = appUser;
+		this.note = note;
+		this.orderdate = orderdate;
+		this.status = status;
+		this.merchant_id = merchant_id;
+		this.totalPrice = totalPrice;
+	}
+	
+	public Order(AppUser appUser, String note, LocalDateTime orderdate, String status, Long merchant_id,
+			double totalPrice) {
+		this.appUser = appUser;
+		this.note = note;
+		this.orderdate = orderdate;
+		this.status = status;
+		this.merchant_id = merchant_id;
+		this.totalPrice = totalPrice;
+	}
 	public Long getId() {
 		return id;
 	}

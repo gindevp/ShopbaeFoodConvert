@@ -6,65 +6,53 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-@Entity(name = "order_detail")
-public class OrderDetail {
+
+import com.fasterxml.jackson.annotation.JsonBackReference;
+
+@Entity(name = "product_cart")
+public class ProductCartMap {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-
     @ManyToOne
-    @JoinColumn(name= "product_id")
+    @JoinColumn(name = "product_id")
     private Product product;
-
     @ManyToOne
-    @JoinColumn(name="order_id")
-    
-    private Order order;
-
-    public OrderDetail() {
-	
-	}
-
-	public OrderDetail(Long id, Product product, Order order, int quantity) {
+    @JoinColumn(name = "cart_id")
+    @JsonBackReference
+    private Cart cart;
+	public ProductCartMap(Long id, Product product, Cart cart) {
 
 		this.id = id;
 		this.product = product;
-		this.order = order;
-		this.quantity = quantity;
+		this.cart = cart;
+	}
+	
+	public ProductCartMap(Product product, Cart cart) {
+		this.product = product;
+		this.cart = cart;
 	}
 
-	private int quantity;
+	public ProductCartMap() {
 
+	}
 	public Long getId() {
 		return id;
 	}
-
 	public void setId(Long id) {
 		this.id = id;
 	}
-
 	public Product getProduct() {
 		return product;
 	}
-
 	public void setProduct(Product product) {
 		this.product = product;
 	}
-
-	public Order getOrder() {
-		return order;
+	public Cart getCart() {
+		return cart;
 	}
-
-	public void setOrder(Order order) {
-		this.order = order;
+	public void setCart(Cart cart) {
+		this.cart = cart;
 	}
-
-	public int getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(int quantity) {
-		this.quantity = quantity;
-	}
-
+    
 }

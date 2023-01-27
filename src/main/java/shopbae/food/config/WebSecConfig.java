@@ -49,10 +49,14 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 //		.antMatchers("/**").permitAll()
-				.antMatchers("/login", "/register/**", "/home", "/static/**", "/merchantp/**", "/mail/**",
-						"/forgotpass/**", "/change-pass/**", "/cart/**","/user-info")
-				.permitAll().antMatchers("/admin/**").hasRole("ADMIN").antMatchers("/merchant/**").hasRole("MERCHANT")
-				.antMatchers("/**").hasAnyRole("ADMIN").and().formLogin().loginPage("/login")
+				.antMatchers("/login", "/register/**", "/home", "/static/**", "/merchantp/**",
+						"/forgotpass/**", "/change-pass/**")
+				.permitAll()
+				.antMatchers("/admin/**").hasRole("ADMIN")
+				.antMatchers("/user-info", "/cart/**").hasRole("USER")
+				.antMatchers("/merchant/**").hasRole("MERCHANT")
+				.antMatchers("/**").hasAnyRole("ADMIN")
+				.and().formLogin().loginPage("/login")
 				.usernameParameter("userName").successHandler(customSuccessHandler).and().logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).and().csrf().disable();
 
