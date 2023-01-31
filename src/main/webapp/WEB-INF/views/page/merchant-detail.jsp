@@ -179,7 +179,7 @@
             </div>
           </div>
           <div class="menu-restaurant-list">
-          <form action="/ShobaeFood/merchant-detail/${merchant.id}/search">
+          <form action="/ShobaeFood/merchantp/detail/${merchant.id}/search">
             <div class="search-items"><p class="input-group"><i class="fas fa-search"></i>
             <input type="search"
                                                                                                  name="name"

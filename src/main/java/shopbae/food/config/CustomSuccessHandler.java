@@ -18,8 +18,8 @@ import org.springframework.security.web.authentication.SimpleUrlAuthenticationSu
 import org.springframework.stereotype.Component;
 
 import shopbae.food.model.Account;
-import shopbae.food.service.IAccountService;
-import shopbae.food.service.IMerchantService;
+import shopbae.food.service.account.IAccountService;
+import shopbae.food.service.merchant.IMerchantService;
 
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {

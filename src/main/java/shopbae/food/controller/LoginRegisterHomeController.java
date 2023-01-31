@@ -23,12 +23,12 @@ import shopbae.food.model.AppUser;
 import shopbae.food.model.Mail;
 import shopbae.food.model.Merchant;
 import shopbae.food.model.dto.AccountRegisterDTO;
-import shopbae.food.service.IAccountService;
-import shopbae.food.service.IAppUserService;
-import shopbae.food.service.IMerchantService;
-import shopbae.food.service.IProductService;
-import shopbae.food.service.IRoleService;
-import shopbae.food.service.MailService;
+import shopbae.food.service.account.IAccountService;
+import shopbae.food.service.mail.MailService;
+import shopbae.food.service.merchant.IMerchantService;
+import shopbae.food.service.product.IProductService;
+import shopbae.food.service.role.IRoleService;
+import shopbae.food.service.user.IAppUserService;
 
 @Controller
 public class LoginRegisterHomeController {

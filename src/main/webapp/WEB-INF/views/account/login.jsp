@@ -1,5 +1,6 @@
  <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
 
  <!--form login-->
     <div class="now-login">
@@ -37,7 +38,14 @@
             <c:if test="${not empty sessionScope.SPRING_SECURITY_LAST_EXCEPTION}">
     <!-- Display error message --> 
     <p style="color:red">${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}</p>
- 
+ <script>
+
+ swal({
+	  title: "${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}",
+	  text: "Hãy nhập lại đi nào!",
+	  icon: "error",
+	});
+</script>
 </c:if>
         
     

@@ -9,8 +9,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import shopbae.food.model.AppUser;
 import shopbae.food.model.Merchant;
-import shopbae.food.service.IAppUserService;
-import shopbae.food.service.IMerchantService;
+import shopbae.food.service.merchant.IMerchantService;
+import shopbae.food.service.user.IAppUserService;
 
 @Controller
 @RequestMapping("/admin")
@@ -29,6 +29,8 @@ public class AdminController {
 	public String merActive(Model model) {
 		model.addAttribute("page","merchant-manager/merchant-active.jsp");
 		model.addAttribute("manager","merchant");
+		model.addAttribute("nav",1);
+		model.addAttribute("nav2",2);
 		model.addAttribute("merchants",merchantService.getAllByMerchantStatus("active"));
 		return "admin/admin-layout";
 	}
@@ -36,6 +38,8 @@ public class AdminController {
 	public String merPending(Model model) {
 		model.addAttribute("page","merchant-manager/merchant-pending.jsp");
 		model.addAttribute("manager","merchant");
+		model.addAttribute("nav",1);
+		model.addAttribute("nav2",1);
 		model.addAttribute("merchants",merchantService.getAllByMerchantStatus("pending"));
 		return "admin/admin-layout";
 	}
@@ -43,6 +47,8 @@ public class AdminController {
 	public String merblock(Model model) {
 		model.addAttribute("page","merchant-manager/merchant-block.jsp");
 		model.addAttribute("manager","merchant");
+		model.addAttribute("nav",1);
+		model.addAttribute("nav2",3);
 		model.addAttribute("merchants",merchantService.getAllByMerchantStatus("block"));
 		return "admin/admin-layout";
 	}
@@ -96,6 +102,8 @@ public class AdminController {
 	public String userActive(Model model) {
 		model.addAttribute("page","user-manager/user-active.jsp");
 		model.addAttribute("manager","user");
+		model.addAttribute("nav",2);
+		model.addAttribute("nav2",2);
 		model.addAttribute("merchants",appUserService.getAllByStatus("active"));
 		return "admin/admin-layout";
 	}
@@ -103,6 +111,8 @@ public class AdminController {
 	public String userPending(Model model) {
 		model.addAttribute("page","user-manager/user-pending.jsp");
 		model.addAttribute("manager","user");
+		model.addAttribute("nav",2);
+		model.addAttribute("nav2",1);
 		model.addAttribute("merchants",appUserService.getAllByStatus("pending"));
 		return "admin/admin-layout";
 	}
@@ -110,6 +120,8 @@ public class AdminController {
 	public String userblock(Model model) {
 		model.addAttribute("page","user-manager/user-block.jsp");
 		model.addAttribute("manager","user");
+		model.addAttribute("nav",2);
+		model.addAttribute("nav2",3);
 		model.addAttribute("merchants",appUserService.getAllByStatus("block"));
 		return "admin/admin-layout";
 	}

@@ -28,6 +28,12 @@ public class Cart {
     private Product product;
 
 
+	@Override
+	public String toString() {
+		return "Cart [id=" + id + ", quantity=" + quantity + ", price=" + price + ", totalPrice=" + totalPrice
+				+ ", deleteFlag=" + deleteFlag + ", user=" + user + ", product=" + product + "]";
+	}
+
 	public Cart() {
 
 	}

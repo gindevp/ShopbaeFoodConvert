@@ -20,8 +20,8 @@ import shopbae.food.model.Account;
 import shopbae.food.model.AppUser;
 import shopbae.food.model.Merchant;
 import shopbae.food.model.dto.ChangeDTO;
-import shopbae.food.service.IAccountService;
-import shopbae.food.service.IAppUserService;
+import shopbae.food.service.account.IAccountService;
+import shopbae.food.service.user.IAppUserService;
 
 @Controller
 @RequestMapping("user-info")

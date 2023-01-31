@@ -353,10 +353,10 @@
                     <p><strong>${product.product.name}</strong></p>
                     <p>Mô tả: ${product.product.shortDescription}</p>
                     <p>Đơn giá: ${product.product.newPrice} đ</p>
-                    <button type="button" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
-                            title="Remove item" style="font-size: 1.45rem;" ><a href="${ pageContext.request.contextPath }/cart/remove-item/${product.product.id}">
-                      <i class="fas fa-trash"></i></a>
-                    </button>
+                    <a href="${ pageContext.request.contextPath }/cart/remove-item/${product.product.id}"><button type="button" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
+                            title="Remove item" style="font-size: 1.45rem;" >
+                      <i class="fas fa-trash"></i>
+                    </button></a>
                     <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip"
                             title="Move to the wish list" style="font-size: 1.45rem;">
                       <i class="fas fa-heart"></i>
@@ -414,8 +414,8 @@
                 <tbody>
                 <c:forEach  var="order" items="${orders}">
                 <tr>
-                <td class="merchant-item" size="150px" style="width: 101px;"><a class="btn btn-order" href="">Nhận hàng</a></td>
-                    <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="">Từ chối</a></td>
+                <td class="merchant-item" size="150px" style="width: 101px;"><a class="btn btn-order" href="/ShobaeFood/cart/receiveds/${order.id}">Nhận hàng</a></td>
+                    <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="/ShobaeFood/cart/refused/${order.id}">Từ chối</a></td>
 
                   
 

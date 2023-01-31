@@ -16,7 +16,7 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 import shopbae.food.model.Account;
-import shopbae.food.service.IAccountService;
+import shopbae.food.service.account.IAccountService;
 
 @Component
 public class CustomIdentityAuthenticationProvider implements AuthenticationProvider {

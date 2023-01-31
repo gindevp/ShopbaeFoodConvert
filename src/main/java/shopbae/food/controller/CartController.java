@@ -1,6 +1,8 @@
 package shopbae.food.controller;
 
 import java.util.List;
+import java.util.stream.Collector;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -16,14 +18,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 import shopbae.food.model.AppUser;
 import shopbae.food.model.Cart;
 import shopbae.food.model.Order;
+import shopbae.food.model.OrderDetail;
 import shopbae.food.model.Product;
-import shopbae.food.repository.ICartRepository;
-import shopbae.food.repository.IOrderRepository;
-import shopbae.food.service.IAppUserService;
-import shopbae.food.service.ICartService;
-import shopbae.food.service.IMerchantService;
-import shopbae.food.service.IOrderService;
-import shopbae.food.service.IProductService;
+import shopbae.food.repository.cart.ICartRepository;
+import shopbae.food.repository.order.IOrderRepository;
+import shopbae.food.service.cart.ICartService;
+import shopbae.food.service.merchant.IMerchantService;
+import shopbae.food.service.order.IOrderService;
+import shopbae.food.service.orderDetail.IOrderDetailService;
+import shopbae.food.service.product.IProductService;
+import shopbae.food.service.user.IAppUserService;
 
 @Controller
 @RequestMapping("/cart")
@@ -38,6 +42,8 @@ public class CartController {
 	IAppUserService appUserService;
 	@Autowired
 	IOrderService orderService;
+	@Autowired
+	IOrderDetailService orderDetailService;
 
 	@GetMapping("/product/{productid}/user/{userid}")
 	public String cart(Model model, @PathVariable Long productid, @PathVariable Long userid, HttpSession session) {
@@ -53,17 +59,18 @@ public class CartController {
 	}
 	@GetMapping("/user/{userId}")
 	public String userCart(Model model, @PathVariable Long userId, HttpSession session) {
-		System.out.println((Long) session.getAttribute("merchantId"));
+		long merId=(long) session.getAttribute("merchantId");
 		List<Cart> cart1= cartService.findAllByUser(userId);
-		model.addAttribute("products", cart1);
+		List<Cart> cart2= cart1.stream().filter(c-> c.getProduct().getMerchant().getId()==merId).collect(Collectors.toList());
+		model.addAttribute("products", cart2);
 		double sum=0;
-		for (Cart x : cart1) {
+		for (Cart x : cart2) {
 			sum+=x.getTotalPrice();
 		}
 		model.addAttribute("sum",sum);
 		List<Order> orders= orderService.findByAppUserAndMer(userId,(Long) session.getAttribute("merchantId"));
 		model.addAttribute("orders", orders);
-		if(cart1.isEmpty()) {
+		if(cart2.isEmpty()) {
 			model.addAttribute("message","khong co du lieu");
 		}else {
 			model.addAttribute("message","co du lieu");
@@ -77,14 +84,27 @@ public class CartController {
 		Order oder= new Order();
 		oder.setOrderdate(java.time.LocalDateTime.now());
 		oder.setNote(note);
-		oder.setStatus("pending");
+		oder.setStatus("cho xac nhan");
 		oder.setTotalPrice(sum);
 		oder.setAppUser(appUserService.findById(userId));
 		oder.setMerchant_id(merchantId);
 		oder.setDeliveryAddress(address);
-//		orderService.save(oder);
-		Long orderId=(Long) orderRepo.savee(oder);
-		cartService.deletesByUser(userId);
+		Long orderId= (Long) orderService.savee(oder);
+		List<Cart> carts= cartService.findAllByUser(userId);
+		System.out.println("cart by userId:"+carts);
+		List<Cart> oderDetail= carts.stream().filter(a-> a.getProduct().getMerchant().getId()== (long) merchantId).collect(Collectors.toList());
+		System.out.println("cart by userId and merId:"+oderDetail);
+		for (Cart cart : oderDetail) {
+			OrderDetail orderDetail= new OrderDetail();
+			oder.setId(orderId);
+			orderDetail.setOrder(oder);
+			orderDetail.setProduct(cart.getProduct());
+			orderDetail.setQuantity(cart.getQuantity());
+			orderDetailService.save(orderDetail);
+			cart.setDeleteFlag(false);
+			cartService.update(cart);
+		}
+		
 		return "redirect:/cart/user/"+userId;
 	}
 	@GetMapping("/delete/order/{orderId}/user/{userId}")
@@ -99,6 +119,30 @@ public class CartController {
 		Cart cart= cartService.findByProductAndFlag(id);
 		cart.setDeleteFlag(false);
 		cartService.update(cart);
+		Long userId= (Long) session.getAttribute("userId");
+		return "redirect:/cart/user/"+userId;
+	}
+	@GetMapping("/received/{id}")
+	public String received(@PathVariable Long id, HttpSession session) {
+		Order order= orderService.findById(id);
+		order.setStatus("nguoi mua da nhan");
+		orderService.update(order);
+		Long userId= (Long) session.getAttribute("userId");
+		return "redirect:/cart/user/"+userId;
+	}
+	@GetMapping("/receiveds/{id}")
+	public String receiveds(Model model,@PathVariable Long id, HttpSession session) {
+		Order order = orderService.findById(id);  
+		order.setStatus("nguoi mua da nhan"); 
+		orderService.update(order);
+		Long userId= (Long) session.getAttribute("userId");
+		return "redirect:/cart/user/"+userId;
+	}
+	@GetMapping("/refused/{id}")
+	public String refused(Model model,@PathVariable Long id, HttpSession session) {
+		Order order = orderService.findById(id);
+		order.setStatus("nguoi mua tu choi");
+		orderService.update(order);
 		Long userId= (Long) session.getAttribute("userId");
 		return "redirect:/cart/user/"+userId;
 	}

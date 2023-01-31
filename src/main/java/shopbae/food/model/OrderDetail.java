@@ -25,6 +25,11 @@ public class OrderDetail {
 	
 	}
 
+	@Override
+	public String toString() {
+		return "OrderDetail [id=" + id + ", product=" + product + ", order=" + order + ", quantity=" + quantity + "]";
+	}
+
 	public OrderDetail(Long id, Product product, Order order, int quantity) {
 
 		this.id = id;

@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,20 +26,24 @@ import org.springframework.web.multipart.MultipartFile;
 import shopbae.food.model.Account;
 import shopbae.food.model.Merchant;
 import shopbae.food.model.Order;
+import shopbae.food.model.OrderDetail;
 import shopbae.food.model.Product;
 import shopbae.food.model.dto.AccountRegisterDTO;
 import shopbae.food.model.dto.ChangeDTO;
 import shopbae.food.model.dto.ProductForm;
-import shopbae.food.service.AccountService;
-import shopbae.food.service.IMerchantService;
-import shopbae.food.service.IOrderService;
-import shopbae.food.service.IProductService;
+import shopbae.food.service.account.AccountService;
+import shopbae.food.service.merchant.IMerchantService;
+import shopbae.food.service.order.IOrderService;
+import shopbae.food.service.orderDetail.IOrderDetailService;
+import shopbae.food.service.product.IProductService;
 
 @Controller
 @RequestMapping("/merchant")
 public class MerchantPOController {
 	@Autowired
 	private IOrderService orderService;
+	@Autowired
+	private IOrderDetailService detailService;
 	@Autowired
 	private IProductService productService;
 	@Autowired
@@ -60,11 +65,12 @@ public class MerchantPOController {
 		List<Object> name= new ArrayList<>() ;
 		List<Object> num= new ArrayList<>();
 		product.stream().forEach(c -> name.add("'"+c.getName()+"'"));
-		product.stream().forEach(c -> num.add(c.getQuantity()));
+		product.stream().forEach(c -> num.add(c.getNumberOrder()));
 		model.addAttribute("name", name);
 		System.out.println(name);
 		model.addAttribute("num", num);
 		model.addAttribute("page","dashboard.jsp");
+		model.addAttribute("nav",1);
 		return "merchant/merchant-layout";
 	}
 	@GetMapping("/detail")
@@ -78,6 +84,7 @@ public class MerchantPOController {
 		changeDTO.setOpenTime(merchant.getOpenTime());
 		changeDTO.setCloseTime(merchant.getCloseTime());
 		model.addAttribute("changeDTO",changeDTO);
+		model.addAttribute("nav",5);
 		// tạo changedto để binding dữ liệu của cả merchant và account
 		return "merchant/merchant-layout";
 	}
@@ -116,6 +123,7 @@ public class MerchantPOController {
 		}
 		
 		model.addAttribute("page", "product-list.jsp");
+		model.addAttribute("nav",3);
 		return "merchant/merchant-layout";
 	}
 
@@ -194,17 +202,22 @@ public class MerchantPOController {
 	}
 
 	@GetMapping("/product/search")
-	public String findProductByName(@RequestParam String name, Model model) {
-		List<Product> product = productService.fAllByDeleFlagTAndMerAndNameContai(1L, name);
+	public String findProductByName(@RequestParam String name, Model model, HttpSession httpSession) {
+		List<Product> product = productService.fAllByDeleFlagTAndMerAndNameContai(((Merchant) httpSession.getAttribute("merchant")).getId(), name);
 		model.addAttribute("products", product);
 		model.addAttribute("page", "product-list.jsp");
 		return "merchant/merchant-layout";
 	}
 	@GetMapping("/order")
-	public String order( Model model) {
-		model.addAttribute("orders",orderService.findByFlagAndStatus("pending"));
+	public String order( Model model, HttpSession httpSession) {
+		List<Order> orders=orderService.findByFlagAndStatus("cho xac nhan"); 
+		long merId= (long)((Merchant) httpSession.getAttribute("merchant")).getId();
+		List<Order> orders2= orders.stream().filter(c->c.getMerchant_id()==merId).collect(Collectors.toList());
+		model.addAttribute("orders",orders2);
 		model.addAttribute("page2","order-pending.jsp");
 		model.addAttribute("page", "order-layout.jsp");
+		model.addAttribute("nav",2);
+		model.addAttribute("nav2",1);
 		return "merchant/merchant-layout";
 	}
 	@GetMapping("/order/pending")
@@ -214,18 +227,62 @@ public class MerchantPOController {
 	@GetMapping("/order/received/{id}")
 	public String received(Model model, @PathVariable Long id) {
 		Order order=orderService.findById(id);
-		order.setStatus("received");
+		order.setStatus("nguoi ban da nhan");
 		orderService.update(order);
-		model.addAttribute("orders",orderService.findByFlagAndStatus("received"));
+		model.addAttribute("orders",orderService.findByFlagAndStatus("nguoi ban da nhan"));
 		model.addAttribute("page2","order-received.jsp");
 		model.addAttribute("page", "order-layout.jsp");
 		return "merchant/merchant-layout";
 	}
 	@GetMapping("/order/received")
 	public String receivedP(Model model) {
-		model.addAttribute("orders",orderService.findByFlagAndStatus("received"));
+		model.addAttribute("orders",orderService.findByFlagAndStatus("nguoi ban da nhan"));
 		model.addAttribute("page2","order-received.jsp");
 		model.addAttribute("page", "order-layout.jsp");
+		model.addAttribute("nav",2);
+		model.addAttribute("nav2",2);
+		return "merchant/merchant-layout";
+	}
+	@GetMapping("/order/detail/{id}")
+	public String detail(Model model, @PathVariable Long id, HttpSession httpSession) {
+		List<OrderDetail> details= detailService.findByOrder(id);
+		double sum=0;
+		for (OrderDetail orderDetail : details) {
+			sum+=orderDetail.getProduct().getQuantity()*orderDetail.getProduct().getNewPrice();
+		}
+		httpSession.setAttribute("orderId", id);
+		model.addAttribute("sum",sum);
+		model.addAttribute("oderDetail",details);
+		model.addAttribute("page2","order-detail.jsp");
+		model.addAttribute("page", "order-layout.jsp");
+		model.addAttribute("nav",2);
+		return "merchant/merchant-layout";
+	}
+	@GetMapping("/order/refuse/{id}")
+	public String refuse(Model model,@PathVariable Long id) {
+		Order order = orderService.findById(id);
+		order.setStatus("nguoi ban tu choi");
+		orderService.update(order);
+		return "redirect:/merchant/order";
+	}
+	@GetMapping("/order/history")
+	public String history(Model model) {
+		List<Order> order = orderService.findAll();
+		model.addAttribute("orders",order);
+		model.addAttribute("page2","order-history.jsp");
+		model.addAttribute("page", "order-layout.jsp");
+		model.addAttribute("nav",2);
+		model.addAttribute("nav2",4);
+		return "merchant/merchant-layout";
+	}
+	@GetMapping("/order/send")
+	public String send(Model model) {
+		List<Order> order = orderService.findByFlagAndStatus("nguoi mua da nhan");
+		model.addAttribute("orders",order);
+		model.addAttribute("page2","order-send.jsp");
+		model.addAttribute("page", "order-layout.jsp");
+		model.addAttribute("nav",2);
+		model.addAttribute("nav2",3);
 		return "merchant/merchant-layout";
 	}
 }

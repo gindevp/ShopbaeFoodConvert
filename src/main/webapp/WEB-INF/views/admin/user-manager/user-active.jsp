@@ -15,6 +15,7 @@
   
     
     <c:forEach var="merchant" items="${merchants}">
+    <c:if test="${merchant.id != 1 }">
     <tr >
       <td>${merchant.id}</td>
       <td><img src="/ShobaeFood/static/storage/${merchant.avatar}"  style="height: 40px;
@@ -26,6 +27,7 @@
 <!--      <td class="merchant-item">{{merchant.closeTime}}</td>-->
       <td class="action-icon"><a href="${ pageContext.request.contextPath }/admin/user/block/${merchant.id}"><i class="fa-regular fas fa-lock"></i></a></td>
     </tr>
+    </c:if>
 </c:forEach>
   </table>
   <div class="txt-center mt-2"><button (click)="plus()" class="btn-none btn-load-more link"><span
