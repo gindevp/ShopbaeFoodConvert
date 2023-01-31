@@ -354,8 +354,8 @@
                     <p>Mô tả: ${product.product.shortDescription}</p>
                     <p>Đơn giá: ${product.product.newPrice} đ</p>
                     <button type="button" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
-                            title="Remove item" style="font-size: 1.45rem;">
-                      <i class="fas fa-trash"></i>
+                            title="Remove item" style="font-size: 1.45rem;" ><a href="${ pageContext.request.contextPath }/cart/remove-item/${product.product.id}">
+                      <i class="fas fa-trash"></i></a>
                     </button>
                     <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip"
                             title="Move to the wish list" style="font-size: 1.45rem;">
@@ -386,9 +386,11 @@
                 </div>
                 <!-- Single item -->
 </c:forEach>
+
               </c:if>
 
           </div>
+          
         </div>
 
 
@@ -400,18 +402,26 @@
               <table class="table table-striped table-sm">
                 <thead>
                 <tr>
+                <th scope="col" colspan="3" style="text-align: center;">Hành động</th>
                   <th scope="col">Ảnh</th>
                   <th scope="col">Người đặt </th>
                   <th scope="col">Tổng tiền</th>
                   <th scope="col">Thời gian</th>
                   <th scope="col" >Trạng thái</th>
-                  <th scope="col" colspan="2" style="text-align: center;">Hành động</th>
+                  
                 </tr>
                 </thead>
                 <tbody>
-                <c:forEach items="${oders }" var="oder">
+                <c:forEach  var="order" items="${orders}">
                 <tr>
-                  <td><img src="${order.appUser.avatar}" alt="" style="height: 40px;
+                <td class="merchant-item" size="150px" style="width: 101px;"><a class="btn btn-order" href="">Nhận hàng</a></td>
+                    <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="">Từ chối</a></td>
+
+                  
+
+                  <td class="merchant-item" size="50px"><a class="btn-order" href="${ pageContext.request.contextPath }/cart/delete/order/${order.id}/user/${sessionScope.userId}"><i class="fa-solid fa-trash"></i></a></td>
+                
+                  <td><img src="${ pageContext.request.contextPath }/static/storage/${order.appUser.avatar}" alt="" style="height: 40px;
         width: 40px;
         border-radius: 50%;"></td>
                   <td class="merchant-item">${order.appUser.name}</td>
@@ -419,13 +429,7 @@
                   <td class="merchant-item">${order.orderdate}</td>
                   <td class="merchant-item" size="50px">${order.status} </td>
               
-                    <td class="merchant-item" size="150px" style="width: 101px;"><a class="btn btn-order" href="">Nhận hàng</a></td>
-                    <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="">Từ chối</a></td>
-
-                  
-
-                  <td class="merchant-item" size="50px"><button class="btn-order"><i class="fa-solid fa-trash"></i></button></td>
-                </tr>
+                    </tr>
                 </c:forEach>
                 </tbody>
               </table>

@@ -24,17 +24,21 @@ import org.springframework.web.multipart.MultipartFile;
 
 import shopbae.food.model.Account;
 import shopbae.food.model.Merchant;
+import shopbae.food.model.Order;
 import shopbae.food.model.Product;
 import shopbae.food.model.dto.AccountRegisterDTO;
 import shopbae.food.model.dto.ChangeDTO;
 import shopbae.food.model.dto.ProductForm;
 import shopbae.food.service.AccountService;
 import shopbae.food.service.IMerchantService;
+import shopbae.food.service.IOrderService;
 import shopbae.food.service.IProductService;
 
 @Controller
 @RequestMapping("/merchant")
 public class MerchantPOController {
+	@Autowired
+	private IOrderService orderService;
 	@Autowired
 	private IProductService productService;
 	@Autowired
@@ -196,5 +200,32 @@ public class MerchantPOController {
 		model.addAttribute("page", "product-list.jsp");
 		return "merchant/merchant-layout";
 	}
-	
+	@GetMapping("/order")
+	public String order( Model model) {
+		model.addAttribute("orders",orderService.findByFlagAndStatus("pending"));
+		model.addAttribute("page2","order-pending.jsp");
+		model.addAttribute("page", "order-layout.jsp");
+		return "merchant/merchant-layout";
+	}
+	@GetMapping("/order/pending")
+	public String orderP( Model model) {
+		return "redirect:/merchant/order";
+	}
+	@GetMapping("/order/received/{id}")
+	public String received(Model model, @PathVariable Long id) {
+		Order order=orderService.findById(id);
+		order.setStatus("received");
+		orderService.update(order);
+		model.addAttribute("orders",orderService.findByFlagAndStatus("received"));
+		model.addAttribute("page2","order-received.jsp");
+		model.addAttribute("page", "order-layout.jsp");
+		return "merchant/merchant-layout";
+	}
+	@GetMapping("/order/received")
+	public String receivedP(Model model) {
+		model.addAttribute("orders",orderService.findByFlagAndStatus("received"));
+		model.addAttribute("page2","order-received.jsp");
+		model.addAttribute("page", "order-layout.jsp");
+		return "merchant/merchant-layout";
+	}
 }

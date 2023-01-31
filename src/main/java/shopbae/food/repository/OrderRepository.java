@@ -1,5 +1,6 @@
 package shopbae.food.repository;
 
+import java.io.Serializable;
 import java.util.List;
 
 import org.hibernate.Session;
@@ -50,14 +51,28 @@ public class OrderRepository implements IOrderRepository{
 	public List<Order> findAll() {
 		// TODO Auto-generated method stub
 		Session session= sessionFactory.getCurrentSession();
-		return session.createQuery("FROM order",Order.class).getResultList();
+		return session.createQuery("FROM orders",Order.class).getResultList();
 	}
 
 	@Override
-	public List<Order> findByAppUser(Long id) {
+	public List<Order> findByAppUserAndMer(Long userId,Long merId) {
 		// TODO Auto-generated method stub
 		Session session= sessionFactory.getCurrentSession();
-		return session.createQuery("FROM order a where a.user="+ id,Order.class).getResultList();
+		return session.createQuery("FROM orders a where a.flag=true and a.appUser="+ userId+"and a.merchant_id="+merId,Order.class).getResultList();
 	}
+
+	@Override
+	public Serializable savee(Order t) {
+		// TODO Auto-generated method stub
+		Session session= sessionFactory.getCurrentSession();
+		return session.save(t);
+	}
+
+	@Override
+	public List<Order> findByFlagAndStatus(String status) {
+		Session session= sessionFactory.getCurrentSession();
+		return session.createQuery("FROM orders a where a.flag=true and a.status='"+ status+"'",Order.class).getResultList();
+	}
+	
 
 }

@@ -67,7 +67,7 @@
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
           <li class="breadcrumb-item"><a class="breadcrumb-link" rel="nofollow" href="/ShobaeFood/home">Home</a></li>
-          <li class="breadcrumb-item"><a class="breadcrumb-link" rel="nofollow" href="/ShobaeFood/">list-merchant</a></li>
+          <li class="breadcrumb-item"><a class="breadcrumb-link" rel="nofollow" href="/ShobaeFood/merchantp/all">list-merchant</a></li>
           <li class="breadcrumb-item"><a class="breadcrumb-link" rel="nofollow" >${merchant.name}</a></li>
         </ol>
       </nav>

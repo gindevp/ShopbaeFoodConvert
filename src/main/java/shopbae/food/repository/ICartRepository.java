@@ -22,4 +22,6 @@ public interface ICartRepository extends IGeneral<Cart>{
     void updateQuantity(int quantity,Long cart_id);
 
     void deletesByUser(Long id);
+
+	Cart findByProductAndFlag(Long id);
 }

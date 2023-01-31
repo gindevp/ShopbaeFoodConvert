@@ -2,13 +2,14 @@ package shopbae.food.model;
 
 import java.time.LocalDateTime;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.Table;
+
 
 @Entity(name = "orders")
 public class Order {
@@ -24,12 +25,13 @@ public class Order {
     private String note;
 
     private LocalDateTime orderdate;
-
+    
     private String status;
     private Long merchant_id;
     private double totalPrice;
-    
-    
+    private String deliveryAddress;
+    @Column(name = "flag")
+    private boolean flag=true;
 	public Order() {
 
 	}
@@ -53,6 +55,20 @@ public class Order {
 		this.status = status;
 		this.merchant_id = merchant_id;
 		this.totalPrice = totalPrice;
+	}
+	
+
+	public boolean isFlag() {
+		return flag;
+	}
+	public void setFlag(boolean flag) {
+		this.flag = flag;
+	}
+	public String getDeliveryAddress() {
+		return deliveryAddress;
+	}
+	public void setDeliveryAddress(String deliveryAddress) {
+		this.deliveryAddress = deliveryAddress;
 	}
 	public Long getId() {
 		return id;

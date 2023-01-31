@@ -57,7 +57,7 @@ public class CartRepository implements ICartRepository {
 	public List<Cart> findAllByUser(Long id) {
 		// TODO Auto-generated method stub
 		Session session = sessionFactory.getCurrentSession();
-		return session.createQuery("FROM cart a where a.user =" + id, Cart.class).getResultList();
+		return session.createQuery("FROM cart a where a.deleteFlag=true and a.user =" + id, Cart.class).getResultList();
 	}
 
 	@Override
@@ -71,7 +71,7 @@ public class CartRepository implements ICartRepository {
 		try {
 			Session session = sessionFactory.getCurrentSession();
 			return session
-					.createQuery("FROM cart a where a.user = " + user_id + " and a.product= " + product_id, Cart.class)
+					.createQuery("FROM cart a where a.user = " + user_id + " and a.product= " + product_id+"and a.deleteFlag=true", Cart.class)
 					.getSingleResult();
 		} catch (Exception e) {
 			// TODO: handle exception
@@ -105,11 +105,15 @@ public class CartRepository implements ICartRepository {
 		// TODO Auto-generated method stub
 		try {
 			Session session = sessionFactory.getCurrentSession();
-			session.createQuery("FROM cart a where a.user=" + id, Cart.class).getSingleResult();
+			session.createQuery("UPDATE cart a SET a.deleteFlag=false WHERE a.user=" + id).executeUpdate();
 		} catch (Exception e) {
 			// TODO: handle exception
 			e.printStackTrace();
 		}
 	}
-
+	@Override
+	public Cart findByProductAndFlag(Long id) {
+		Session session = sessionFactory.getCurrentSession();
+		return session.createQuery("FROM cart a where a.deleteFlag=true and a.product =" + id, Cart.class).getSingleResult();
+	}
 }

@@ -26,5 +26,7 @@ public interface ICartService extends IGeneral<Cart>{
 
 	    Cart findCartById(Long id);
 	    Cart updateCart(Long id, Cart cart);
-	    void addToCart(Cart cart); 
+	    void addToCart(Cart cart);
+
+		Cart findByProductAndFlag(Long id); 
 }

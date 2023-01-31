@@ -3,6 +3,7 @@ package shopbae.food.service;
 import java.util.List;
 import java.util.Optional;
 
+import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -131,5 +132,8 @@ ICartRepository cartRepository;
 	        int quantity = cart.get().getQuantity() + 1;
 	        cartRepository.updateQuantity(quantity, cart.get().getId());
 	}
-
+	@Override
+	public Cart findByProductAndFlag(Long id) {
+		return cartRepository.findByProductAndFlag(id);
+	}
 }

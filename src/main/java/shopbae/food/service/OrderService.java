@@ -43,9 +43,15 @@ public class OrderService implements IOrderService {
 	}
 
 	@Override
-	public List<Order> findByAppUser(Long id) {
+	public List<Order> findByAppUserAndMer(Long userId,Long merId) {
 		// TODO Auto-generated method stub
-		return orderRepository.findByAppUser(id);
+		return orderRepository.findByAppUserAndMer(userId,merId);
+	}
+
+	@Override
+	public List<Order> findByFlagAndStatus(String status) {
+		// TODO Auto-generated method stub
+		return orderRepository.findByFlagAndStatus(status);
 	}
 
 }
