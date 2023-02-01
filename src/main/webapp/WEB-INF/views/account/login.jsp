@@ -22,7 +22,7 @@
         
         <form action="${ pageContext.request.contextPath }/login" method="post">
           <div class="form-login-input">
-             <span th:text= "${mess}"></span>
+             <span style="">${mess}</span>
             <div class="field-group">
               <div class="input-group">
               <i class="far fa-user"></i>
