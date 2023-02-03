@@ -317,11 +317,14 @@
 
 <section class="h-100 gradient-custom">
   <div class="container py-5">
+  <a class="btn btn-primary btn-orderDetail" href="/ShobaeFood/merchantp/detail/${sessionScope.merchantId}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
+  <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
+</svg>Quay lại quán</a>
     <div class="row d-flex justify-content-center my-4">
       <div class="col-md-8">
         <div class="card mb-4">
           <div class="card-header py-3">
-            <h5 class="mb-0">Sản phẩm</h5>
+            <h5 class="mb-0">  Sản phẩm</h5>
           </div>
           <div class="card-body">
 
@@ -395,6 +398,9 @@
 
 
         <div class="card mb-4" style="width: 1110px;">
+        
+        
+        <c:if test="${page2!='order-detail.jsp'}">
           <div class="card-body">
             <p><strong>Lịch sử mua hàng</strong></p>
 
@@ -403,10 +409,12 @@
                 <thead>
                 <tr>
                 <th scope="col" colspan="3" style="text-align: center;">Hành động</th>
-                  <th scope="col">Ảnh</th>
+                 
                   <th scope="col">Người đặt </th>
+                  <th scope="col">Chi tiết</th>
                   <th scope="col">Tổng tiền</th>
-                  <th scope="col">Thời gian</th>
+                  <th scope="col">Thời gian đặt mua hàng</th>
+                  
                   <th scope="col" >Trạng thái</th>
                   
                 </tr>
@@ -414,19 +422,22 @@
                 <tbody>
                 <c:forEach  var="order" items="${orders}">
                 <tr>
-                <td class="merchant-item" size="150px" style="width: 101px;"><a class="btn btn-order" href="/ShobaeFood/cart/receiveds/${order.id}">Nhận hàng</a></td>
-                    <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="/ShobaeFood/cart/refused/${order.id}">Từ chối</a></td>
+                
+                <td class="merchant-item" size="150px" style="width: 101px;"><c:if test="${order.status=='nguoi ban da nhan' }"><a class="btn btn-order" href="/ShobaeFood/cart/received/${order.id}">Nhận hàng</a></c:if><c:if test="${order.status!='nguoi ban da nhan' }"><button class="btn btn-order" disabled="disabled">Nhận hàng</button></c:if></td>
+                    <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="/ShobaeFood/cart/refuse/${order.id}">Từ chối</a></td>
 
                   
 
                   <td class="merchant-item" size="50px"><a class="btn-order" href="${ pageContext.request.contextPath }/cart/delete/order/${order.id}/user/${sessionScope.userId}"><i class="fa-solid fa-trash"></i></a></td>
                 
-                  <td><img src="${ pageContext.request.contextPath }/static/storage/${order.appUser.avatar}" alt="" style="height: 40px;
-        width: 40px;
-        border-radius: 50%;"></td>
+                  
                   <td class="merchant-item">${order.appUser.name}</td>
+                  <td class="action-icon show-detail"><a href="/ShobaeFood/cart/order/detail/${order.id}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-left-square" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm10.096 3.146a.5.5 0 1 1 .707.708L6.707 9.95h2.768a.5.5 0 1 1 0 1H5.5a.5.5 0 0 1-.5-.5V6.475a.5.5 0 1 1 1 0v2.768l4.096-4.097z"/>
+</svg></a></td>
                   <td class="merchant-item">${order.totalPrice} đ</td>
                   <td class="merchant-item">${order.orderdate}</td>
+                  
                   <td class="merchant-item" size="50px">${order.status} </td>
               
                     </tr>
@@ -436,7 +447,10 @@
             </div>
 
           </div>
-
+</c:if>
+<c:if test="${page2=='order-detail.jsp'}">
+<jsp:include page="/WEB-INF/views/merchant/${page2}"></jsp:include>
+</c:if>
 
           <div class="card-body">
             <p><strong>We accept</strong></p>

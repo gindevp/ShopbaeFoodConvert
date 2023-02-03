@@ -222,9 +222,11 @@
                               style="font-weight: 400;position: relative;top: -9px;font-size: 10px;right: 0;">đ</span>
                             </div>
                           </div>
-                          <a href="/ShobaeFood/cart/product/${product.id}/user/${sessionScope.userId}">
+                          <a >
                           <div class="col-auto adding-food-cart txt-right">
-                            <div class="btn-adding" >+</div>
+                          
+                            <div class="btn-adding" onclick="addToCart(${sessionScope.userId},${product.id})">+</div>
+                            
                           </div></a>
                         </div>
                       </div>
@@ -251,4 +253,46 @@
   </div>
 </div>
 <br>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script>
+	function addToCart(user_id,product_id) {
+		if(user_id == 0){
+		
+			window.location="https://localhost:8443/ShobaeFood/login?mess=chua-dang-nhap";
+			
+		}
 
+	/*     let producer = $('#producer').val();
+	    let model = $('#model').val();
+	    let price = $('#price').val(); */
+	/*     console.log(price); */
+	    console.log(user_id);
+	    console.log(product_id);
+	    let CartDTO = {
+	    	user_id: user_id,
+	    	product_id: product_id
+	    		
+	    };
+		
+	    $.ajax({
+	    	headers: {
+	             'Accept': 'application/json',
+	             'Content-Type': 'application/json'
+	         },
+	        type: "POST",
+	        data: JSON.stringify(CartDTO),
+	        //tên API
+	        url:`/ShobaeFood/cart/product/`+product_id+`/user/${sessionScope.userId}`,
+	        //xử lý khi thành công
+	        success: function (data) {
+	      	console.log("suss");  
+	      	swal({title:"Thêm thành công",
+	      		icon: "success",
+	      	});
+	        }
+
+	      });
+	}
+
+</script>

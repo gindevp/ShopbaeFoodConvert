@@ -1,4 +1,4 @@
-
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="../img/favicon.png">
+  <link rel="icon" type="image/x-icon" href="/ShobaeFood/static/img/favicon.png">
   <title>Đặt Đồ Ăn</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -4264,25 +4264,34 @@ input.required-data, select.required-data {
 
             </div>
 
-            <div class="main-nav col"><a class="nav-item active" href="">Đồ ăn</a><a
-                    class="nav-item " href="https://shopeefood.vn/ho-chi-minh/fresh">Thực phẩm</a>
-              <a class="nav-item "href="https://shopeefood.vn/ho-chi-minh/liquor">Bia</a>
-              <a class="nav-item " href="https://shopeefood.vn/ho-chi-minh/flowers">Hoa</a>
-              <a class="nav-item " href="https://shopeefood.vn/ho-chi-minh/fmcg">Siêu thị</a>
-              <a class="nav-item " href="https://shopeefood.vn/ho-chi-minh/medicine">Thuốc</a>
-              <a class="nav-item " href="https://shopeefood.vn/ho-chi-minh/pets">Thú
-                cưng</a>
+            <div class="main-nav col"><a class="nav-item active" href=""><spring:message code="food"/></a><a
+                    class="nav-item " href="https://shopeefood.vn/ho-chi-minh/fresh"><spring:message code="fresh"/></a>
+              <a class="nav-item "href="https://shopeefood.vn/ho-chi-minh/liquor"><spring:message code="liquor"/></a>
+              <a class="nav-item " href="https://shopeefood.vn/ho-chi-minh/flowers"><spring:message code="flowers"/></a>
+              <a class="nav-item " href="https://shopeefood.vn/ho-chi-minh/fmcg"><spring:message code="fmcg"/></a>
+              <a class="nav-item " href="https://shopeefood.vn/ho-chi-minh/medicine"><spring:message code="medicine"/></a>
+              <a class="nav-item " href="https://shopeefood.vn/ho-chi-minh/pets"><spring:message code="pets"/></a>
             </div>
-
+<div class="dropdown">
+  <button style="background-color: #f56043;"  class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+    Language
+  </button>
+  <div class="dropdown-menu">
+    <a class="dropdown-item" href="?language=en">English</a>|
+	<a class="dropdown-item" href="?language=vi_VN">Viet Nam</a>|
+	
+  </div>
+</div> 
+&nbsp;
+ &nbsp; &nbsp; 
 <c:if test="${sessionScope.message == 'chua dang nhap'}">
             <div class="user-acc col-auto">
               <a href="/ShobaeFood/login"><button type="button" class="btn btn-none-bg btn-login">
-                <span class="font14">Đăng nhập<c:out value=""/></span>
+                <span class="font14"><spring:message code="login"/></span>
               </button></a>
             </div>
             </c:if>
-        
-            
+           
             <c:if test="${sessionScope.message != 'chua dang nhap'}">
             <div class="user-acc-contain">
                   <img class="user-acc-img" src="${ pageContext.request.contextPath }/static/storage/${sessionScope.avatar}" alt="avatar">

@@ -13,7 +13,7 @@ public class Product {
     private Long id;
     private String name;
     private String shortDescription;
-    private String numberOrder;
+    private Double numberOrder=0d;
     private Double oldPrice;
     private Double newPrice;
     private String image;
@@ -25,7 +25,7 @@ public class Product {
 //    @JsonBackReference
     private Merchant merchant;
 
-	public Product(String name, String shortDescription, String numberOrder, Double oldPrice, Double newPrice,
+	public Product(String name, String shortDescription, Double numberOrder, Double oldPrice, Double newPrice,
 			String image, int quantity, boolean deleteFlag, Merchant merchant) {
 		this.name = name;
 		this.shortDescription = shortDescription;
@@ -83,11 +83,11 @@ public class Product {
 		this.shortDescription = shortDescription;
 	}
 
-	public String getNumberOrder() {
+	public Double getNumberOrder() {
 		return numberOrder;
 	}
 
-	public void setNumberOrder(String numberOrder) {
+	public void setNumberOrder(Double numberOrder) {
 		this.numberOrder = numberOrder;
 	}
 

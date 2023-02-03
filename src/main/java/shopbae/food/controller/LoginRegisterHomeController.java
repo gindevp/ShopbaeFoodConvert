@@ -1,13 +1,10 @@
 package shopbae.food.controller;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
+
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,7 +12,6 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import shopbae.food.model.Account;
@@ -37,18 +33,17 @@ public class LoginRegisterHomeController {
 	@Autowired
 	IAccountService accountService;
 	@Autowired
-	IMerchantService merchantService;
+	IMerchantService merchantService;	
 	@Autowired
 	IProductService productService;
 	@Autowired
-	PasswordEncoder passwordEncoder;
-	@Autowired
 	IAppUserService userSevice;
 	@Autowired
-    MailService mailService;
+	MailService mailService;
 	@Autowired
 	PasswordEncoder encoder;
 
+// Vào trang login
 	@GetMapping("/login")
 	public String showLoginForm(Model model, HttpSession httpSession) {
 		model.addAttribute("page", "login.jsp");
@@ -56,6 +51,7 @@ public class LoginRegisterHomeController {
 
 	}
 
+// Vào trang đăng ký user
 	@GetMapping("/register/user")
 	public String showRegisUser(Model model) {
 		model.addAttribute("page", "register-user.jsp");
@@ -63,7 +59,7 @@ public class LoginRegisterHomeController {
 		model.addAttribute("accountRegisterDTO", new AccountRegisterDTO());
 		return "account/account-layout";
 	}
-
+// Vào trang đăng ký cho merchant
 	@GetMapping("/register/merchant")
 	public String showRegisMerchant(Model model) {
 		model.addAttribute("page", "register-merchant.jsp");
@@ -71,29 +67,21 @@ public class LoginRegisterHomeController {
 		model.addAttribute("accountRegisterDTO", new AccountRegisterDTO());
 		return "account/account-layout";
 	}
-
+// Vào trang hiển thị tất cả merchant
 	@GetMapping("/merchantp/all")
 	public String allMerchant(Model model) {
 		model.addAttribute("merchants", merchantService.getAllByMerchantStatus("active"));
 		model.addAttribute("page", "all-merchant-list.jsp");
 		return "page/home-layout";
 	}
-
+// Vào trang merchant để mua sản phẩm
 	@GetMapping("/merchantp/detail/{id}")
 	public String merchantDetail(@PathVariable Long id, Model model, HttpSession httpSession) {
-		System.out.println(merchantService.findById(id).getStatus());
-		httpSession.setAttribute("merchantId", id);
-		if ("active".equals(merchantService.findById(id).getStatus())) {
-			model.addAttribute("merchant", merchantService.findById(id));
-			model.addAttribute("products", productService.getAllByDeleteFlagTrueAndMerchant(id));
-			model.addAttribute("page", "merchant-detail.jsp");
-		} else {
-			return "redirect:/home";
-		}
-
-		return "page/home-layout";
+		return merchantService.detailMer(id, model, httpSession);
 	}
 
+
+// Tìm kiểm sản phẩm theo id và trả về kq ngay tại trang đó
 	@GetMapping("/merchantp/detail/{id}/search")
 	public String merchant(@PathVariable Long id, @RequestParam String name, Model model) {
 		model.addAttribute("merchant", merchantService.findById(id));
@@ -101,64 +89,22 @@ public class LoginRegisterHomeController {
 		model.addAttribute("page", "merchant-detail.jsp");
 		return "page/home-layout";
 	}
-
+// Trang home show các merchant và set các thông tin session của người dùng
 	@GetMapping("/home")
 	public String home(Model model, HttpSession session) {
-		String userName = (String) session.getAttribute("username");
-		Account account = accountService.findByName(userName);
-
-		String message = "";
-		String name = "";
-		String avatar = "";
-		String role = "";
-
-		if (account == null) {
-			message = "chua dang nhap";
-		} else {
-			if (account.getUser() != null) {
-				name = account.getUser().getName();
-				avatar = account.getUser().getAvatar();
-				role = "user";
-			}
-			if (isAdmin(session)) {
-				name = account.getUser().getName();
-				avatar = account.getUser().getAvatar();
-				role = "admin";
-			}
-			if (account.getMerchant() != null) {
-				name = account.getMerchant().getName();
-				avatar = account.getMerchant().getAvatar();
-				role = "merchant";
-			}
-		}
-		session.setAttribute("name", name);
-		session.setAttribute("avatar", avatar);
-		session.setAttribute("role", role);
-		session.setAttribute("message", message);
-		model.addAttribute("merchants", merchantService.getAllByMerchantStatus("active"));
-		model.addAttribute("page", "home.jsp");
+		merchantService.homePage(model, session);
 		return "page/home-layout";
 	}
 
-	private boolean isAdmin(HttpSession session) {
-		Collection<? extends GrantedAuthority> authorities = (Collection<? extends GrantedAuthority>) session
-				.getAttribute("authorities");
-		List<String> roles = new ArrayList<String>();
-		for (GrantedAuthority a : authorities) {
-			roles.add(a.getAuthority());
-		}
-		if (roles.contains("ROLE_ADMIN")) {
-			return true;
-		}
-		return false;
-	}
+	
 
+// Thực hiện đăng ký cho user
 	@PostMapping("/register/user")
 	public String addUser(@ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model) {
 		try {
 			String status = "pending";
 			boolean isEnabled = true;
-			String pass = passwordEncoder.encode(accountRegisterDTO.getPassword());
+			String pass = encoder.encode(accountRegisterDTO.getPassword());
 			Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled,
 					accountRegisterDTO.getEmail());
 			accountService.save(account);
@@ -178,13 +124,13 @@ public class LoginRegisterHomeController {
 		}
 
 	}
-
+// THực  hiện đăng ký cho merchant
 	@PostMapping("/register/merchant")
 	public String addMerchant(@ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model) {
 		try {
 			String status = "pending";
 			boolean isEnabled = true;
-			String pass = passwordEncoder.encode(accountRegisterDTO.getPassword());
+			String pass = encoder.encode(accountRegisterDTO.getPassword());
 			Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled,
 					accountRegisterDTO.getEmail());
 			accountService.save(account);
@@ -203,31 +149,32 @@ public class LoginRegisterHomeController {
 			return "account/account-layout";
 		}
 	}
-
+// Hiển thị trang quên mật khẩu
 	@GetMapping("/forgotpass")
 	public String forgot(Model model) {
 		model.addAttribute("page", "forgotpass.jsp");
 		return "account/account-layout";
 	}
-
+// Thực hiện nhận username và bắt xác nhận one time password (otp) để đổi pass
 	@PostMapping("/forgotpass")
 	public String fogot(Model model, @RequestParam String username, HttpSession session) {
-		Account account= accountService.findByName(username);
-		if ( account!= null) {
+		Account account = accountService.findByName(username);
+		if (account != null) {
 			double randomDouble = Math.random();
-	        randomDouble = randomDouble * 1000000+1 ;
-	        int OTP= (int) randomDouble;
-	        account.setOtp(String.valueOf(OTP));
-	        accountService.update(account);
-	        Mail mail= new Mail();
-	        mail.setMailTo(account.getEmail());
-	        mail.setMailFrom("nguyenhuuquyet07092001@gmail.com");
-	        mail.setMailSubject("Mã xác nhận OTP");
-	        mail.setMailContent("Mã OTP của bạn là:"+OTP+"\nVui lòng không chia sẻ với ai\nMời nhấp link bên dưới để đến trang xác nhận OTP\nhttps://localhost:8443/ShobaeFood/forgotpass/confirm");
-	        mailService.sendEmail(mail);
-	        model.addAttribute("page", "confirm-otp.jsp");
-	        session.setAttribute("name",username);
-	        return "account/account-layout";
+			randomDouble = randomDouble * 1000000 + 1;
+			int OTP = (int) randomDouble;
+			account.setOtp(String.valueOf(OTP));
+			accountService.update(account);
+			Mail mail = new Mail();
+			mail.setMailTo(account.getEmail());
+			mail.setMailFrom("nguyenhuuquyet07092001@gmail.com");
+			mail.setMailSubject("Mã xác nhận OTP");
+			mail.setMailContent("Mã OTP của bạn là:" + OTP
+					+ "\nVui lòng không chia sẻ với ai\nMời nhấp link bên dưới để đến trang xác nhận OTP\nhttps://localhost:8443/ShobaeFood/forgotpass/confirm");
+			mailService.sendEmail(mail);
+			model.addAttribute("page", "confirm-otp.jsp");
+			session.setAttribute("name", username);
+			return "account/account-layout";
 
 		} else {
 			model.addAttribute("message", "username bạn nhập không tồn tại");
@@ -236,47 +183,56 @@ public class LoginRegisterHomeController {
 		}
 
 	}
-	
+// Đổi pass cần nhập otp và new password
 	@PostMapping("/forgotpass/confirm")
-    public String confirmOtp(Model model,HttpSession session,@RequestParam String otp, String pass){
-		String name= (String) session.getAttribute("name");
-       Account account= accountService.findByName(name);
-        if(otp.equals(account.getOtp())){
-            account.setPassword(encoder.encode(pass));
-            account.setOtp(null);
-            accountService.update(account);
-            session.removeAttribute("name");
-            model.addAttribute("page","login.jsp");
-            return "account/account-layout";
-        }else {
-        	model.addAttribute("message","sai otp ròi mời nhập lại");
-        	model.addAttribute("page","confirm-otp.jsp");
-            return "account/account-layout";
-        }
-    }
+	public String confirmOtp(Model model, HttpSession session, @RequestParam String otp, String pass) {
+		String name = (String) session.getAttribute("name");
+		Account account = accountService.findByName(name);
+		if (otp.equals(account.getOtp())) {
+			account.setPassword(encoder.encode(pass));
+			account.setOtp(null);
+			accountService.update(account);
+			session.removeAttribute("name");
+			model.addAttribute("page", "login.jsp");
+			return "account/account-layout";
+		} else {
+			model.addAttribute("message", "sai otp ròi mời nhập lại");
+			model.addAttribute("page", "confirm-otp.jsp");
+			return "account/account-layout";
+		}
+	}
+// Đổi pass cho người dùng đã đăng nhập
 	@GetMapping("/change-pass")
-	public String change(HttpSession session,Model model) {
-		Account account= accountService.findByName(((Account) session.getAttribute("account")).getUserName());
-		if ( account!= null) {
+	public String change(HttpSession session, Model model) {
+		Account account = accountService.findByName(((Account) session.getAttribute("account")).getUserName());
+		if (account != null) {
 			double randomDouble = Math.random();
-	        randomDouble = randomDouble * 1000000+1 ;
-	        int OTP= (int) randomDouble;
-	        account.setOtp(String.valueOf(OTP));
-	        accountService.update(account);
-	        Mail mail= new Mail();
-	        mail.setMailTo(account.getEmail());
-	        mail.setMailFrom("nguyenhuuquyet07092001@gmail.com");
-	        mail.setMailSubject("Mã xác nhận OTP");
-	        mail.setMailContent("Mã OTP của bạn là:"+OTP+"\nVui lòng không chia sẻ với ai\nMời nhấp link bên dưới để đến trang xác nhận OTP\nhttps://localhost:8443/ShobaeFood/forgotpass/confirm");
-	        mailService.sendEmail(mail);
-	        model.addAttribute("page", "confirm-otp.jsp");
-	        session.setAttribute("name",((Account) session.getAttribute("account")).getUserName());
-	        return "account/account-layout";
+			randomDouble = randomDouble * 1000000 + 1;
+			int OTP = (int) randomDouble;
+			account.setOtp(String.valueOf(OTP));
+			accountService.update(account);
+			Mail mail = new Mail();
+			mail.setMailTo(account.getEmail());
+			mail.setMailFrom("nguyenhuuquyet07092001@gmail.com");
+			mail.setMailSubject("Mã xác nhận OTP");
+			mail.setMailContent("Mã OTP của bạn là:" + OTP
+					+ "\nVui lòng không chia sẻ với ai\nMời nhấp link bên dưới để đến trang xác nhận OTP\nhttps://localhost:8443/ShobaeFood/forgotpass/confirm");
+			mailService.sendEmail(mail);
+			model.addAttribute("page", "confirm-otp.jsp");
+			session.setAttribute("name", ((Account) session.getAttribute("account")).getUserName());
+			return "account/account-layout";
 
 		} else {
 			model.addAttribute("message", "username bạn nhập không tồn tại");
 			model.addAttribute("page", "forgotpass.jsp");
 			return "redirect:/merchant/detail";
 		}
+	}
+// Tìm kiểm merchant theo name gần đúng
+	@GetMapping("home/search/merchant")
+	public String searchMerchant(Model model, @RequestParam String search) {
+		model.addAttribute("merchants", merchantService.findAllMerchantAndNameContainer(search));
+		model.addAttribute("page", "all-merchant-list.jsp");
+		return "page/home-layout";
 	}
 }

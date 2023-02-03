@@ -1,4 +1,4 @@
-package shopbae.food.controller;
+  package shopbae.food.controller;
 
 import java.io.File;
 import java.io.IOException;
@@ -32,6 +32,8 @@ public class UserController {
 	IAccountService accountService;
 	@Value("${file-upload}")
 	private String fileUpload;
+	
+	// Hiển thị thông tin user
 	@GetMapping
 	public String info( Model model, HttpSession httpSession) {
 		model.addAttribute("page","user-info.jsp");
@@ -44,6 +46,7 @@ public class UserController {
 		// tạo changedto để binding dữ liệu của cả merchant và account
 		return "page/home-layout";
 	}
+	// Sửa thông tin user
 	@PostMapping
 	public String infoSave( @ModelAttribute ChangeDTO changeDTO, Model model, HttpSession httpSession) {
 		model.addAttribute("page","user-info.jsp");

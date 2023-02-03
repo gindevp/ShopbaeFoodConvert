@@ -2,19 +2,39 @@ package shopbae.food.service.cart;
 
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
+
+import javax.servlet.http.HttpSession;
 
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.ui.Model;
 
 import shopbae.food.model.AppUser;
 import shopbae.food.model.Cart;
+import shopbae.food.model.Order;
+import shopbae.food.model.OrderDetail;
 import shopbae.food.model.Product;
 import shopbae.food.repository.cart.ICartRepository;
+import shopbae.food.service.order.IOrderService;
+import shopbae.food.service.orderDetail.IOrderDetailService;
+import shopbae.food.service.product.IProductService;
+import shopbae.food.service.user.IAppUserService;
 @Service
 public class CartService implements ICartService{
 @Autowired
 ICartRepository cartRepository;
+@Autowired
+IProductService productService;
+@Autowired
+IAppUserService appUserService;
+@Autowired
+IOrderService orderService;
+@Autowired
+IOrderDetailService orderDetailService;
+@Autowired
+ICartService cartService;
 	@Override
 	public Cart findById(Long id) {
 		// TODO Auto-generated method stub
@@ -81,23 +101,6 @@ ICartRepository cartRepository;
 		cartRepository.deletesByUser(id);
 	}
 
-	@Override
-	public void removeAll() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public Cart findCartById(Long id) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public Cart updateCart(Long id, Cart cart) {
-		// TODO Auto-generated method stub
-		return null;
-	}
 
 	@Override
 	public void addToCart(Cart cart) {
@@ -135,5 +138,62 @@ ICartRepository cartRepository;
 	@Override
 	public Cart findByProductAndFlag(Long id) {
 		return cartRepository.findByProductAndFlag(id);
+	}
+	@Override
+	public void addCart(Long productid, Long userid) {
+		Cart cart = new Cart();
+		AppUser apUser = appUserService.findById(userid);
+		Product product = new Product();
+		product.setId(productid);
+		cart.setPrice(productService.findById(productid).getNewPrice());
+		cart.setProduct(product);
+		cart.setUser(apUser);
+		this.addToCart(cart);
+	}
+	@Override
+	public void cartDetail(Model model, Long userId, HttpSession session) {
+		long merId=(long) session.getAttribute("merchantId");
+		List<Cart> cart1= this.findAllByUser(userId);
+		List<Cart> cart2= cart1.stream().filter(c-> c.getProduct().getMerchant().getId()==merId).collect(Collectors.toList());
+		model.addAttribute("products", cart2);
+		double sum=0;
+		for (Cart x : cart2) {
+			sum+=x.getTotalPrice();
+		}
+		model.addAttribute("sum",sum);
+		List<Order> orders= orderService.findByAppUserAndMer(userId,(Long) session.getAttribute("merchantId"));
+		model.addAttribute("orders", orders);
+		if(cart2.isEmpty()) {
+			model.addAttribute("message","khong co du lieu");
+		}else {
+			model.addAttribute("message","co du lieu");
+		}
+		model.addAttribute("page", "cart.jsp");
+	}
+	@Override
+	public void ordeing(Long userId, Long merchantId, String note, String address, double sum) {
+		Order oder= new Order();
+		oder.setOrderdate(java.time.LocalDateTime.now());
+		oder.setNote(note);
+		oder.setStatus("cho xac nhan");
+		oder.setTotalPrice(sum);
+		oder.setAppUser(appUserService.findById(userId));
+		oder.setMerchant_id(merchantId);
+		oder.setDeliveryAddress(address);
+		Long orderId= (Long) orderService.savee(oder);
+		List<Cart> carts= this.findAllByUser(userId);
+		System.out.println("cart by userId:"+carts);
+		List<Cart> oderDetail= carts.stream().filter(a-> a.getProduct().getMerchant().getId()== (long) merchantId).collect(Collectors.toList());
+		System.out.println("cart by userId and merId:"+oderDetail);
+		for (Cart cart : oderDetail) {
+			OrderDetail orderDetail= new OrderDetail();
+			oder.setId(orderId);
+			orderDetail.setOrder(oder);
+			orderDetail.setProduct(cart.getProduct());
+			orderDetail.setQuantity(cart.getQuantity());
+			orderDetailService.save(orderDetail);
+			cart.setDeleteFlag(false);
+			cartService.update(cart);
+		}
 	}
 }

@@ -27,8 +27,8 @@ public class AccountController {
 
 	@RequestMapping("/")
 	public String find(Model model) {
-		model.addAttribute("accounts", accountService.findAll());
-		return "account/account-list";
+		
+		return "account/test/home";
 	}
 
 	@GetMapping("/add")

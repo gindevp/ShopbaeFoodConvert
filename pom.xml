@@ -5,7 +5,18 @@
 	<version>0.0.1-SNAPSHOT</version>
 	<packaging>war</packaging>
 	<dependencies>
-	
+	    <!-- https://mvnrepository.com/artifact/org.springframework/spring-websocket -->
+<dependency>
+    <groupId>org.springframework</groupId>
+    <artifactId>spring-websocket</artifactId>
+    <version>5.3.18</version>
+</dependency>
+
+    <dependency>
+  <groupId>org.springframework</groupId>
+  <artifactId>spring-messaging</artifactId>
+  <version>5.3.18</version>
+</dependency>
 		<!-- Spring Context Support -->
 		<dependency>
 			<groupId>org.springframework</groupId>

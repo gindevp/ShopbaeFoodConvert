@@ -97,8 +97,17 @@
 <a class="btn btn-dark" href="${ pageContext.request.contextPath }/merchant/product">Hủy</a>
 
 &nbsp;
-  <button class="btn btn-danger" type="submit">Thêm</button>
+  <button class="btn btn-danger" type="submit" onclick="sw()">Thêm</button>
 </form:form>
 
 </body>
 </html>
+<script type="text/javascript">
+function sw() {
+	title: "Thêm thành công",
+	  icon: "success",
+}
+</script>
+<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js">
+</script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
