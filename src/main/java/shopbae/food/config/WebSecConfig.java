@@ -50,7 +50,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 //		.antMatchers("/**").permitAll()
 				.antMatchers("/login", "/register/**", "/home/**", "/static/**", "/merchantp/**",
-						"/forgotpass/**", "/change-pass/**","/account/","/a/**","/chat/**")
+						"/forgotpass/**", "/change-pass/**","/account/","/a/**","/chat/**","/jasper/**")
 				.permitAll()
 				.antMatchers("/admin/**").hasRole("ADMIN")
 				.antMatchers("/user-info", "/cart/**").hasRole("USER")

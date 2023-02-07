@@ -44,6 +44,7 @@ public class AppConfig implements WebMvcConfigurer, ApplicationContextAware{
 		// TODO Auto-generated method stub
 		configurer.enable();;
 	}
+	
 	@Bean
 	public InternalResourceViewResolver getInternalResourceViewResolver() {
 		InternalResourceViewResolver resolver= new  InternalResourceViewResolver();

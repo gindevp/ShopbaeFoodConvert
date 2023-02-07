@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
-<link rel="icon" type="image/x-icon" href="/ShobaeFood/static/img/favicon.png">
+<link rel="icon" type="image/x-icon" href="${ pageContext.request.contextPath }/static/img/favicon.png">
 
 <!DOCTYPE html>
 <head>
@@ -40,7 +40,7 @@
                <div class="user-acc col-auto">
                
                <c:if test="${page == 'forgotpass.jsp'|| page =='confirm-otp.jsp' }">
-              <a href="/ShobaeFood/login"><button type="button" class="btn btn-none-bg btn-login">
+              <a href="${ pageContext.request.contextPath }login"><button type="button" class="btn btn-none-bg btn-login">
                 <span class="font14">Đăng nhập</span>
               </button></a></c:if>
             </div>

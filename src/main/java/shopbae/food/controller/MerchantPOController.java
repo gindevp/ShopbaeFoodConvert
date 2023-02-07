@@ -85,6 +85,7 @@ public class MerchantPOController {
 		changeDTO.setOpenTime(merchant.getOpenTime());
 		changeDTO.setCloseTime(merchant.getCloseTime());
 		model.addAttribute("changeDTO",changeDTO);
+		httpSession.setAttribute("merchantAvt",merchant.getAvatar());
 		model.addAttribute("nav",5);
 		// tạo changedto để binding dữ liệu của cả merchant và account
 		return "merchant/merchant-layout";
@@ -98,7 +99,7 @@ public class MerchantPOController {
 		try {
 			FileCopyUtils.copy(changeDTO.getAvatar().getBytes(), new File(fileUpload + fileName));
 		} catch (IOException e) {
-			e.printStackTrace();
+			fileName=(String) httpSession.getAttribute("merchantAvt");
 		}
 		
 		Merchant merchant= (Merchant) httpSession.getAttribute("merchant");
@@ -144,7 +145,7 @@ public class MerchantPOController {
 		try {
 			FileCopyUtils.copy(productForm.getImage().getBytes(), new File(fileUpload + fileName));
 		} catch (IOException e) {
-			e.printStackTrace();
+			fileName= "tet.jpg";
 		}
 		Product product = new Product(productForm.getName(), productForm.getShortDescription(),
 				productForm.getNewPrice(), productForm.getOldPrice(), fileName);
@@ -167,11 +168,12 @@ public class MerchantPOController {
 	}
 // Hiển thị trang edit product và thông tin product cần sửa
 	@RequestMapping("/product/edit/{id}")
-	public String update(@PathVariable Long id, Model model) {
+	public String update(@PathVariable Long id, Model model, HttpSession httpSession) {
 		Product product = productService.findById(id);
 		ProductForm productForm = new ProductForm(product.getId(), product.getName(), product.getShortDescription(),
 				product.getNewPrice(), product.getOldPrice(), null);
 		model.addAttribute("productForm", productForm);
+		httpSession.setAttribute("productImage", product.getImage());
 		model.addAttribute("page", "product-edit.jsp");
 		return "merchant/merchant-layout";
 	}
@@ -184,7 +186,7 @@ public class MerchantPOController {
 		try {
 			FileCopyUtils.copy(productForm.getImage().getBytes(), new File(fileUpload + fileName));
 		} catch (IOException e) {
-			e.printStackTrace();
+			fileName= (String) httpSession.getAttribute("productImage");
 		}
 		Product product = new Product(productForm.getId(), productForm.getName(), productForm.getShortDescription(),
 				productForm.getNewPrice(), productForm.getOldPrice(), fileName);

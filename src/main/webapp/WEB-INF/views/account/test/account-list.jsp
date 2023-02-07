@@ -30,8 +30,8 @@
   		<td>${q.id}</td>
   		<td>${q.userName}</td>
   		<td>${q.email}</td>
-  		<td><a href="/ShobaeFood/update/${q.id}" >edit</a></td>
-        <td><a href="/ShobaeFood/delete/${q.id}" >delete</a></td>                         
+  		<td><a href="${ pageContext.request.contextPath }/update/${q.id}" >edit</a></td>
+        <td><a href="${ pageContext.request.contextPath }/delete/${q.id}" >delete</a></td>                         
   	</tr>
   	</c:forEach>
   </table>

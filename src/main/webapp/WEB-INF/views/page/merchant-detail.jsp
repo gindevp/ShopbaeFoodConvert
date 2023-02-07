@@ -66,8 +66,8 @@
     <div class="detail-restaurant-info">
       <nav aria-label="breadcrumb">
         <ol class="breadcrumb">
-          <li class="breadcrumb-item"><a class="breadcrumb-link" rel="nofollow" href="/ShobaeFood/home">Home</a></li>
-          <li class="breadcrumb-item"><a class="breadcrumb-link" rel="nofollow" href="/ShobaeFood/merchantp/all">list-merchant</a></li>
+          <li class="breadcrumb-item"><a class="breadcrumb-link" rel="nofollow" href="${ pageContext.request.contextPath }/home">Home</a></li>
+          <li class="breadcrumb-item"><a class="breadcrumb-link" rel="nofollow" href="${ pageContext.request.contextPath }/merchantp/all">list-merchant</a></li>
           <li class="breadcrumb-item"><a class="breadcrumb-link" rel="nofollow" >${merchant.name}</a></li>
         </ol>
       </nav>
@@ -179,7 +179,7 @@
             </div>
           </div>
           <div class="menu-restaurant-list">
-          <form action="/ShobaeFood/merchantp/detail/${merchant.id}/search">
+          <form action="${ pageContext.request.contextPath }/merchantp/detail/${merchant.id}/search">
             <div class="search-items"><p class="input-group"><i class="fas fa-search"></i>
             <input type="search"
                                                                                                  name="name"
@@ -205,7 +205,7 @@
                     <div class="row" style="width: 750px">
                       <div class="col-auto item-restaurant-img" >
                         <button class="inline"><img
-                          src="/ShobaeFood/static/storage/${product.image}"
+                          src="${ pageContext.request.contextPath }/static/storage/${product.image}"
                           alt="Set lẩu tok full topping 2-3 người ăn" width="60" height="60"></button>
                       </div>
                       <div class="col item-restaurant-info"><h2 class="item-restaurant-name">${product.name}</h2>

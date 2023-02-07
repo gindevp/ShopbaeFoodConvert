@@ -18,7 +18,7 @@
     &nbsp;&nbsp;&nbsp;&nbsp;
     &nbsp;&nbsp;&nbsp;&nbsp;
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <form action="/ShobaeFood/merchant/product/search" method="get" class="col-2 " role="search" style="width: 17% ; margin-left: 700px">
+    <form action="${ pageContext.request.contextPath }/merchant/product/search" method="get" class="col-2 " role="search" style="width: 17% ; margin-left: 700px">
       <input id = "name" type="search" class="form-control form-control-search" placeholder="Search..." aria-label="Search" name="name" >
 
     </form>

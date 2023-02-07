@@ -42,6 +42,7 @@ public class UserController {
 		changeDTO.setName(user.getName());
 		changeDTO.setEmail(user.getAccount().getEmail());
 		changeDTO.setPhone(user.getPhone());
+		httpSession.setAttribute("userAvt",user.getAvatar());
 		model.addAttribute("changeDTO",changeDTO);
 		// tạo changedto để binding dữ liệu của cả merchant và account
 		return "page/home-layout";
@@ -55,7 +56,7 @@ public class UserController {
 		try {
 			FileCopyUtils.copy(changeDTO.getAvatar().getBytes(), new File(fileUpload + fileName));
 		} catch (IOException e) {
-			e.printStackTrace();
+			fileName= (String) httpSession.getAttribute("userAvt");
 		}
 		
 		AppUser user= (AppUser) httpSession.getAttribute("user");

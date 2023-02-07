@@ -12,7 +12,7 @@
               
             </div>
             
-            <form action="/ShobaeFood/home/search/merchant">
+            <form action="${ pageContext.request.contextPath }/home/search/merchant">
             <div class="form-search">
               <div class="input-group"><input style="color: black;" type="text" id="txtSearchHome"
                                               placeholder="<spring:message code="2"/>" name="search"><a>
@@ -22,29 +22,29 @@
             </div>
             </form>
           <div class="category-list-filter"><a href="${ pageContext.request.contextPath }/merchantp/all"><span
-              class="category-item ">All</span></a><a href="/ShobaeFood/home/search/merchant?search=do an"><span
-              class="category-item ">Đồ ăn</span></a><a href="/ShobaeFood/home/search/merchant?search=do uong"><span class="category-item ">Đồ uống</span></a><a
-              href="/ShobaeFood/home/search/merchant?search=do chay"><span
+              class="category-item ">All</span></a><a href="${ pageContext.request.contextPath }/home/search/merchant?search=do an"><span
+              class="category-item ">Đồ ăn</span></a><a href="${ pageContext.request.contextPath }/home/search/merchant?search=do uong"><span class="category-item ">Đồ uống</span></a><a
+              href="${ pageContext.request.contextPath }/home/search/merchant?search=do chay"><span
               class="category-item ">Đồ chay</span></a><a
-              href="/ShobaeFood/home/search/merchant?search=banh kem"><span
+              href="${ pageContext.request.contextPath }/home/search/merchant?search=banh kem"><span
               class="category-item ">Bánh kem</span></a><a
-              href="/ShobaeFood/home/search/merchant?search=trang mieng"><span
+              href="${ pageContext.request.contextPath }/home/search/merchant?search=trang mieng"><span
               class="category-item ">Tráng miệng</span></a><a
-              href="/ShobaeFood/home/search/merchant?search=homemade"><span
+              href="${ pageContext.request.contextPath }/home/search/merchant?search=homemade"><span
               class="category-item ">Homemade</span></a><a
-              href="/ShobaeFood/home/search/merchant?search=via he"><span
+              href="${ pageContext.request.contextPath }/home/search/merchant?search=via he"><span
               class="category-item ">Vỉa hè</span></a><a
-              href="/ShobaeFood/home/search/merchant?search=pizza"><span
+              href="${ pageContext.request.contextPath }/home/search/merchant?search=pizza"><span
               class="category-item ">Pizza/Burger</span></a><a
-              href="/ShobaeFood/home/search/merchant?search=ga"><span
+              href="${ pageContext.request.contextPath }/home/search/merchant?search=ga"><span
               class="category-item ">Món gà</span></a><a
-              href="/ShobaeFood/home/search/merchant?search=lau"><span
+              href="${ pageContext.request.contextPath }/home/search/merchant?search=lau"><span
               class="category-item ">Món lẩu</span></a><a
-              href="/ShobaeFood/home/search/merchant?search=sushi"><span
+              href="${ pageContext.request.contextPath }/home/search/merchant?search=sushi"><span
               class="category-item ">Sushi</span></a><a
-              href="/ShobaeFood/home/search/merchant?search=mi pho"><span
+              href="${ pageContext.request.contextPath }/home/search/merchant?search=mi pho"><span
               class="category-item ">Mì phở</span></a><a
-              href="/ShobaeFood/home/search/merchant?search=com hop"><span
+              href="${ pageContext.request.contextPath }/home/search/merchant?search=com hop"><span
               class="category-item ">Cơm hộp</span></a></div>
             <div>
 
@@ -148,7 +148,7 @@
 <%--              List shops foreach--%>
               <c:forEach var="shops" items="${merchants}">
               <div class="item-restaurant"><a  class="item-content"
-                                              href="/ShobaeFood/merchantp/detail/${shops.id}">
+                                              href="${ pageContext.request.contextPath }/merchantp/detail/${shops.id}">
                 <div class="img-restaurant"><img
                         src="${ pageContext.request.contextPath }/static/storage/${shops.avatar}"
                         class=""></div>

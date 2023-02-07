@@ -9,7 +9,7 @@
 <body>
 
   <h1>Add new Account:</h1>
-  <form:form action="/ShobaeFood/save" method="POST"
+  <form:form action="${ pageContext.request.contextPath }/save" method="POST"
     modelAttribute="account">
       Name: <form:input path="userName" /> <br/> <br/>
       Mail: <form:input path="email" /> <br/> <br/>

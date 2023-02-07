@@ -9,7 +9,7 @@
     <div class="list-restaurant" >
       <c:forEach var="shops" items="${merchants}">
               <div class="item-restaurant"><a  class="item-content"
-                                              href="/ShobaeFood/merchantp/detail/${shops.id}">	
+                                              href="${ pageContext.request.contextPath }/merchantp/detail/${shops.id}">	
                 <div class="img-restaurant"><img
                         src="${ pageContext.request.contextPath }/static/storage/${shops.avatar}"
                         class=""></div>

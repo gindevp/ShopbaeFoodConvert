@@ -18,7 +18,7 @@
 		}
 
 		function connect() {
-			var socket = new SockJS('/ShobaeFood/chat');
+			var socket = new SockJS('${ pageContext.request.contextPath }/chat');
 			stompClient = Stomp.over(socket);
 			stompClient.connect({}, function(frame) {
 				setConnected(true);

@@ -18,7 +18,7 @@
     <c:forEach var="merchant" items="${merchants}">
     <tr >
       <td>${merchant.id}</td>
-      <td><img src="/ShobaeFood/static/storage/${merchant.avatar}"  style="height: 40px;
+      <td><img src="${ pageContext.request.contextPath }/static/storage/${merchant.avatar}"  style="height: 40px;
     width: 40px;
     border-radius: 50%;"></td>
       <td class="merchant-item">${merchant.name}</td>

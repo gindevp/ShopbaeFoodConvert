@@ -6,7 +6,7 @@
   <meta charset="utf-8">
   <meta http-equiv="X-UA-Compatible" content="IE=edge">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <link rel="icon" type="image/x-icon" href="/ShobaeFood/static/img/favicon.png">
+  <link rel="icon" type="image/x-icon" href="${ pageContext.request.contextPath }/static/img/favicon.png">
   <title>Đặt Đồ Ăn</title>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.4.1/css/bootstrap.min.css">
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
@@ -4286,7 +4286,7 @@ input.required-data, select.required-data {
  &nbsp; &nbsp; 
 <c:if test="${sessionScope.message == 'chua dang nhap'}">
             <div class="user-acc col-auto">
-              <a href="/ShobaeFood/login"><button type="button" class="btn btn-none-bg btn-login">
+              <a href="${ pageContext.request.contextPath }/login"><button type="button" class="btn btn-none-bg btn-login">
                 <span class="font14"><spring:message code="login"/></span>
               </button></a>
             </div>

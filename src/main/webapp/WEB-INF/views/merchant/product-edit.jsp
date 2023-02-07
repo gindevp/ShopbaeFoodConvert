@@ -19,7 +19,7 @@
 &nbsp;
 &nbsp;
 &nbsp;
-<form:form action="/ShobaeFood/merchant/product/edit/save" method="POST"
+<form:form action="${ pageContext.request.contextPath }/merchant/product/edit/save" method="POST"
     modelAttribute="productForm" class="container" enctype="multipart/form-data">
 
   
