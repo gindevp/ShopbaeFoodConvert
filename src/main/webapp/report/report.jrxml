@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.19.1.final using JasperReports Library version 6.19.1-867c00bf88cd4d784d404379d6c05e1b419e8a4c  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="Blank_A4" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="c9583f62-b612-4e45-808b-f9922efa5a0e">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="id_order" class="java.lang.Integer"/>
+	<field name="merchant_name" class="java.lang.String"/>
+	<field name="merchant_phone" class="java.lang.String"/>
+	<field name="time" class="java.lang.String"/>
+	<field name="product_name" class="java.lang.String"/>
+	<field name="product_price" class="java.lang.Double"/>
+	<field name="product_quantity" class="java.lang.Integer"/>
+	<field name="product_totalPrice" class="java.lang.Double"/>
+	<field name="sum" class="java.lang.Double"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="94" splitType="Stretch">
+			<staticText>
+				<reportElement x="200" y="0" width="170" height="30" uuid="a75fefe5-2ec3-4fbb-aec7-22b4cce8b3e5"/>
+				<textElement>
+					<font size="20" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SHOPBAE FOOD]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="240" y="30" width="100" height="20" uuid="bf1d892a-f42e-44d2-a89f-0673454fde8c"/>
+				<textElement>
+					<font fontName=".VnArabia" size="18"/>
+				</textElement>
+				<text><![CDATA[i'm happy]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="217" y="50" width="120" height="30" uuid="b87d9211-a92c-4892-974a-a402d7a822fa"/>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Ready Number:  ]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="330" y="50" width="100" height="30" uuid="167bde03-3eef-487b-a9ab-a40c6ecc5bdb">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ce79b967-0355-45eb-ac3e-a3098c704eae"/>
+				</reportElement>
+				<textElement>
+					<font size="16"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{id_order}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="88" splitType="Stretch">
+			<staticText>
+				<reportElement x="80" y="0" width="400" height="82" uuid="7f3ef727-f4aa-4a88-8d23-df110dc6c289"/>
+				<textElement>
+					<font size="11"/>
+				</textElement>
+				<text><![CDATA[CTY TNHH SHOPBAE FOOD VIETNAM
+TEN QUAN:
+SDT:
+PASSWIFI: quyetdzai
+TIME:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="140" y="13" width="117" height="20" uuid="a3efb755-82cd-4453-b865-0309c1117c44">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{merchant_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="108" y="27" width="120" height="24" uuid="45e4d5bd-216e-48b8-a857-82bf8fee3fac">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+					<property name="com.jaspersoft.studio.unit.x" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{merchant_phone}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="120" y="55" width="333" height="19" uuid="20b3bfb9-1ffd-4655-8fe1-5a1f392f7834">
+					<property name="com.jaspersoft.studio.unit.y" value="px"/>
+				</reportElement>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{time}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="25" splitType="Stretch">
+			<staticText>
+				<reportElement x="80" y="0" width="100" height="20" uuid="4fd72651-236b-4f27-b2e9-f1ec13ca6148"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Product Name]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="180" y="0" width="100" height="20" uuid="7c5eb34f-92ec-4301-9c93-3c8dcae37533"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Price]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="2" width="100" height="20" uuid="dc72374d-5509-47c0-8bfb-3434b9f356f9"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Quantity]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="380" y="2" width="100" height="20" uuid="99f092f2-e294-4657-b8f2-5bf930219763"/>
+				<textElement>
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Amount]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="21" splitType="Stretch">
+			<textField>
+				<reportElement x="80" y="0" width="100" height="20" uuid="1b15e3d8-c4b7-4b44-a870-7c5fddc38ab4">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="ec8bf6c7-1f96-4195-8ae6-16090ae02e83"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{product_name}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="180" y="0" width="100" height="20" uuid="a409c781-fdbf-4931-867c-09c1b34069fc">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="32648890-7d18-4be3-8e32-56613dc3b57d"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{product_price}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="380" y="0" width="100" height="20" uuid="92700566-b2d1-434f-89c3-7f8e5c49f035">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="b7a36e06-c899-4b4c-8a75-675f05cc9d0e"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{product_totalPrice}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="280" y="0" width="100" height="20" uuid="81f8bcc0-1cfd-4644-ab05-e270057a7603">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="918466ac-af28-43d3-bd80-0b3498576d6c"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{product_quantity}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="100" y="0" width="100" height="13" uuid="525edece-7245-4db0-9bde-bdd5f20dd907"/>
+				<text><![CDATA[Total( Including TAX)
+]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="80" y="15" width="100" height="30" uuid="b08cc258-602a-40ce-af6f-652b308e9f25"/>
+				<text><![CDATA[Cash
+Changing]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="280" y="15" width="100" height="30" uuid="80170643-45bc-4a61-8947-0763540f56a8"/>
+				<text><![CDATA[AmountTotal]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="380" y="15" width="100" height="30" uuid="8c7b33c2-70b4-48f9-918c-fe1c9c64d4ea">
+					<property name="com.jaspersoft.studio.spreadsheet.connectionID" value="633c1eaf-e26d-4dac-abe1-c6b8826ff3dd"/>
+				</reportElement>
+				<textFieldExpression><![CDATA[$F{sum}]]></textFieldExpression>
+			</textField>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="62" splitType="Stretch">
+			<staticText>
+				<reportElement x="80" y="0" width="400" height="62" uuid="6753d5e4-1f0c-42f7-9d12-3a5c800f82de"/>
+				<textElement>
+					<font size="12"/>
+				</textElement>
+				<text><![CDATA[00009 Huu Quyet
+ReceiptNr: 039840823489234
+Shopbae food Tan Binh
+20 Cong Hoa, P12, Q. Tan Binh
+SDT: 028 3894 43030]]></text>
+			</staticText>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

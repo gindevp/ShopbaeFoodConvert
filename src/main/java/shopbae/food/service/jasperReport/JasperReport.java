@@ -1,7 +1,10 @@
 package shopbae.food.service.jasperReport;
 
+import java.util.List;
+import java.util.Map;
+
 import javax.servlet.http.HttpServletResponse;
 
 public interface JasperReport {
-	void generateReport(HttpServletResponse response) throws Exception;
+	List<Map<String, ?>> generateReport() throws Exception;
 }

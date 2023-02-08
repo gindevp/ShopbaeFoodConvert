@@ -46,10 +46,10 @@ public class Product {
 		this.image = image;
 	}
 
-	public Product(Long id, String name, String shortDescription, Double oldPrice, Double newPrice, String image) {
-		super();
+	public Product(Long id, String name, String shortDescription,Double numberOrder, Double oldPrice, Double newPrice, String image) {
 		this.id = id;
 		this.name = name;
+		this.numberOrder = numberOrder;
 		this.shortDescription = shortDescription;
 		this.oldPrice = oldPrice;
 		this.newPrice = newPrice;

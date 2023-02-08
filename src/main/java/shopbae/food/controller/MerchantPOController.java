@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
+import org.hibernate.type.descriptor.java.LocalDateTimeJavaDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -173,7 +174,7 @@ public class MerchantPOController {
 		ProductForm productForm = new ProductForm(product.getId(), product.getName(), product.getShortDescription(),
 				product.getNewPrice(), product.getOldPrice(), null);
 		model.addAttribute("productForm", productForm);
-		httpSession.setAttribute("productImage", product.getImage());
+		httpSession.setAttribute("product", product);
 		model.addAttribute("page", "product-edit.jsp");
 		return "merchant/merchant-layout";
 	}
@@ -186,10 +187,10 @@ public class MerchantPOController {
 		try {
 			FileCopyUtils.copy(productForm.getImage().getBytes(), new File(fileUpload + fileName));
 		} catch (IOException e) {
-			fileName= (String) httpSession.getAttribute("productImage");
+			fileName= ((Product) httpSession.getAttribute("product")).getImage();
 		}
 		Product product = new Product(productForm.getId(), productForm.getName(), productForm.getShortDescription(),
-				productForm.getNewPrice(), productForm.getOldPrice(), fileName);
+				((Product) httpSession.getAttribute("product")).getNumberOrder(),productForm.getNewPrice(), productForm.getOldPrice(), fileName);
 		product.setDeleteFlag(true);
 		Merchant merchant = new Merchant();
 		merchant.setId(((Merchant) httpSession.getAttribute("merchant")).getId());
@@ -239,7 +240,9 @@ public class MerchantPOController {
 		model.addAttribute("nav",2);
 		model.addAttribute("nav2",2);
 		httpSession.setAttribute("a",3);
-		return "merchant/merchant-layout";
+		httpSession.setAttribute("order",order);
+		httpSession.setAttribute("time", java.time.LocalDateTime.now());
+		return "redirect:/jasper/report";
 	}
 // Hiển thị đơn hàng người bán đã nhận
 	@GetMapping("/order/received")
@@ -264,6 +267,7 @@ public class MerchantPOController {
 			sum+=orderDetail.getQuantity()*orderDetail.getProduct().getNewPrice();
 		}
 		httpSession.setAttribute("orderId", id);
+		httpSession.setAttribute("sum",sum);
 		model.addAttribute("sum",sum);
 		model.addAttribute("oderDetail",details);
 		model.addAttribute("page2","order-detail.jsp");
