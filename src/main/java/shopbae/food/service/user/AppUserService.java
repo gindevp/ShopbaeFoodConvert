@@ -15,45 +15,37 @@ public class AppUserService implements IAppUserService {
 
 	@Override
 	public AppUser findById(Long id) {
-		// TODO Auto-generated method stub
 		return appUserRepository.findById(id);
 	}
 
 	@Override
 	public void save(AppUser t) {
-		// TODO Auto-generated method stub
 		appUserRepository.save(t);
 	}
 
 	@Override
 	public void update(AppUser t) {
-		// TODO Auto-generated method stub
 		appUserRepository.update(t);
 	}
 
 	@Override
 	public void delete(AppUser t) {
-		// TODO Auto-generated method stub
 		appUserRepository.delete(t);
 	}
 
 	@Override
 	public List<AppUser> findAll() {
-		// TODO Auto-generated method stub
 		return appUserRepository.findAll();
 	}
 
 	@Override
 	public AppUser findByName(String name) {
-		// TODO Auto-generated method stub
 		return appUserRepository.findByName(name);
 	}
 
 	@Override
 	public List<AppUser> getAllByStatus(String status) {
-		// TODO Auto-generated method stub
 		return appUserRepository.getAllByStatus(status);
 	}
-
 
 }

@@ -16,13 +16,18 @@ import shopbae.food.model.AppRoles;
 
 @Repository
 @Transactional(rollbackFor = Exception.class)
-public class RoleRepository implements IRoleRepository{
+public class RoleRepository implements IRoleRepository {
 	@Autowired
 	private SessionFactory sessionFactory;
+
+	private Session getSession() {
+		Session session = sessionFactory.getCurrentSession();
+		return session;
+	}
+
 	@Override
 	public AppRoles findByName(String name) {
-		Session session = this.sessionFactory.getCurrentSession();
-		TypedQuery<AppRoles> query = session.createQuery("FROM roles a WHERE a.name = :name", AppRoles.class);
+		TypedQuery<AppRoles> query = getSession().createQuery("FROM roles a WHERE a.name = :name", AppRoles.class);
 		query.setParameter("name", name);
 		try {
 			return query.getSingleResult();
@@ -33,12 +38,11 @@ public class RoleRepository implements IRoleRepository{
 
 	@Override
 	public void setDefaultRole(Long accountId, Long roleId) {
-		Session session = this.sessionFactory.getCurrentSession();
-		Account account= new Account();
+		Account account = new Account();
 		account.setId(accountId);
-		AppRoles roles= new AppRoles();
+		AppRoles roles = new AppRoles();
 		roles.setId(roleId);
-		session.save(new AccountRoleMap(account, roles));
+		getSession().save(new AccountRoleMap(account, roles));
 	}
 
 }

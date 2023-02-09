@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 
+import shopbae.food.model.AccountStatus;
 import shopbae.food.model.AppUser;
 import shopbae.food.model.Merchant;
 import shopbae.food.service.merchant.IMerchantService;
@@ -25,48 +26,48 @@ public class AdminController {
 		return "redirect:/admin/merchant";
 	}
 
-	// Quản lý merchant
-	// Hiển thị merchant active
+	// manager merchant
+	// display merchant active
 	@GetMapping("/merchant")
 	public String merActive(Model model) {
 		model.addAttribute("page", "merchant-manager/merchant-active.jsp");
 		model.addAttribute("manager", "merchant");
 		model.addAttribute("nav", 1);
 		model.addAttribute("nav2", 2);
-		model.addAttribute("merchants", merchantService.getAllByMerchantStatus("active"));
+		model.addAttribute("merchants", merchantService.getAllByMerchantStatus(AccountStatus.ACTIVE.toString()));
 		return "admin/admin-layout";
 	}
 
-	// Hiển thị merchant pending
+	// display merchant pending
 	@GetMapping("/merchant/pending")
 	public String merPending(Model model) {
 		model.addAttribute("page", "merchant-manager/merchant-pending.jsp");
 		model.addAttribute("manager", "merchant");
 		model.addAttribute("nav", 1);
 		model.addAttribute("nav2", 1);
-		model.addAttribute("merchants", merchantService.getAllByMerchantStatus("pending"));
+		model.addAttribute("merchants", merchantService.getAllByMerchantStatus(AccountStatus.PENDING.toString()));
 		return "admin/admin-layout";
 	}
 
-	// Hiển thị merchant block
+	// display merchant block
 	@GetMapping("/merchant/block")
 	public String merblock(Model model) {
 		model.addAttribute("page", "merchant-manager/merchant-block.jsp");
 		model.addAttribute("manager", "merchant");
 		model.addAttribute("nav", 1);
 		model.addAttribute("nav2", 3);
-		model.addAttribute("merchants", merchantService.getAllByMerchantStatus("block"));
+		model.addAttribute("merchants", merchantService.getAllByMerchantStatus(AccountStatus.BLOCK.toString()));
 		return "admin/admin-layout";
 	}
 
-	// Thực hiện việc active merchant
+	// perform active merchant
 	@GetMapping("/merchant/active/{id}")
 	public String merSuccess(Model model, @PathVariable Long id) {
 		model.addAttribute("page", "merchant-manager/merchant-active.jsp");
 		model.addAttribute("manager", "merchant");
 		Merchant merchant = merchantService.findById(id);
 
-		merchant.setStatus("active");
+		merchant.setStatus(AccountStatus.ACTIVE.toString());
 		merchantService.update(merchant);
 		return "redirect:/admin/merchant/pending";
 	}
@@ -78,7 +79,7 @@ public class AdminController {
 		model.addAttribute("manager", "merchant");
 		Merchant merchant = merchantService.findById(id);
 
-		merchant.setStatus("refuse");
+		merchant.setStatus(AccountStatus.REFUSE.toString());
 		merchantService.update(merchant);
 		return "redirect:/admin/merchant/pending";
 	}
@@ -90,7 +91,7 @@ public class AdminController {
 		model.addAttribute("manager", "merchant");
 		Merchant merchant = merchantService.findById(id);
 
-		merchant.setStatus("block");
+		merchant.setStatus(AccountStatus.BLOCK.toString());
 		merchantService.update(merchant);
 		return "redirect:/admin/merchant";
 	}
@@ -102,12 +103,12 @@ public class AdminController {
 		model.addAttribute("manager", "merchant");
 		Merchant merchant = merchantService.findById(id);
 
-		merchant.setStatus("active");
+		merchant.setStatus(AccountStatus.ACTIVE.toString());
 		merchantService.update(merchant);
 		return "redirect:/admin/merchant/block";
 	}
 
-	// Quản lý user
+	// Manager user
 
 	// Hiển thị user active
 	@GetMapping("/user")
@@ -116,7 +117,7 @@ public class AdminController {
 		model.addAttribute("manager", "user");
 		model.addAttribute("nav", 2);
 		model.addAttribute("nav2", 2);
-		model.addAttribute("merchants", appUserService.getAllByStatus("active"));
+		model.addAttribute("merchants", appUserService.getAllByStatus(AccountStatus.ACTIVE.toString()));
 		return "admin/admin-layout";
 	}
 
@@ -127,7 +128,7 @@ public class AdminController {
 		model.addAttribute("manager", "user");
 		model.addAttribute("nav", 2);
 		model.addAttribute("nav2", 1);
-		model.addAttribute("merchants", appUserService.getAllByStatus("pending"));
+		model.addAttribute("merchants", appUserService.getAllByStatus(AccountStatus.PENDING.toString()));
 		return "admin/admin-layout";
 	}
 
@@ -138,7 +139,7 @@ public class AdminController {
 		model.addAttribute("manager", "user");
 		model.addAttribute("nav", 2);
 		model.addAttribute("nav2", 3);
-		model.addAttribute("merchants", appUserService.getAllByStatus("block"));
+		model.addAttribute("merchants", appUserService.getAllByStatus(AccountStatus.BLOCK.toString()));
 		return "admin/admin-layout";
 	}
 
@@ -149,7 +150,7 @@ public class AdminController {
 		model.addAttribute("manager", "user");
 		AppUser merchant = appUserService.findById(id);
 
-		merchant.setStatus("active");
+		merchant.setStatus(AccountStatus.ACTIVE.toString());
 		appUserService.update(merchant);
 		return "redirect:/admin/user/pending";
 	}
@@ -161,7 +162,7 @@ public class AdminController {
 		model.addAttribute("manager", "user");
 		AppUser merchant = appUserService.findById(id);
 
-		merchant.setStatus("refuse");
+		merchant.setStatus(AccountStatus.REFUSE.toString());
 		appUserService.update(merchant);
 		return "redirect:/admin/user/pending";
 	}
@@ -173,7 +174,7 @@ public class AdminController {
 		model.addAttribute("manager", "user");
 		AppUser merchant = appUserService.findById(id);
 
-		merchant.setStatus("block");
+		merchant.setStatus(AccountStatus.BLOCK.toString());
 		appUserService.update(merchant);
 		return "redirect:/admin/user";
 	}
@@ -185,7 +186,7 @@ public class AdminController {
 		model.addAttribute("manager", "user");
 		AppUser merchant = appUserService.findById(id);
 
-		merchant.setStatus("active");
+		merchant.setStatus(AccountStatus.ACTIVE.toString());
 		appUserService.update(merchant);
 		return "redirect:/admin/user/block";
 	}

@@ -27,10 +27,12 @@ public interface IMerchantService extends IGeneral<Merchant> {
 	 * @return
 	 */
 	String detailMer(Long id, Model model, HttpSession httpSession);
-/**
- * Dùng để load merchant và kiểm tra đăng nhập cho homepage
- * @param model 
- * @param session
- */
+
+	/**
+	 * Dùng để load merchant và kiểm tra đăng nhập cho homepage
+	 * 
+	 * @param model
+	 * @param session
+	 */
 	void homePage(Model model, HttpSession session);
 }

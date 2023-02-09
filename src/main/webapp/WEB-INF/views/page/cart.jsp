@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+<link rel="stylesheet" href="${ pageContext.request.contextPath }/static/css/bootstrap.css">
 <style>
 
 .gradient-custom {
@@ -423,7 +423,7 @@
                 <c:forEach  var="order" items="${orders}">
                 <tr>
                 
-                <td class="merchant-item" size="150px" style="width: 101px;"><c:if test="${order.status=='nguoi ban da nhan' }"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/received/${order.id}">Nhận hàng</a></c:if><c:if test="${order.status!='nguoi ban da nhan' }"><button class="btn btn-order" disabled="disabled">Nhận hàng</button></c:if></td>
+                <td class="merchant-item" size="150px" style="width: 101px;"><c:if test="${order.status=='MERCHANT_RECEIVED' }"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/received/${order.id}">Nhận hàng</a></c:if><c:if test="${order.status!='MERCHANT_RECEIVED' }"><button class="btn btn-order" disabled="disabled">Nhận hàng</button></c:if></td>
                     <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/refuse/${order.id}">Từ chối</a></td>
 
                   

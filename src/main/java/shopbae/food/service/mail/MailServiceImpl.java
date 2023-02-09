@@ -12,30 +12,31 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
 
 import shopbae.food.model.Mail;
+
 @Service("mailService")
 public class MailServiceImpl implements MailService {
 
-    @Autowired
-    JavaMailSender mailSender;
+	@Autowired
+	JavaMailSender mailSender;
 
-    public void sendEmail(Mail mail) {
-        MimeMessage mimeMessage = mailSender.createMimeMessage();
+	public void sendEmail(Mail mail) {
+		MimeMessage mimeMessage = mailSender.createMimeMessage();
 
-        try {
+		try {
 
-            MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
+			MimeMessageHelper mimeMessageHelper = new MimeMessageHelper(mimeMessage, true);
 
-            mimeMessageHelper.setSubject(mail.getMailSubject());
-            mimeMessageHelper.setFrom(new InternetAddress(mail.getMailFrom(), "ShopbaeFoodOTP"));
-            mimeMessageHelper.setTo(mail.getMailTo());
-            mimeMessageHelper.setText(mail.getMailContent());
+			mimeMessageHelper.setSubject(mail.getMailSubject());
+			mimeMessageHelper.setFrom(new InternetAddress(mail.getMailFrom(), "ShopbaeFoodOTP"));
+			mimeMessageHelper.setTo(mail.getMailTo());
+			mimeMessageHelper.setText(mail.getMailContent());
 
-            mailSender.send(mimeMessageHelper.getMimeMessage());
+			mailSender.send(mimeMessageHelper.getMimeMessage());
 
-        } catch (MessagingException e) {
-            e.printStackTrace();
-        } catch (UnsupportedEncodingException e) {
-            e.printStackTrace();
-        }
-    }
+		} catch (MessagingException e) {
+			e.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+	}
 }

@@ -2,13 +2,14 @@ package shopbae.food.controller;
 
 import java.io.File;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
-import org.hibernate.type.descriptor.java.LocalDateTimeJavaDescriptor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 
@@ -28,8 +29,8 @@ import shopbae.food.model.Account;
 import shopbae.food.model.Merchant;
 import shopbae.food.model.Order;
 import shopbae.food.model.OrderDetail;
+import shopbae.food.model.OrderStatus;
 import shopbae.food.model.Product;
-import shopbae.food.model.dto.AccountRegisterDTO;
 import shopbae.food.model.dto.ChangeDTO;
 import shopbae.food.model.dto.ProductForm;
 import shopbae.food.service.account.AccountService;
@@ -209,7 +210,7 @@ public class MerchantPOController {
 // Hiển thị đơn hàng đang chờ merchant xác nhận
 	@GetMapping("/order")
 	public String order( Model model, HttpSession httpSession) {
-		List<Order> orders=orderService.findByFlagAndStatus("cho xac nhan"); 
+		List<Order> orders=orderService.findByFlagAndStatus(OrderStatus.MERCHANT_PENDING.toString()); 
 		long merId= (long)((Merchant) httpSession.getAttribute("merchant")).getId();
 		List<Order> orders2= orders.stream().filter(c->c.getMerchant_id()==merId).collect(Collectors.toList());
 		model.addAttribute("orders",orders2);
@@ -229,9 +230,9 @@ public class MerchantPOController {
 	@GetMapping("/order/received/{id}")
 	public String received(Model model, @PathVariable Long id,HttpSession httpSession) {
 		Order order=orderService.findById(id);
-		order.setStatus("nguoi ban da nhan");
+		order.setStatus(OrderStatus.MERCHANT_RECEIVED.toString());
 		orderService.update(order);
-		List<Order> orders=orderService.findByFlagAndStatus("nguoi ban da nhan"); 
+		List<Order> orders=orderService.findByFlagAndStatus(OrderStatus.MERCHANT_RECEIVED.toString()); 
 		long merId= (long)((Merchant) httpSession.getAttribute("merchant")).getId();
 		List<Order> orders2= orders.stream().filter(c->c.getMerchant_id()==merId).collect(Collectors.toList());
 		model.addAttribute("orders",orders2);
@@ -241,13 +242,13 @@ public class MerchantPOController {
 		model.addAttribute("nav2",2);
 		httpSession.setAttribute("a",3);
 		httpSession.setAttribute("order",order);
-		httpSession.setAttribute("time", java.time.LocalDateTime.now());
+		httpSession.setAttribute("time", new SimpleDateFormat("dd-M-yyyy hh:mm:ss").format(new Date()));
 		return "redirect:/jasper/report";
 	}
 // Hiển thị đơn hàng người bán đã nhận
 	@GetMapping("/order/received")
 	public String receivedP(Model model,HttpSession httpSession) {
-		List<Order> orders=orderService.findByFlagAndStatus("nguoi ban da nhan"); 
+		List<Order> orders=orderService.findByFlagAndStatus(OrderStatus.MERCHANT_RECEIVED.toString()); 
 		long merId= (long)((Merchant) httpSession.getAttribute("merchant")).getId();
 		List<Order> orders2= orders.stream().filter(c->c.getMerchant_id()==merId).collect(Collectors.toList());
 		model.addAttribute("orders",orders2);
@@ -279,7 +280,7 @@ public class MerchantPOController {
 	@GetMapping("/order/refuse/{id}")
 	public String refuse(Model model,@PathVariable Long id) {
 		Order order = orderService.findById(id);
-		order.setStatus("nguoi ban tu choi");
+		order.setStatus(OrderStatus.MERCHANT_REFUSE.toString());
 		orderService.update(order);
 		return "redirect:/merchant/order";
 	}
@@ -288,7 +289,7 @@ public class MerchantPOController {
 	public String history(Model model, HttpSession httpSession) {
 		List<Order> orders = orderService.findAll();
 		long merId= (long)((Merchant) httpSession.getAttribute("merchant")).getId();
-		List<Order> orders2= orders.stream().filter(c->((c.getMerchant_id()==merId)&& (c.getStatus().equals("nguoi mua da nhan")||c.getStatus().equals("nguoi mua tu choi")|| c.getStatus().equals("nguoi ban tu choi")))).collect(Collectors.toList());
+		List<Order> orders2= orders.stream().filter(c->((c.getMerchant_id()==merId)&& (c.getStatus().equals(OrderStatus.USER_RECEIVED.toString())||c.getStatus().equals(OrderStatus.USER_REFUSE.toString())|| c.getStatus().equals(OrderStatus.MERCHANT_REFUSE.toString())))).collect(Collectors.toList());
 		model.addAttribute("orders",orders2);
 		model.addAttribute("page2","order-history.jsp");
 		model.addAttribute("page", "order-layout.jsp");
@@ -300,7 +301,7 @@ public class MerchantPOController {
 // Hiển thị đơn hàng người mua đã nhận 
 	@GetMapping("/order/send")
 	public String send(Model model, HttpSession httpSession) {
-		List<Order> orders = orderService.findByFlagAndStatus("nguoi mua da nhan");
+		List<Order> orders = orderService.findByFlagAndStatus(OrderStatus.USER_RECEIVED.toString());
 		long merId= (long)((Merchant) httpSession.getAttribute("merchant")).getId();
 		List<Order> orders2= orders.stream().filter(c->c.getMerchant_id()==merId).collect(Collectors.toList());
 		model.addAttribute("orders",orders2);

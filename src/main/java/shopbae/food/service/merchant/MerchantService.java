@@ -12,10 +12,12 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import shopbae.food.model.Account;
+import shopbae.food.model.AccountStatus;
 import shopbae.food.model.Merchant;
 import shopbae.food.repository.merchant.IMerchantRepository;
 import shopbae.food.service.account.IAccountService;
 import shopbae.food.service.product.IProductService;
+
 @Service
 public class MerchantService implements IMerchantService {
 	@Autowired
@@ -27,55 +29,46 @@ public class MerchantService implements IMerchantService {
 
 	@Override
 	public Merchant findById(Long id) {
-		// TODO Auto-generated method stub
 		return merchantRepository.findById(id);
 	}
 
 	@Override
 	public void save(Merchant t) {
-		// TODO Auto-generated method stub
 		merchantRepository.save(t);
 	}
 
 	@Override
 	public void update(Merchant t) {
-		// TODO Auto-generated method stub
 		merchantRepository.update(t);
 	}
 
 	@Override
 	public void delete(Merchant t) {
-		// TODO Auto-generated method stub
 		merchantRepository.delete(t);
 	}
 
 	@Override
 	public List<Merchant> findAll() {
-		// TODO Auto-generated method stub
 		return merchantRepository.findAll();
 	}
 
 	@Override
 	public Merchant findByName(String name) {
-		// TODO Auto-generated method stub
 		return merchantRepository.findByName(name);
 	}
 
 	@Override
 	public List<Merchant> getAllByMerchantStatus(String status) {
-		// TODO Auto-generated method stub
 		return merchantRepository.getAllByMerchantStatus(status);
 	}
 
 	@Override
 	public List<Merchant> findAllMerchantAndNameContainer(String name) {
-		// TODO Auto-generated method stub
 		return merchantRepository.findAllMerchantAndNameContainer(name);
 	}
 
 	@Override
 	public Merchant findByAccount(Long id) {
-		// TODO Auto-generated method stub
 		return merchantRepository.findByAccount(id);
 	}
 
@@ -85,7 +78,7 @@ public class MerchantService implements IMerchantService {
 		if (httpSession.getAttribute("userId") == null) {
 			httpSession.setAttribute("userId", 0);
 		}
-		if ("active".equals(this.findById(id).getStatus())) {
+		if (AccountStatus.ACTIVE.toString().equals(this.findById(id).getStatus())) {
 			model.addAttribute("merchant", this.findById(id));
 			model.addAttribute("products", productService.getAllByDeleteFlagTrueAndMerchant(id));
 			model.addAttribute("page", "merchant-detail.jsp");
@@ -97,51 +90,53 @@ public class MerchantService implements IMerchantService {
 	}
 
 	// Kiểm tra đăng nhập của admin
-		public boolean isAdmin(HttpSession session) {
-			Collection<? extends GrantedAuthority> authorities = (Collection<? extends GrantedAuthority>) session
-					.getAttribute("authorities");
-			List<String> roles = new ArrayList<String>();
-			for (GrantedAuthority a : authorities) {
-				roles.add(a.getAuthority());
-			}
-			if (roles.contains("ROLE_ADMIN")) {
-				return true;
-			}
-			return false;
+	public boolean isAdmin(HttpSession session) {
+		@SuppressWarnings("unchecked")
+		Collection<? extends GrantedAuthority> authorities = (Collection<? extends GrantedAuthority>) session
+				.getAttribute("authorities");
+		List<String> roles = new ArrayList<String>();
+		for (GrantedAuthority a : authorities) {
+			roles.add(a.getAuthority());
 		}
-		public void homePage(Model model, HttpSession session) {
-			String userName = (String) session.getAttribute("username");
-			Account account = accountService.findByName(userName);
-
-			String message = "";
-			String name = "";
-			String avatar = "";
-			String role = "";
-
-			if (account == null) {
-				message = "chua dang nhap";
-			} else {
-				if (account.getUser() != null) {
-					name = account.getUser().getName();
-					avatar = account.getUser().getAvatar();
-					role = "user";
-				}
-				if (new MerchantService().isAdmin(session)) {
-					name = account.getUser().getName();
-					avatar = account.getUser().getAvatar();
-					role = "admin";
-				}
-				if (account.getMerchant() != null) {
-					name = account.getMerchant().getName();
-					avatar = account.getMerchant().getAvatar();
-					role = "merchant";
-				}
-			}
-			session.setAttribute("name", name);
-			session.setAttribute("avatar", avatar);
-			session.setAttribute("role", role);
-			session.setAttribute("message", message);
-			model.addAttribute("merchants", this.getAllByMerchantStatus("active"));
-			model.addAttribute("page", "home.jsp");
+		if (roles.contains("ROLE_ADMIN")) {
+			return true;
 		}
+		return false;
+	}
+
+	public void homePage(Model model, HttpSession session) {
+		String userName = (String) session.getAttribute("username");
+		Account account = accountService.findByName(userName);
+
+		String message = "";
+		String name = "";
+		String avatar = "";
+		String role = "";
+
+		if (account == null) {
+			message = "chua dang nhap";
+		} else {
+			if (account.getUser() != null) {
+				name = account.getUser().getName();
+				avatar = account.getUser().getAvatar();
+				role = "user";
+			}
+			if (new MerchantService().isAdmin(session)) {
+				name = account.getUser().getName();
+				avatar = account.getUser().getAvatar();
+				role = "admin";
+			}
+			if (account.getMerchant() != null) {
+				name = account.getMerchant().getName();
+				avatar = account.getMerchant().getAvatar();
+				role = "merchant";
+			}
+		}
+		session.setAttribute("name", name);
+		session.setAttribute("avatar", avatar);
+		session.setAttribute("role", role);
+		session.setAttribute("message", message);
+		model.addAttribute("merchants", this.getAllByMerchantStatus(AccountStatus.ACTIVE.toString()));
+		model.addAttribute("page", "home.jsp");
+	}
 }

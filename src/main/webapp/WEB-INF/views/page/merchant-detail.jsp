@@ -253,8 +253,8 @@
   </div>
 </div>
 <br>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="${ pageContext.request.contextPath }/static/js/sweetalert.js"></script>
+<script src="${ pageContext.request.contextPath }/static/js/jquerry.js"></script>
 <script>
 	function addToCart(user_id,product_id) {
 		if(user_id == 0){

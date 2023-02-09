@@ -13,17 +13,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 
 import shopbae.food.model.Account;
-import shopbae.food.model.Merchant;
 import shopbae.food.service.account.IAccountService;
-import shopbae.food.service.merchant.IMerchantService;
+
 
 @Controller
 @RequestMapping("/account")
 public class AccountController {
 	@Autowired
 	private IAccountService accountService;
-	@Autowired
-	private IMerchantService merchantService;
 
 	@RequestMapping("/")
 	public String find(Model model) {

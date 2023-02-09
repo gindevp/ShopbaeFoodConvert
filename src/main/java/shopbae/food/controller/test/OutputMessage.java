@@ -1,7 +1,4 @@
 package shopbae.food.controller.test;
-
-import java.text.SimpleDateFormat;
-
 public class OutputMessage {
 	private String from;
     private String text;

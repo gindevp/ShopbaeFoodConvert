@@ -8,12 +8,10 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-import org.springframework.security.core.userdetails.UserDetailsService;
+
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
-
-import shopbae.food.service.account.IAccountService;
 
 @Configuration
 @EnableWebSecurity
@@ -21,9 +19,6 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 
 	@Autowired
 	private CustomSuccessHandler customSuccessHandler;
-
-	@Autowired
-	private IAccountService accountService;
 
 	@Autowired
 	private CustomIdentityAuthenticationProvider customIdentityAuthenticationProvider;
@@ -49,22 +44,13 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
 //		.antMatchers("/**").permitAll()
-				.antMatchers("/login", "/register/**", "/home/**", "/static/**", "/merchantp/**",
-						"/forgotpass/**", "/change-pass/**","/account/","/a/**","/chat/**","/jasper/**")
-				.permitAll()
-				.antMatchers("/admin/**").hasRole("ADMIN")
-				.antMatchers("/user-info", "/cart/**").hasRole("USER")
-				.antMatchers("/merchant/**").hasRole("MERCHANT")
-				.antMatchers("/**").hasAnyRole("ADMIN")
-				.and().formLogin().loginPage("/login")
-				.usernameParameter("userName").successHandler(customSuccessHandler).and().logout()
+				.antMatchers("/login", "/register/**", "/home/**", "/static/**", "/merchantp/**", "/forgotpass/**",
+						"/change-pass/**", "/account/", "/a/**", "/chat/**", "/jasper/**")
+				.permitAll().antMatchers("/admin/**").hasRole("ADMIN").antMatchers("/user-info", "/cart/**")
+				.hasRole("USER").antMatchers("/merchant/**").hasRole("MERCHANT").antMatchers("/**").hasAnyRole("ADMIN")
+				.and().formLogin().loginPage("/login").usernameParameter("userName")
+				.successHandler(customSuccessHandler).and().logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).and().csrf().disable();
-
-//		   http
-//	        .sessionManagement(session -> session
-//	            .sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-//	            .invalidSessionUrl("/login")
-//	        );
 
 		http.sessionManagement().maximumSessions(1).expiredUrl("/login?expired=true");
 

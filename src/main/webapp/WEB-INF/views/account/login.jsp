@@ -1,6 +1,6 @@
  <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+<script src="${ pageContext.request.contextPath }/static/js/sweetalert.js"></script>
 
  <!--form login-->
     <div class="now-login">

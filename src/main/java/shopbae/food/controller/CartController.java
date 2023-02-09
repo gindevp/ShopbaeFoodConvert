@@ -1,8 +1,7 @@
 package shopbae.food.controller;
 
 import java.util.List;
-import java.util.stream.Collector;
-import java.util.stream.Collectors;
+
 
 import javax.servlet.http.HttpSession;
 
@@ -15,19 +14,14 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import shopbae.food.model.AppUser;
 import shopbae.food.model.Cart;
 import shopbae.food.model.Order;
 import shopbae.food.model.OrderDetail;
 import shopbae.food.model.Product;
-import shopbae.food.repository.cart.ICartRepository;
-import shopbae.food.repository.order.IOrderRepository;
 import shopbae.food.service.cart.ICartService;
-import shopbae.food.service.merchant.IMerchantService;
 import shopbae.food.service.order.IOrderService;
 import shopbae.food.service.orderDetail.IOrderDetailService;
 import shopbae.food.service.product.IProductService;
-import shopbae.food.service.user.IAppUserService;
 
 @Controller
 @RequestMapping("/cart")
@@ -97,7 +91,7 @@ public class CartController {
 			pro.setNumberOrder(orderDetail.getProduct().getNumberOrder() + orderDetail.getQuantity());
 			productService.update(pro);
 		}
-		order.setStatus("nguoi mua da nhan");
+		order.setStatus("USER_RECEIVED");
 		orderService.update(order);
 		Long userId = (Long) session.getAttribute("userId");
 		return "redirect:/cart/user/" + userId;
@@ -107,7 +101,7 @@ public class CartController {
 	@GetMapping("/refuse/{id}")
 	public String refused(Model model, @PathVariable Long id, HttpSession session) {
 		Order order = orderService.findById(id);
-		order.setStatus("nguoi mua tu choi");
+		order.setStatus("USER_REFUSE");
 		orderService.update(order);
 		Long userId = (Long) session.getAttribute("userId");
 		return "redirect:/cart/user/" + userId;

@@ -9,44 +9,38 @@ import shopbae.food.model.OrderDetail;
 import shopbae.food.repository.orderDetail.IOrderDetailRepository;
 
 @Service
-public class OrderDetailService implements IOrderDetailService{
-@Autowired
-IOrderDetailRepository orderDetailRepository;
+public class OrderDetailService implements IOrderDetailService {
+	@Autowired
+	IOrderDetailRepository orderDetailRepository;
+
 	@Override
 	public OrderDetail findById(Long id) {
-		// TODO Auto-generated method stub
 		return orderDetailRepository.findById(id);
 	}
 
 	@Override
 	public void save(OrderDetail t) {
-		// TODO Auto-generated method stub
 		orderDetailRepository.save(t);
 	}
 
 	@Override
 	public void update(OrderDetail t) {
-		// TODO Auto-generated method stub
 		orderDetailRepository.update(t);
 	}
 
 	@Override
 	public void delete(OrderDetail t) {
-		// TODO Auto-generated method stub
 		orderDetailRepository.delete(t);
 	}
 
 	@Override
 	public List<OrderDetail> findAll() {
-		// TODO Auto-generated method stub
 		return orderDetailRepository.findAll();
 	}
 
 	@Override
 	public List<OrderDetail> findByOrder(Long id) {
-		// TODO Auto-generated method stub
 		return orderDetailRepository.findByOrder(id);
 	}
 
 }
- 

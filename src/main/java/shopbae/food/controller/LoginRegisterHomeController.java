@@ -12,10 +12,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import shopbae.food.model.Account;
+import shopbae.food.model.AccountStatus;
 import shopbae.food.model.AppUser;
 import shopbae.food.model.Mail;
 import shopbae.food.model.Merchant;
@@ -72,7 +72,7 @@ public class LoginRegisterHomeController {
 // Vào trang hiển thị tất cả merchant
 	@GetMapping("/merchantp/all")
 	public String allMerchant(Model model) {
-		model.addAttribute("merchants", merchantService.getAllByMerchantStatus("active"));
+		model.addAttribute("merchants", merchantService.getAllByMerchantStatus(AccountStatus.ACTIVE.toString()));
 		model.addAttribute("page", "all-merchant-list.jsp");
 		return "page/home-layout";
 	}
@@ -104,7 +104,6 @@ public class LoginRegisterHomeController {
 	@PostMapping("/register/user")
 	public String addUser(@ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model) {
 		try {
-			String status = "pending";
 			boolean isEnabled = true;
 			String pass = encoder.encode(accountRegisterDTO.getPassword());
 			Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled,
@@ -115,7 +114,7 @@ public class LoginRegisterHomeController {
 			String avatar = "tet.jpg";
 
 			userSevice.save(new AppUser(accountRegisterDTO.getName(), accountRegisterDTO.getAddress(),
-					accountRegisterDTO.getPhone(), avatar, status, account2));
+					accountRegisterDTO.getPhone(), avatar, AccountStatus.PENDING.toString(), account2));
 
 			return "redirect:/login";
 		} catch (Exception e) {
@@ -130,7 +129,6 @@ public class LoginRegisterHomeController {
 	@PostMapping("/register/merchant")
 	public String addMerchant(@ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model) {
 		try {
-			String status = "pending";
 			boolean isEnabled = true;
 			String pass = encoder.encode(accountRegisterDTO.getPassword());
 			Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled,
@@ -141,7 +139,7 @@ public class LoginRegisterHomeController {
 			String avatar = "tet.jpg";
 
 			merchantService.save(new Merchant(accountRegisterDTO.getName(), accountRegisterDTO.getPhone(),
-					accountRegisterDTO.getAddress(), avatar, status, account2));
+					accountRegisterDTO.getAddress(), avatar, AccountStatus.PENDING.toString(), account2));
 
 			return "redirect:/login";
 		} catch (Exception e) {

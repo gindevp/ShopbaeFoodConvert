@@ -21,43 +21,40 @@ public class AccountRepository implements IAccountRepository {
 	@Autowired
 	private SessionFactory sessionFactory;
 
+	private Session getSession() {
+		Session session = sessionFactory.getCurrentSession();
+		return session;
+	}
+
 	@Override
 	public Account findById(Long id) {
-		Session session = sessionFactory.getCurrentSession();
-		return session.get(Account.class, id);
+		return getSession().get(Account.class, id);
 	}
 
 	@Override
 	public void save(Account t) {
-		// TODO Auto-generated method stub
-		Session session = sessionFactory.getCurrentSession();
-		session.save(t);
+		getSession().save(t);
 	}
 
 	@Override
 	public void update(Account t) {
-		// TODO Auto-generated method stub
-		Session session = sessionFactory.getCurrentSession();
-		session.update(t);
+		getSession().update(t);
 	}
 
 	@Override
 	public void delete(Account t) {
-		// TODO Auto-generated method stub
-		Session session = sessionFactory.getCurrentSession();
-		session.delete(t);
+		getSession().delete(t);
 	}
 
 	@Override
 	public List<Account> findAll() {
-		Session session = sessionFactory.getCurrentSession();
-		return session.createQuery("FROM account ", Account.class).getResultList();
+		return getSession().createQuery("FROM account ", Account.class).getResultList();
 	}
 
 	@Override
 	public Account findByName(String name) {
-		Session session = this.sessionFactory.getCurrentSession();
-		TypedQuery<Account> query = session.createQuery("FROM account a WHERE a.userName = :userName", Account.class);
+		TypedQuery<Account> query = getSession().createQuery("FROM account a WHERE a.userName = :userName",
+				Account.class);
 		query.setParameter("userName", name);
 		try {
 			return query.getSingleResult();
@@ -68,9 +65,8 @@ public class AccountRepository implements IAccountRepository {
 
 	@Override
 	public Long findIdUserByUserName(String userName) {
-		// TODO Auto-generated method stub
-		Session session = this.sessionFactory.getCurrentSession();
-		TypedQuery<Account> query = session.createQuery("FROM account a WHERE a.userName = :userName", Account.class);
+		TypedQuery<Account> query = getSession().createQuery("FROM account a WHERE a.userName = :userName",
+				Account.class);
 		query.setParameter("userName", userName);
 		try {
 			Account account = query.getSingleResult();
@@ -82,15 +78,13 @@ public class AccountRepository implements IAccountRepository {
 
 	@Override
 	public boolean existsAccountByUserName(String username) {
-		// TODO Auto-generated method stub
 		try {
-			if (findByName(username) == null ) {
+			if (findByName(username) == null) {
 				return true;
 			} else {
 				return false;
 			}
 		} catch (Exception e) {
-			// TODO: handle exception
 			e.printStackTrace();
 			return false;
 		}

@@ -18,7 +18,6 @@ import org.springframework.web.multipart.MultipartFile;
 
 import shopbae.food.model.Account;
 import shopbae.food.model.AppUser;
-import shopbae.food.model.Merchant;
 import shopbae.food.model.dto.ChangeDTO;
 import shopbae.food.service.account.IAccountService;
 import shopbae.food.service.user.IAppUserService;

@@ -5,8 +5,6 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
-
-import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
@@ -15,130 +13,125 @@ import shopbae.food.model.AppUser;
 import shopbae.food.model.Cart;
 import shopbae.food.model.Order;
 import shopbae.food.model.OrderDetail;
+import shopbae.food.model.OrderStatus;
 import shopbae.food.model.Product;
 import shopbae.food.repository.cart.ICartRepository;
 import shopbae.food.service.order.IOrderService;
 import shopbae.food.service.orderDetail.IOrderDetailService;
 import shopbae.food.service.product.IProductService;
 import shopbae.food.service.user.IAppUserService;
+
 @Service
-public class CartService implements ICartService{
-@Autowired
-ICartRepository cartRepository;
-@Autowired
-IProductService productService;
-@Autowired
-IAppUserService appUserService;
-@Autowired
-IOrderService orderService;
-@Autowired
-IOrderDetailService orderDetailService;
-@Autowired
-ICartService cartService;
+public class CartService implements ICartService {
+	@Autowired
+	ICartRepository cartRepository;
+	@Autowired
+	IProductService productService;
+	@Autowired
+	IAppUserService appUserService;
+	@Autowired
+	IOrderService orderService;
+	@Autowired
+	IOrderDetailService orderDetailService;
+	@Autowired
+	ICartService cartService;
+
 	@Override
 	public Cart findById(Long id) {
-		// TODO Auto-generated method stub
 		return cartRepository.findById(id);
 	}
 
 	@Override
 	public void save(Cart t) {
-		// TODO Auto-generated method stub
 		cartRepository.save(t);
 	}
 
 	@Override
 	public void update(Cart t) {
-		// TODO Auto-generated method stub
 		cartRepository.update(t);
 	}
 
 	@Override
 	public void delete(Cart t) {
-		// TODO Auto-generated method stub
 		cartRepository.delete(t);
 	}
 
 	@Override
 	public List<Cart> findAll() {
-		// TODO Auto-generated method stub
 		return cartRepository.findAll();
 	}
 
 	@Override
 	public List<Cart> findAllByUser(Long id) {
-		// TODO Auto-generated method stub
 		return cartRepository.findAllByUser(id);
 	}
 
 	@Override
 	public Cart findByProduct(Long id) {
-		// TODO Auto-generated method stub
 		return findByProduct(id);
 	}
 
 	@Override
 	public Cart findByProductIdAndUserId(Long product_id, Long user_id) {
-		// TODO Auto-generated method stub
 		return findByProductIdAndUserId(product_id, user_id);
 	}
 
 	@Override
 	public void setProductCart(Long cart_id, Long product_id) {
-		// TODO Auto-generated method stub
 		cartRepository.setProductCart(cart_id, product_id);
 	}
 
 	@Override
 	public void updateQuantity(int quantity, Long cart_id) {
-		// TODO Auto-generated method stub
 		cartRepository.updateQuantity(quantity, cart_id);
 	}
 
 	@Override
 	public void deletesByUser(Long id) {
-		// TODO Auto-generated method stub
 		cartRepository.deletesByUser(id);
 	}
 
-
 	@Override
 	public void addToCart(Cart cart) {
-		// TODO Auto-generated method stub
-		Optional<Cart> cartOptional = Optional.ofNullable(cartRepository.findByProductIdAndUserId(cart.getProduct().getId(), cart.getUser().getId()));
-        if (cartOptional.isPresent()) {
-            this.updateQuantityCart(cart.getProduct().getId(), cart.getUser().getId());
-        } else {
-            int quantity = 1;
-            cart.setQuantity(quantity);
-            this.saveCart(quantity, cart.getPrice(), cart.getUser().getId(), cart.getProduct().getId(), cart.getTotalPrice());
-        }
+		Optional<Cart> cartOptional = Optional
+				.ofNullable(cartRepository.findByProductIdAndUserId(cart.getProduct().getId(), cart.getUser().getId()));
+		if (cartOptional.isPresent()) {
+			this.updateQuantityCart(cart.getProduct().getId(), cart.getUser().getId());
+		} else {
+			int quantity = 1;
+			cart.setQuantity(quantity);
+			this.saveCart(quantity, cart.getPrice(), cart.getUser().getId(), cart.getProduct().getId(),
+					cart.getTotalPrice());
+		}
 	}
+
 	public void saveCart(int quantity, double price, Long userID, Long productId, double totalPrice) {
-		Cart cart= new Cart();
+		Cart cart = new Cart();
 		cart.setQuantity(quantity);
 		cart.setPrice(price);
-		AppUser appUser= new  AppUser();
+		AppUser appUser = new AppUser();
 		appUser.setId(userID);
 		cart.setUser(appUser);
-		Product product= new Product();
+		Product product = new Product();
 		product.setId(productId);
 		cart.setProduct(product);
 		cart.setTotalPrice(totalPrice);
-        cartRepository.save(cart);
-        Optional<Cart> cart1 = Optional.ofNullable(cartRepository.findByProductIdAndUserId(productId, userID));
-        this.setProductCart(cart1.get().getId(), productId);
-    }
-	private void updateQuantityCart(Long id, Long id2) {
-		// TODO Auto-generated method stub
-		 Optional<Cart> cart = Optional.ofNullable(cartRepository.findByProductIdAndUserId(id, id2));
-	        int quantity = cart.get().getQuantity() + 1;
-	        cartRepository.updateQuantity(quantity, cart.get().getId());
+		cartRepository.save(cart);
+		Optional<Cart> cart1 = Optional.ofNullable(cartRepository.findByProductIdAndUserId(productId, userID));
+		this.setProductCart(cart1.get().getId(), productId);
 	}
+
+	private void updateQuantityCart(Long id, Long id2) {
+		Optional<Cart> cart = Optional.ofNullable(cartRepository.findByProductIdAndUserId(id, id2));
+		int quantity = cart.get().getQuantity() + 1;
+		cartRepository.updateQuantity(quantity, cart.get().getId());
+	}
+
 	@Override
 	public Cart findByProductAndFlag(Long id) {
 		return cartRepository.findByProductAndFlag(id);
 	}
+
 	@Override
 	public void addCart(Long productid, Long userid) {
 		Cart cart = new Cart();
@@ -150,43 +143,47 @@ ICartService cartService;
 		cart.setUser(apUser);
 		this.addToCart(cart);
 	}
+
 	@Override
 	public void cartDetail(Model model, Long userId, HttpSession session) {
-		long merId=(long) session.getAttribute("merchantId");
-		List<Cart> cart1= this.findAllByUser(userId);
-		List<Cart> cart2= cart1.stream().filter(c-> c.getProduct().getMerchant().getId()==merId).collect(Collectors.toList());
+		long merId = (long) session.getAttribute("merchantId");
+		List<Cart> cart1 = this.findAllByUser(userId);
+		List<Cart> cart2 = cart1.stream().filter(c -> c.getProduct().getMerchant().getId() == merId)
+				.collect(Collectors.toList());
 		model.addAttribute("products", cart2);
-		double sum=0;
+		double sum = 0;
 		for (Cart x : cart2) {
-			sum+=x.getTotalPrice();
+			sum += x.getTotalPrice();
 		}
-		model.addAttribute("sum",sum);
-		List<Order> orders= orderService.findByAppUserAndMer(userId,(Long) session.getAttribute("merchantId"));
+		model.addAttribute("sum", sum);
+		List<Order> orders = orderService.findByAppUserAndMer(userId, (Long) session.getAttribute("merchantId"));
 		model.addAttribute("orders", orders);
-		if(cart2.isEmpty()) {
-			model.addAttribute("message","khong co du lieu");
-		}else {
-			model.addAttribute("message","co du lieu");
+		if (cart2.isEmpty()) {
+			model.addAttribute("message", "khong co du lieu");
+		} else {
+			model.addAttribute("message", "co du lieu");
 		}
 		model.addAttribute("page", "cart.jsp");
 	}
+
 	@Override
 	public void ordeing(Long userId, Long merchantId, String note, String address, double sum) {
-		Order oder= new Order();
+		Order oder = new Order();
 		oder.setOrderdate(java.time.LocalDateTime.now());
 		oder.setNote(note);
-		oder.setStatus("cho xac nhan");
+		oder.setStatus(OrderStatus.MERCHANT_PENDING.toString());
 		oder.setTotalPrice(sum);
 		oder.setAppUser(appUserService.findById(userId));
 		oder.setMerchant_id(merchantId);
 		oder.setDeliveryAddress(address);
-		Long orderId= (Long) orderService.savee(oder);
-		List<Cart> carts= this.findAllByUser(userId);
-		System.out.println("cart by userId:"+carts);
-		List<Cart> oderDetail= carts.stream().filter(a-> a.getProduct().getMerchant().getId()== (long) merchantId).collect(Collectors.toList());
-		System.out.println("cart by userId and merId:"+oderDetail);
+		Long orderId = (Long) orderService.savee(oder);
+		List<Cart> carts = this.findAllByUser(userId);
+		System.out.println("cart by userId:" + carts);
+		List<Cart> oderDetail = carts.stream().filter(a -> a.getProduct().getMerchant().getId() == (long) merchantId)
+				.collect(Collectors.toList());
+		System.out.println("cart by userId and merId:" + oderDetail);
 		for (Cart cart : oderDetail) {
-			OrderDetail orderDetail= new OrderDetail();
+			OrderDetail orderDetail = new OrderDetail();
 			oder.setId(orderId);
 			orderDetail.setOrder(oder);
 			orderDetail.setProduct(cart.getProduct());

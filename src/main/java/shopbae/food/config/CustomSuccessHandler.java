@@ -19,15 +19,13 @@ import org.springframework.stereotype.Component;
 
 import shopbae.food.model.Account;
 import shopbae.food.service.account.IAccountService;
-import shopbae.food.service.merchant.IMerchantService;
+
 
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
 	@Autowired
 	private IAccountService accountService;
-	@Autowired
-	private IMerchantService merchantService;
 
 	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
