@@ -12,7 +12,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
 import shopbae.food.model.Account;
-import shopbae.food.model.AccountStatus;
+import shopbae.food.util.*;
 import shopbae.food.model.Merchant;
 import shopbae.food.repository.merchant.IMerchantRepository;
 import shopbae.food.service.account.IAccountService;

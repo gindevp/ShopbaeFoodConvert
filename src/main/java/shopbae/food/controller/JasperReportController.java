@@ -32,30 +32,21 @@ public class JasperReportController {
     	List<OrderDetail> details= detailService.findByOrder(order.getId());
     	List<Product> products= new ArrayList<>();
     	for (OrderDetail orderDetail : details) {
-			products.add(orderDetail.getProduct());
-			orderDetail.getProduct().setQuantity(orderDetail.getQuantity());
-		}
-    	for (Product product : products) {
     		Map<String, Object> m= new HashMap<String,Object>();
-    		m.put("product_name", product.getName());
-    		m.put("product_price", product.getNewPrice());
-    		m.put("product_quantity", product.getQuantity());
-    		m.put("product_totalPrice", product.getNewPrice()*product.getQuantity());
+			products.add(orderDetail.getProduct());
+			m.put("product_name", orderDetail.getProduct().getName());
+    		m.put("product_price", orderDetail.getProduct().getNewPrice());
+    		m.put("product_quantity", orderDetail.getQuantity());
+    		m.put("product_totalPrice", orderDetail.getProduct().getNewPrice()*orderDetail.getQuantity());
     		list.add(m);
 		}
     	Map<String, Object> m1= new HashMap<>();
     	m1.put("id_order",(Long) ((Order) httpSession.getAttribute("order")).getId());
-    	System.out.println("id_order:"+(Long) ((Order) httpSession.getAttribute("order")).getId());
     	m1.put("merchant_name",(String) ((Merchant) httpSession.getAttribute("merchant")).getName());
-    	System.out.println("merchant_name"+(String) ((Merchant) httpSession.getAttribute("merchant")).getName());
     	m1.put("merchant_phone", (String) ((Merchant) httpSession.getAttribute("merchant")).getPhone());
-    	System.out.println("merPhone:"+(String) ((Merchant) httpSession.getAttribute("merchant")).getName());
     	m1.put("sum",(Double) httpSession.getAttribute("sum"));
-    	System.out.println("sum"+(Double) httpSession.getAttribute("sum"));
     	m1.put("time", (String) httpSession.getAttribute("time"));
-    	System.out.println("time"+ httpSession.getAttribute("time"));
     	System.out.println(m1);
-    	
     	
     	modelMap.put("param", m1);
     	modelMap.put("listProducts", list);

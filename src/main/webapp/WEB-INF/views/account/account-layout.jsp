@@ -40,7 +40,7 @@
                <div class="user-acc col-auto">
                
                <c:if test="${page == 'forgotpass.jsp'|| page =='confirm-otp.jsp' }">
-              <a href="${ pageContext.request.contextPath }login"><button type="button" class="btn btn-none-bg btn-login">
+              <a href="${ pageContext.request.contextPath }/login"><button type="button" class="btn btn-none-bg btn-login">
                 <span class="font14">Đăng nhập</span>
               </button></a></c:if>
             </div>

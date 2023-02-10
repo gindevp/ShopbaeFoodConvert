@@ -66,20 +66,4 @@ public class AccountController {
 		model.addAttribute("account", accountService.findAll());
 		return "redirect:/";
 	}
-//	  @GetMapping("/search")
-//	  public String findAccountByName(@RequestParam String name, Model model) {
-//	    List<Account> account = accountService.findByName(name);
-//	    model.addAttribute("accounts", account);
-//	    return "account/account-list";
-//	  }
-//	@RequestMapping
-//	public String d(Model model) {
-//		Merchant merchant= new Merchant();
-//		Account account= new Account();
-//		account.setId(43L);
-//		merchant.setName("hihai");
-//		merchant.setAccount(account);
-//		merchantService.save(merchant);
-//		return "account/account-list";
-//	}
 }

@@ -19,7 +19,7 @@ import org.springframework.stereotype.Component;
 
 import shopbae.food.model.Account;
 import shopbae.food.service.account.IAccountService;
-
+import shopbae.food.util.Auth;
 
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
@@ -90,21 +90,21 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 	}
 
 	private boolean isUser(List<String> roles) {
-		if (roles.contains("ROLE_USER")) {
+		if (roles.contains(Auth.ROLE_USER.toString())) {
 			return true;
 		}
 		return false;
 	}
 
 	private boolean isAdmin(List<String> roles) {
-		if (roles.contains("ROLE_ADMIN")) {
+		if (roles.contains(Auth.ROLE_ADMIN.toString())) {
 			return true;
 		}
 		return false;
 	}
 
 	private boolean isMerchant(List<String> roles) {
-		if (roles.contains("ROLE_MERCHANT")) {
+		if (roles.contains(Auth.ROLE_MERCHANT.toString())) {
 			return true;
 		}
 		return false;

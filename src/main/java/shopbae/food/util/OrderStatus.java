@@ -1,4 +1,4 @@
-package shopbae.food.model;
+package shopbae.food.util;
 
 public enum OrderStatus {
 	MERCHANT_PENDING, MERCHANT_RECEIVED,USER_RECEIVED,MERCHANT_REFUSE,USER_REFUSE;

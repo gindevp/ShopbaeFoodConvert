@@ -1,4 +1,4 @@
-package shopbae.food.model;
+package shopbae.food.util;
 
 public enum AccountStatus{
 	PENDING,ACTIVE,REFUSE,BLOCK;

@@ -1,6 +1,5 @@
 package shopbae.food.controller;
 
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,7 +14,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import shopbae.food.model.Account;
-import shopbae.food.model.AccountStatus;
+import shopbae.food.util.*;
 import shopbae.food.model.AppUser;
 import shopbae.food.model.Mail;
 import shopbae.food.model.Merchant;
@@ -26,16 +25,17 @@ import shopbae.food.service.merchant.IMerchantService;
 import shopbae.food.service.product.IProductService;
 import shopbae.food.service.role.IRoleService;
 import shopbae.food.service.user.IAppUserService;
+import shopbae.food.util.Email;
 
 @Controller
 public class LoginRegisterHomeController {
-	
+	Email messageMail = new Email();
 	@Autowired
 	IRoleService roleService;
 	@Autowired
 	IAccountService accountService;
 	@Autowired
-	IMerchantService merchantService;	
+	IMerchantService merchantService;
 	@Autowired
 	IProductService productService;
 	@Autowired
@@ -61,6 +61,7 @@ public class LoginRegisterHomeController {
 		model.addAttribute("accountRegisterDTO", new AccountRegisterDTO());
 		return "account/account-layout";
 	}
+
 // Vào trang đăng ký cho merchant
 	@GetMapping("/register/merchant")
 	public String showRegisMerchant(Model model) {
@@ -69,6 +70,7 @@ public class LoginRegisterHomeController {
 		model.addAttribute("accountRegisterDTO", new AccountRegisterDTO());
 		return "account/account-layout";
 	}
+
 // Vào trang hiển thị tất cả merchant
 	@GetMapping("/merchantp/all")
 	public String allMerchant(Model model) {
@@ -76,12 +78,12 @@ public class LoginRegisterHomeController {
 		model.addAttribute("page", "all-merchant-list.jsp");
 		return "page/home-layout";
 	}
+
 // Vào trang merchant để mua sản phẩm
 	@GetMapping("/merchantp/detail/{id}")
 	public String merchantDetail(@PathVariable Long id, Model model, HttpSession httpSession) {
 		return merchantService.detailMer(id, model, httpSession);
 	}
-
 
 // Tìm kiểm sản phẩm theo id và trả về kq ngay tại trang đó
 	@GetMapping("/merchantp/detail/{id}/search")
@@ -91,6 +93,7 @@ public class LoginRegisterHomeController {
 		model.addAttribute("page", "merchant-detail.jsp");
 		return "page/home-layout";
 	}
+
 // Trang home show các merchant và set các thông tin session của người dùng
 	@GetMapping("/home")
 	public String home(Model model, HttpSession session) {
@@ -98,7 +101,11 @@ public class LoginRegisterHomeController {
 		return "page/home-layout";
 	}
 
-	
+// redirect
+	@GetMapping({ "", "/" })
+	public String redirect() {
+		return "redirect:/home";
+	}
 
 // Thực hiện đăng ký cho user
 	@PostMapping("/register/user")
@@ -125,6 +132,7 @@ public class LoginRegisterHomeController {
 		}
 
 	}
+
 // THực  hiện đăng ký cho merchant
 	@PostMapping("/register/merchant")
 	public String addMerchant(@ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model) {
@@ -149,12 +157,14 @@ public class LoginRegisterHomeController {
 			return "account/account-layout";
 		}
 	}
+
 // Hiển thị trang quên mật khẩu
 	@GetMapping("/forgotpass")
 	public String forgot(Model model) {
 		model.addAttribute("page", "forgotpass.jsp");
 		return "account/account-layout";
 	}
+
 // Thực hiện nhận username và bắt xác nhận one time password (otp) để đổi pass
 	@PostMapping("/forgotpass")
 	public String fogot(Model model, @RequestParam String username, HttpSession session) {
@@ -167,22 +177,22 @@ public class LoginRegisterHomeController {
 			accountService.update(account);
 			Mail mail = new Mail();
 			mail.setMailTo(account.getEmail());
-			mail.setMailFrom("nguyenhuuquyet07092001@gmail.com");
-			mail.setMailSubject("Mã xác nhận OTP");
-			mail.setMailContent("Mã OTP của bạn là:" + OTP
-					+ "\nVui lòng không chia sẻ với ai\nMời nhấp link bên dưới để đến trang xác nhận OTP\nhttps://localhost:8443/ShobaeFood/forgotpass/confirm");
+			mail.setMailFrom(messageMail.MAIL);
+			mail.setMailSubject(messageMail.CONFIRM);
+			mail.setMailContent(messageMail.messageOTP(String.valueOf(OTP)));
 			mailService.sendEmail(mail);
 			model.addAttribute("page", "confirm-otp.jsp");
 			session.setAttribute("name", username);
 			return "account/account-layout";
 
 		} else {
-			model.addAttribute("message", "username bạn nhập không tồn tại");
+			model.addAttribute("message", messageMail.USER_EMPTY);
 			model.addAttribute("page", "forgotpass.jsp");
 			return "account/account-layout";
 		}
 
 	}
+
 // Đổi pass cần nhập otp và new password
 	@PostMapping("/forgotpass/confirm")
 	public String confirmOtp(Model model, HttpSession session, @RequestParam String otp, String pass) {
@@ -196,11 +206,12 @@ public class LoginRegisterHomeController {
 			model.addAttribute("page", "login.jsp");
 			return "account/account-layout";
 		} else {
-			model.addAttribute("message", "sai otp ròi mời nhập lại");
+			model.addAttribute("message", messageMail.USER_ERORR);
 			model.addAttribute("page", "confirm-otp.jsp");
 			return "account/account-layout";
 		}
 	}
+
 // Đổi pass cho người dùng đã đăng nhập
 	@GetMapping("/change-pass")
 	public String change(HttpSession session, Model model) {
@@ -213,21 +224,21 @@ public class LoginRegisterHomeController {
 			accountService.update(account);
 			Mail mail = new Mail();
 			mail.setMailTo(account.getEmail());
-			mail.setMailFrom("nguyenhuuquyet07092001@gmail.com");
-			mail.setMailSubject("Mã xác nhận OTP");
-			mail.setMailContent("Mã OTP của bạn là:" + OTP
-					+ "\nVui lòng không chia sẻ với ai\nMời nhấp link bên dưới để đến trang xác nhận OTP\nhttps://localhost:8443/ShobaeFood/forgotpass/confirm");
+			mail.setMailFrom(messageMail.MAIL);
+			mail.setMailSubject(messageMail.CONFIRM);
+			mail.setMailContent(messageMail.messageOTP(String.valueOf(OTP)));
 			mailService.sendEmail(mail);
 			model.addAttribute("page", "confirm-otp.jsp");
 			session.setAttribute("name", ((Account) session.getAttribute("account")).getUserName());
 			return "account/account-layout";
 
 		} else {
-			model.addAttribute("message", "username bạn nhập không tồn tại");
+			model.addAttribute("message", messageMail.USER_EMPTY);
 			model.addAttribute("page", "forgotpass.jsp");
 			return "redirect:/merchant/detail";
 		}
 	}
+
 // Tìm kiểm merchant theo name gần đúng
 	@GetMapping("home/search/merchant")
 	public String searchMerchant(Model model, @RequestParam String search) {
