@@ -111,19 +111,25 @@ public class LoginRegisterHomeController {
 	@PostMapping("/register/user")
 	public String addUser(@ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model) {
 		try {
-			boolean isEnabled = true;
-			String pass = encoder.encode(accountRegisterDTO.getPassword());
-			Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled,
-					accountRegisterDTO.getEmail());
-			accountService.save(account);
-			Account account2 = accountService.findByName(accountRegisterDTO.getUserName());
-			roleService.setDefaultRole(account2.getId(), 2L);
-			String avatar = "tet.jpg";
+			if (!accountService.existsAccountByUserName(accountRegisterDTO.getUserName())) {
+				boolean isEnabled = true;
+				String pass = encoder.encode(accountRegisterDTO.getPassword());
+				Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled,
+						accountRegisterDTO.getEmail());
+				accountService.save(account);
+				Account account2 = accountService.findByName(accountRegisterDTO.getUserName());
+				roleService.setDefaultRole(account2.getId(), 2L);
+				String avatar = "tet.jpg";
 
-			userSevice.save(new AppUser(accountRegisterDTO.getName(), accountRegisterDTO.getAddress(),
-					accountRegisterDTO.getPhone(), avatar, AccountStatus.PENDING.toString(), account2));
+				userSevice.save(new AppUser(accountRegisterDTO.getName(), accountRegisterDTO.getAddress(),
+						accountRegisterDTO.getPhone(), avatar, AccountStatus.PENDING.toString(), account2));
+				return "redirect:/login";
+			} else {
+				model.addAttribute("page", "register-user.jsp");
+				model.addAttribute("err", "trùng username");
+				return "account/account-layout";
+			}
 
-			return "redirect:/login";
 		} catch (Exception e) {
 			// TODO: handle exception
 			model.addAttribute("page", "register-user.jsp");
@@ -137,19 +143,25 @@ public class LoginRegisterHomeController {
 	@PostMapping("/register/merchant")
 	public String addMerchant(@ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model) {
 		try {
-			boolean isEnabled = true;
-			String pass = encoder.encode(accountRegisterDTO.getPassword());
-			Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled,
-					accountRegisterDTO.getEmail());
-			accountService.save(account);
-			Account account2 = accountService.findByName(accountRegisterDTO.getUserName());
-			roleService.setDefaultRole(account2.getId(), 3L);
-			String avatar = "tet.jpg";
+			if (!accountService.existsAccountByUserName(accountRegisterDTO.getUserName())) {
+				boolean isEnabled = true;
+				String pass = encoder.encode(accountRegisterDTO.getPassword());
+				Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled,
+						accountRegisterDTO.getEmail());
+				accountService.save(account);
+				Account account2 = accountService.findByName(accountRegisterDTO.getUserName());
+				roleService.setDefaultRole(account2.getId(), 3L);
+				String avatar = "tet.jpg";
 
-			merchantService.save(new Merchant(accountRegisterDTO.getName(), accountRegisterDTO.getPhone(),
-					accountRegisterDTO.getAddress(), avatar, AccountStatus.PENDING.toString(), account2));
+				merchantService.save(new Merchant(accountRegisterDTO.getName(), accountRegisterDTO.getPhone(),
+						accountRegisterDTO.getAddress(), avatar, AccountStatus.PENDING.toString(), account2));
+				return "redirect:/login";
+			} else {
+				model.addAttribute("page", "register-merchant.jsp");
+				model.addAttribute("err", "trùng username");
+				return "account/account-layout";
+			}
 
-			return "redirect:/login";
 		} catch (Exception e) {
 			// TODO: handle exception
 			model.addAttribute("page", "register-merchant.jsp");

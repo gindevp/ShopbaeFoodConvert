@@ -2,6 +2,14 @@ package shopbae.food.repository.cart;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +25,8 @@ import shopbae.food.model.ProductCartMap;
 @Transactional
 @EnableTransactionManagement
 public class CartRepository implements ICartRepository {
+	@PersistenceContext
+	private EntityManager entityManager;
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -27,7 +37,27 @@ public class CartRepository implements ICartRepository {
 
 	@Override
 	public Cart findById(Long id) {
-		return getSession().get(Cart.class, id);
+		// Tạo CriteriaBuilder
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+		// Tạo CriteriaQuery
+		CriteriaQuery<Cart> criteriaQuery = criteriaBuilder.createQuery(Cart.class);
+
+		// Tạo Root
+		Root<Cart> root = criteriaQuery.from(Cart.class);
+
+		// Thêm điều kiện truy vấn
+		Predicate condition = criteriaBuilder.equal(root.get("id"), id);
+
+		// Thêm điều kiện vào truy vấn
+		criteriaQuery.where(condition);
+
+		// Tạo truy vấn với điều kiện
+		TypedQuery<Cart> query = entityManager.createQuery(criteriaQuery);
+
+		// Thực hiện truy vấn
+		Cart result = query.getSingleResult();
+		return result;
 	}
 
 	@Override
@@ -52,8 +82,27 @@ public class CartRepository implements ICartRepository {
 
 	@Override
 	public List<Cart> findAllByUser(Long id) {
-		return getSession().createQuery("FROM cart a where a.deleteFlag=true and a.user =" + id, Cart.class)
-				.getResultList();
+		// Tạo CriteriaBuilder
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+		// Tạo CriteriaQuery
+		CriteriaQuery<Cart> criteriaQuery = criteriaBuilder.createQuery(Cart.class);
+
+		// Tạo Root
+		Root<Cart> root = criteriaQuery.from(Cart.class);
+
+		// Thêm điều kiện truy vấn
+		Predicate condition = criteriaBuilder.equal(root.get("user"), id);
+		Predicate condition2 = criteriaBuilder.equal(root.get("deleteFlag"), true);
+		// Thêm điều kiện vào truy vấn
+		criteriaQuery.where(criteriaBuilder.and(condition, condition2));
+
+		// Tạo truy vấn với điều kiện
+		TypedQuery<Cart> query = entityManager.createQuery(criteriaQuery);
+
+		// Thực hiện truy vấn
+		List<Cart> result = query.getResultList();
+		return result;
 	}
 
 	@Override
@@ -64,9 +113,29 @@ public class CartRepository implements ICartRepository {
 	@Override
 	public Cart findByProductIdAndUserId(Long product_id, Long user_id) {
 		try {
-			return getSession().createQuery(
-					"FROM cart a where a.user = " + user_id + " and a.product= " + product_id + "and a.deleteFlag=true",
-					Cart.class).getSingleResult();
+			// Tạo CriteriaBuilder
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+			// Tạo CriteriaQuery
+			CriteriaQuery<Cart> criteriaQuery = criteriaBuilder.createQuery(Cart.class);
+
+			// Tạo Root
+			Root<Cart> root = criteriaQuery.from(Cart.class);
+
+			// Thêm điều kiện truy vấn
+			Predicate condition = criteriaBuilder.equal(root.get("user"), user_id);
+			Predicate condition2 = criteriaBuilder.equal(root.get("product"), product_id);
+			Predicate condition3 = criteriaBuilder.equal(root.get("deleteFlag"), true);
+			// Thêm điều kiện vào truy vấn
+			criteriaQuery.where(criteriaBuilder.and(condition, condition2, condition3));
+
+			// Tạo truy vấn với điều kiện
+			TypedQuery<Cart> query = entityManager.createQuery(criteriaQuery);
+
+			// Thực hiện truy vấn
+			Cart result = query.getSingleResult();
+			return result;
+
 		} catch (Exception e) {
 			// TODO: handle exception
 			return null;

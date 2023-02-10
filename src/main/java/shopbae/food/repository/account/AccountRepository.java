@@ -1,9 +1,16 @@
 package shopbae.food.repository.account;
 
 import java.util.List;
+import java.util.Optional;
 
+import javax.persistence.EntityManager;
 import javax.persistence.NoResultException;
+import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
 
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -18,6 +25,8 @@ import shopbae.food.model.Account;
 @Transactional
 @EnableTransactionManagement
 public class AccountRepository implements IAccountRepository {
+	@PersistenceContext
+	private EntityManager entityManager;
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -28,7 +37,27 @@ public class AccountRepository implements IAccountRepository {
 
 	@Override
 	public Account findById(Long id) {
-		return getSession().get(Account.class, id);
+		// Tạo CriteriaBuilder
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+		// Tạo CriteriaQuery
+		CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
+
+		// Tạo Root
+		Root<Account> root = criteriaQuery.from(Account.class);
+
+		// Thêm điều kiện truy vấn
+		Predicate condition = criteriaBuilder.equal(root.get("id"), id);
+
+		// Thêm điều kiện vào truy vấn
+		criteriaQuery.where(condition);
+
+		// Tạo truy vấn với điều kiện
+		TypedQuery<Account> query = entityManager.createQuery(criteriaQuery);
+
+		// Thực hiện truy vấn
+		Account result = query.getSingleResult();
+		return result;
 	}
 
 	@Override
@@ -53,24 +82,53 @@ public class AccountRepository implements IAccountRepository {
 
 	@Override
 	public Account findByName(String name) {
-		TypedQuery<Account> query = getSession().createQuery("FROM account a WHERE a.userName = :userName",
-				Account.class);
-		query.setParameter("userName", name);
-		try {
-			return query.getSingleResult();
-		} catch (NoResultException e) {
-			return null;
-		}
+		// Tạo CriteriaBuilder
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+		// Tạo CriteriaQuery
+		CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
+
+		// Tạo Root
+		Root<Account> root = criteriaQuery.from(Account.class);
+
+		// Thêm điều kiện truy vấn
+		Predicate condition = criteriaBuilder.equal(root.get("userName"), name);
+
+		// Thêm điều kiện vào truy vấn
+		criteriaQuery.where(condition);
+
+		// Tạo truy vấn với điều kiện
+		TypedQuery<Account> query = entityManager.createQuery(criteriaQuery);
+
+		// Thực hiện truy vấn
+		Account result = query.getSingleResult();
+		return result;
 	}
 
 	@Override
 	public Long findIdUserByUserName(String userName) {
-		TypedQuery<Account> query = getSession().createQuery("FROM account a WHERE a.userName = :userName",
-				Account.class);
-		query.setParameter("userName", userName);
-		try {
-			Account account = query.getSingleResult();
-			return account.getId();
+		try { // Tạo CriteriaBuilder
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+			// Tạo CriteriaQuery
+			CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
+
+			// Tạo Root
+			Root<Account> root = criteriaQuery.from(Account.class);
+
+			// Thêm điều kiện truy vấn
+			Predicate condition = criteriaBuilder.equal(root.get("userName"), userName);
+
+			// Thêm điều kiện vào truy vấn
+			criteriaQuery.where(condition);
+
+			// Tạo truy vấn với điều kiện
+			TypedQuery<Account> query = entityManager.createQuery(criteriaQuery);
+
+			// Thực hiện truy vấn
+			Account result = query.getSingleResult();
+
+			return result.getId();
 		} catch (NoResultException e) {
 			return null;
 		}
@@ -78,8 +136,9 @@ public class AccountRepository implements IAccountRepository {
 
 	@Override
 	public boolean existsAccountByUserName(String username) {
+		Optional<Account> optional = Optional.ofNullable(findByName(username));
 		try {
-			if (findByName(username) == null) {
+			if (optional.isPresent()) {
 				return true;
 			} else {
 				return false;

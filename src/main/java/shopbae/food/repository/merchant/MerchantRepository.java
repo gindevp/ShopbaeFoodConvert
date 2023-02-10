@@ -2,6 +2,14 @@ package shopbae.food.repository.merchant;
 
 import java.util.List;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Predicate;
+import javax.persistence.criteria.Root;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +23,8 @@ import shopbae.food.model.Merchant;
 @Transactional
 @EnableTransactionManagement
 public class MerchantRepository implements IMerchantRepository {
+	@PersistenceContext
+	private EntityManager entityManager;
 	@Autowired
 	private SessionFactory sessionFactory;
 
@@ -25,7 +35,27 @@ public class MerchantRepository implements IMerchantRepository {
 
 	@Override
 	public Merchant findById(Long id) {
-		return getSession().get(Merchant.class, id);
+		// Tạo CriteriaBuilder
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+		// Tạo CriteriaQuery
+		CriteriaQuery<Merchant> criteriaQuery = criteriaBuilder.createQuery(Merchant.class);
+
+		// Tạo Root
+		Root<Merchant> root = criteriaQuery.from(Merchant.class);
+
+		// Thêm điều kiện truy vấn
+		Predicate condition = criteriaBuilder.equal(root.get("id"), id);
+
+		// Thêm điều kiện vào truy vấn
+		criteriaQuery.where(condition);
+
+		// Tạo truy vấn với điều kiện
+		TypedQuery<Merchant> query = entityManager.createQuery(criteriaQuery);
+
+		// Thực hiện truy vấn
+		Merchant result = query.getSingleResult();
+		return result;
 	}
 
 	@Override
@@ -50,7 +80,26 @@ public class MerchantRepository implements IMerchantRepository {
 
 	@Override
 	public Merchant findByName(String name) {
-		return getSession().createQuery("FROM merchant a where a.name =" + name, Merchant.class).getSingleResult();
+		// Tạo CriteriaBuilder
+		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+
+		// Tạo CriteriaQuery
+		CriteriaQuery<Merchant> criteriaQuery = criteriaBuilder.createQuery(Merchant.class);
+
+		// Tạo Root
+		Root<Merchant> root = criteriaQuery.from(Merchant.class);
+
+		// Thêm điều kiện truy vấn
+		Predicate condition = criteriaBuilder.equal(root.get("name"), name);
+		// Thêm điều kiện vào truy vấn
+		criteriaQuery.where(condition);
+
+		// Tạo truy vấn với điều kiện
+		TypedQuery<Merchant> query = entityManager.createQuery(criteriaQuery);
+
+		// Thực hiện truy vấn
+		Merchant result = query.getSingleResult();
+		return result;
 	}
 
 	@Override

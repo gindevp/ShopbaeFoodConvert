@@ -1,9 +1,14 @@
+<%@page import="java.nio.file.Files"%>
+<%@page import="java.nio.file.Paths"%>
+<%@page import="java.nio.file.Path"%>
+<%@page import="java.nio.charset.StandardCharsets"%>
 <%@ page contentType="application/pdf"%>
 <%@ page trimDirectiveWhitespaces="true"%>
 <%@ page import="net.sf.jasperreports.engine.*"%>
 <%@ page import="net.sf.jasperreports.engine.data.*"%>
 <%@ page import="java.util.*"%>
 <%@ page import="java.io.*"%>
+
 <%
 
 try {
@@ -15,14 +20,17 @@ try {
 	System.out.print("m1 "+m1);
 	JRDataSource jrDataSource=  new JRBeanCollectionDataSource(dataSource);
 	String jrxmlFile= session.getServletContext().getRealPath("/report/report.jrxml");
-	InputStream input=  new FileInputStream(new File(jrxmlFile));
+	Path path= Paths.get(jrxmlFile);
+	String s= Files.readString(path,StandardCharsets.UTF_8);
+	InputStream input= new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
+ 	/* InputStream input=  new FileInputStream(new File(jrxmlFile)); */ 
+/* 	InputStream input=  new ByteArrayInputStream(jrxmlFile.getBytes(StandardCharsets.UTF_8)); */
 	JasperReport jasperReport= JasperCompileManager.compileReport(input);
 	JasperPrint jasperPrint= JasperFillManager.fillReport(jasperReport, m1, jrDataSource);
 	JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());
 	response.getOutputStream().flush();
 	response.getOutputStream().close();
 } catch (Exception e) {
-	// TODO: handle exception
 	e.printStackTrace();
 }
 %>

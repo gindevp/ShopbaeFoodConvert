@@ -45,7 +45,7 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 		http.authorizeRequests()
 				.antMatchers("/login", "/register/**", "/home/**", "/static/**", "/merchantp/**", "/forgotpass/**",
 						"/change-pass/**", "/account/", "/a/**", "/chat/**", "/jasper/**")
-				.permitAll().antMatchers("/admin/**").hasRole("ADMIN").antMatchers("/user-info", "/cart/**")
+				.permitAll().antMatchers("/admin/**").hasRole("ADMIN").antMatchers("/user-info/**", "/cart/**")
 				.hasRole("USER").antMatchers("/merchant/**").hasRole("MERCHANT").antMatchers("/**").hasAnyRole("ADMIN")
 				.and().formLogin().loginPage("/login").usernameParameter("userName")
 				.successHandler(customSuccessHandler).and().logout()
