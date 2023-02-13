@@ -2,6 +2,8 @@ package shopbae.food.repository.orderDetail;
 
 import java.util.List;
 
+import javax.persistence.TypedQuery;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,6 +11,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 import shopbae.food.model.OrderDetail;
+import shopbae.food.repository.order.IOrderRepository;
 
 @Repository
 @Transactional
@@ -16,6 +19,8 @@ import shopbae.food.model.OrderDetail;
 public class OrderDetailRepository implements IOrderDetailRepository {
 	@Autowired
 	private SessionFactory sessionFactory;
+	@Autowired
+	private IOrderRepository orderRepository;
 
 	private Session getSession() {
 		Session session = sessionFactory.getCurrentSession();
@@ -49,7 +54,15 @@ public class OrderDetailRepository implements IOrderDetailRepository {
 
 	@Override
 	public List<OrderDetail> findByOrder(Long id) {
-		return getSession().createQuery("FROM order_detail a where a.order= " + id, OrderDetail.class).getResultList();
+		try {
+			TypedQuery<OrderDetail> query = getSession().createQuery("FROM order_detail a where a.order=:id",
+					OrderDetail.class);
+			query.setParameter("id", orderRepository.findById(id));
+			return query.getResultList();
+		} catch (Exception e) {
+			return null;
+		}
+
 	}
 
 }

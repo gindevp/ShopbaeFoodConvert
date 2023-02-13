@@ -2,6 +2,8 @@ package shopbae.food.repository.product;
 
 import java.util.List;
 
+import javax.persistence.TypedQuery;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +11,9 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import shopbae.food.model.Merchant;
 import shopbae.food.model.Product;
+import shopbae.food.repository.merchant.IMerchantRepository;
 
 @Repository
 @Transactional
@@ -17,6 +21,8 @@ import shopbae.food.model.Product;
 public class ProductRepository implements IProductRepository {
 	@Autowired
 	private SessionFactory sessionFactory;
+	@Autowired
+	private IMerchantRepository iMerchantRepository;
 
 	private Session getSession() {
 		Session session = sessionFactory.getCurrentSession();
@@ -50,19 +56,44 @@ public class ProductRepository implements IProductRepository {
 
 	@Override
 	public Product findByName(String name) {
-		return getSession().createQuery("FROM product a where a.name=" + name, Product.class).getSingleResult();
+		try {
+			TypedQuery<Product> query = getSession().createQuery("FROM product a where a.name=:name", Product.class);
+			query.setParameter("name", name);
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+
 	}
 
 	@Override
 	public List<Product> getAllByDeleteFlagTrueAndMerchant(Long id) {
-		return getSession().createQuery("From product a where a.deleteFlag = true and a.merchant =" + id, Product.class)
-				.getResultList();
+		Merchant mer= iMerchantRepository.findById(id);
+		try {
+			TypedQuery<Product> query = getSession().createQuery("From product a where a.deleteFlag = true and a.merchant =:id", Product.class);
+			query.setParameter("id", mer);
+			return query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 	@Override
 	public List<Product> fAllByDeleFlagTAndMerAndNameContai(Long id, String name) {
-		return getSession().createQuery("From product p where p.deleteFlag = true and p.merchant = " + id
-				+ " and p.name like concat('%','" + name + "', '%')", Product.class).getResultList();
+		try {
+			TypedQuery<Product> query = getSession().createQuery(
+					"From product p where p.deleteFlag = true and p.merchant =:id and p.name like concat('%',:name, '%')",
+					Product.class);
+			query.setParameter("id", iMerchantRepository.findById(id));
+			query.setParameter("name", name);
+			return query.getResultList();
+		} catch (Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+
 	}
 
 }

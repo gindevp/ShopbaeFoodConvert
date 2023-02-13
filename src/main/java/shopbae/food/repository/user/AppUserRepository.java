@@ -2,6 +2,8 @@ package shopbae.food.repository.user;
 
 import java.util.List;
 
+import javax.persistence.TypedQuery;
+
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -50,12 +52,27 @@ public class AppUserRepository implements IAppUserRepository {
 
 	@Override
 	public AppUser findByName(String name) {
-		return getSession().createQuery("FROM appuser a where a.name =" + name, AppUser.class).getSingleResult();
+		try {
+			TypedQuery<AppUser> query = getSession().createQuery("FROM appuser a where a.name =: name", AppUser.class);
+			query.setParameter("name", name);
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
+
 	}
 
 	@Override
 	public List<AppUser> getAllByStatus(String status) {
-		return getSession().createQuery("From appuser a where a.status='" + status + "'", AppUser.class).getResultList();
+		try {
+			TypedQuery<AppUser> query = getSession().createQuery("From appuser a where a.status=: status",
+					AppUser.class);
+			query.setParameter("status", status);
+			return query.getResultList();
+		} catch (Exception e) {
+			return null;
+		}
+
 	}
 
 }

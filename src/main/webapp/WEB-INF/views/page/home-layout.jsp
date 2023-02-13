@@ -4204,7 +4204,7 @@ input.required-data, select.required-data {
   </style>
 </head>
 
-<body class="portal" style="font-size:calc(8px + 0.5vw);">
+
 <!-- Google Tag Manager (noscript) -->
 <noscript><iframe src="https://www.googletagmanager.com/ns.html?id=GTM-KZSQTX3" height="0" width="0"
                   style="display:none;visibility:hidden"></iframe></noscript>
@@ -4277,7 +4277,7 @@ input.required-data, select.required-data {
     Language
   </button>
   <div class="dropdown-menu">
-    <a class="dropdown-item" href="?language=en">English</a>|
+    <a class="dropdown-item" href="?language=en_US">English</a>|
 	<a class="dropdown-item" href="?language=vi_VN">Viet Nam</a>|
 	
   </div>
@@ -4457,10 +4457,12 @@ input.required-data, select.required-data {
       </div>
     </header>
     
-      
+     <body class="portal" style="font-size:calc(8px + 0.5vw);"> 
     <jsp:include page="/WEB-INF/views/page/${page}"></jsp:include>
       
-     
+</body>
+      <footer class="main-footer">
+      <div id="footer-bottom">
       <div class="now-container-coporation" >
         <p class="seo-footer-link__head">Danh mục</p>
         <div class="seo-footer-link__body">
@@ -4574,9 +4576,9 @@ input.required-data, select.required-data {
 
 
   </div>
-  <footer class="main-footer">
+ 
     
-    <div id="footer-bottom"></div>
+    </div>
   </footer>
 </div>
 <div id="modal">
@@ -4605,6 +4607,5 @@ input.required-data, select.required-data {
 
 
 
-</body>
 
 </html>

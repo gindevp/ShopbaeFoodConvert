@@ -311,7 +311,6 @@
   width: 100%;
   padding-left: 15px;
   border-radius: 5px;
-  border: none;
 }
 </style>
 

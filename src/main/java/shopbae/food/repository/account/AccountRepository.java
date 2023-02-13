@@ -82,27 +82,34 @@ public class AccountRepository implements IAccountRepository {
 
 	@Override
 	public Account findByName(String name) {
-		// Tạo CriteriaBuilder
-		CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
+		try {
 
-		// Tạo CriteriaQuery
-		CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
+			// Tạo CriteriaBuilder
+			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
 
-		// Tạo Root
-		Root<Account> root = criteriaQuery.from(Account.class);
+			// Tạo CriteriaQuery
+			CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
 
-		// Thêm điều kiện truy vấn
-		Predicate condition = criteriaBuilder.equal(root.get("userName"), name);
+			// Tạo Root
+			Root<Account> root = criteriaQuery.from(Account.class);
 
-		// Thêm điều kiện vào truy vấn
-		criteriaQuery.where(condition);
+			// Thêm điều kiện truy vấn
+			Predicate condition = criteriaBuilder.equal(root.get("userName"), name);
 
-		// Tạo truy vấn với điều kiện
-		TypedQuery<Account> query = entityManager.createQuery(criteriaQuery);
+			// Thêm điều kiện vào truy vấn
+			criteriaQuery.where(condition);
 
-		// Thực hiện truy vấn
-		Account result = query.getSingleResult();
-		return result;
+			// Tạo truy vấn với điều kiện
+			TypedQuery<Account> query = entityManager.createQuery(criteriaQuery);
+
+			// Thực hiện truy vấn
+			Account result = query.getSingleResult();
+			return result;
+
+		} catch (Exception e) {
+//			throw new HandleException(500,"không tìm thấy ");
+			return null;
+		}
 	}
 
 	@Override

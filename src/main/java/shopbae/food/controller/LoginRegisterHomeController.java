@@ -1,12 +1,14 @@
 package shopbae.food.controller;
 
 import javax.servlet.http.HttpSession;
+import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -109,9 +111,10 @@ public class LoginRegisterHomeController {
 
 // Thực hiện đăng ký cho user
 	@PostMapping("/register/user")
-	public String addUser(@ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model) {
-		try {
-			if (!accountService.existsAccountByUserName(accountRegisterDTO.getUserName())) {
+	public String addUser(@Valid @ModelAttribute AccountRegisterDTO accountRegisterDTO,BindingResult bindingResult, Model model) {
+		try {System.out.println("erors "+bindingResult.hasErrors());
+			if (!bindingResult.hasErrors()) {
+				
 				boolean isEnabled = true;
 				String pass = encoder.encode(accountRegisterDTO.getPassword());
 				Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled,
@@ -126,14 +129,12 @@ public class LoginRegisterHomeController {
 				return "redirect:/login";
 			} else {
 				model.addAttribute("page", "register-user.jsp");
-				model.addAttribute("err", "trùng username");
 				return "account/account-layout";
 			}
 
 		} catch (Exception e) {
 			// TODO: handle exception
 			model.addAttribute("page", "register-user.jsp");
-			model.addAttribute("err", "trùng username");
 			return "account/account-layout";
 		}
 

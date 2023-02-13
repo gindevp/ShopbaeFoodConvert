@@ -3,6 +3,7 @@ package shopbae.food.repository.merchant;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
 
+import oracle.net.aso.q;
 import shopbae.food.model.Merchant;
 
 @Repository
@@ -104,24 +106,39 @@ public class MerchantRepository implements IMerchantRepository {
 
 	@Override
 	public List<Merchant> getAllByMerchantStatus(String status) {
-		return getSession().createQuery("From merchant a where a.status='" + status + "'", Merchant.class)
-				.getResultList();
+		try {
+			TypedQuery<Merchant> query = getSession().createQuery("From merchant a where a.status=: status",
+					Merchant.class);
+			query.setParameter("status", status);
+			query.setMaxResults(9);
+			return query.getResultList();
+		} catch (NoResultException e) {
+			return null;
+		}
+
 	}
 
 	@Override
 	public List<Merchant> findAllMerchantAndNameContainer(String name) {
-		return getSession()
-				.createQuery("From merchant a where a.status='active' and a.name like concat('%','" + name + "','%')",
-						Merchant.class)
-				.getResultList();
+		try {
+			TypedQuery<Merchant> query = getSession().createQuery(
+					"From merchant a where a.status='ACTIVE' and a.name like concat('%', :name  ,'%')", Merchant.class);
+			query.setParameter("name", name);
+			return query.getResultList();
+		} catch (Exception e) {
+			return null;
+		}
+
 	}
 
 	@Override
 	public Merchant findByAccount(Long id) {
 		try {
-			return getSession().createQuery("FROM merchant a where a.account =" + id, Merchant.class).getSingleResult();
+			TypedQuery<Merchant> query = getSession().createQuery("FROM merchant a where a.account =:id",
+					Merchant.class);
+			query.setParameter("id", id);
+			return query.getSingleResult();
 		} catch (Exception e) {
-			e.printStackTrace();
 			return null;
 		}
 

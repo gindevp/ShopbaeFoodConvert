@@ -3,6 +3,7 @@ package shopbae.food.repository.cart;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.NoResultException;
 import javax.persistence.PersistenceContext;
 import javax.persistence.TypedQuery;
 import javax.persistence.criteria.CriteriaBuilder;
@@ -107,7 +108,15 @@ public class CartRepository implements ICartRepository {
 
 	@Override
 	public Cart findByProduct(Long id) {
-		return getSession().createQuery("FROM cart a where a.product =" + id, Cart.class).getSingleResult();
+		TypedQuery<Cart> query = getSession().createQuery("FROM cart a where a.product =:id", Cart.class);
+		query.setParameter("userName", id);
+		try {
+			return query.getSingleResult();
+		} catch (NoResultException e) {
+			// TODO: handle exception
+			return null;
+		}
+
 	}
 
 	@Override
@@ -163,7 +172,10 @@ public class CartRepository implements ICartRepository {
 	@Override
 	public void deletesByUser(Long id) {
 		try {
-			getSession().createQuery("UPDATE cart a SET a.deleteFlag=false WHERE a.user=" + id).executeUpdate();
+			TypedQuery<Cart> query = getSession().createQuery("UPDATE cart a SET a.deleteFlag=false WHERE a.user =: id",
+					Cart.class);
+			query.setParameter("id", id);
+			query.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -171,7 +183,13 @@ public class CartRepository implements ICartRepository {
 
 	@Override
 	public Cart findByProductAndFlag(Long id) {
-		return getSession().createQuery("FROM cart a where a.deleteFlag=true and a.product =" + id, Cart.class)
-				.getSingleResult();
+		try {
+			TypedQuery<Cart> query = getSession().createQuery("FROM cart a where a.deleteFlag=true and a.product =: id",
+					Cart.class);
+			query.setParameter("id", id);
+			return query.getSingleResult();
+		} catch (Exception e) {
+			return null;
+		}
 	}
 }

@@ -15,6 +15,8 @@ import org.springframework.context.support.ReloadableResourceBundleMessageSource
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.DefaultServletHandlerConfigurer;
 import org.springframework.web.servlet.config.annotation.EnableWebMvc;
@@ -34,6 +36,8 @@ import org.springframework.web.servlet.view.JstlView;
 public class AppConfig implements WebMvcConfigurer {
 	@Value("${file-upload}")
 	private String fileUpload;
+	@Autowired
+	private IntercepterI18n i18n;
 
 	/**
 	 * this method use for setting
@@ -116,11 +120,19 @@ public class AppConfig implements WebMvcConfigurer {
 		ReloadableResourceBundleMessageSource ret = new ReloadableResourceBundleMessageSource();
 
 		// Set the base name for the messages properties file.
-		ret.setBasename("/i18n/messages");
-
+		ret.setBasename("classpath:/i18n/messages");
+		ret.addBasenames("classpath:application");
 		ret.setDefaultEncoding("utf-8");
 
 		return ret;
+	}
+
+	@Bean
+	@Override
+	public Validator getValidator() {
+		LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+		bean.setValidationMessageSource(getMessageSource());
+		return bean;
 	}
 
 	/**
@@ -135,7 +147,7 @@ public class AppConfig implements WebMvcConfigurer {
 		// Set cookie name
 		localeResolver.setCookieName("myAppLocaleCookie");
 		// Set default locale value.
-		localeResolver.setDefaultLocale(Locale.ENGLISH);
+		localeResolver.setDefaultLocale(Locale.US);
 		// Set cookie max exist time.
 		localeResolver.setCookieMaxAge(3600);
 
@@ -162,6 +174,7 @@ public class AppConfig implements WebMvcConfigurer {
 	@Override
 	public void addInterceptors(InterceptorRegistry registry) {
 		registry.addInterceptor(getLocaleInterceptor());
+		registry.addInterceptor(i18n);
 	}
 
 	// end I18n

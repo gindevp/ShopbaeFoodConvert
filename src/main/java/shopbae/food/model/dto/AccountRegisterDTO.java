@@ -1,12 +1,27 @@
 package shopbae.food.model.dto;
 
+import org.hibernate.validator.constraints.Email;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import shopbae.food.model.validate.Phone;
+import shopbae.food.model.validate.UserNameUnique;
+
 public class AccountRegisterDTO {
 	private Long id;
+	@NotEmpty(message = "{userName.not.empty}")
+	@UserNameUnique
 	private String userName;
+	@NotEmpty(message = "{password.not.empty}")
 	private String password;
+	@NotEmpty(message = "{mail.not.empty}")
+	@Email(message = "{mail.type}")
 	private String email;
+	@NotEmpty(message = "{name.not.empty}")
 	private String name;
+	@NotEmpty(message = "{phone.not.empty}")
+	@Phone
 	private String phone;
+	@NotEmpty(message = "{address.not.empty}")
 	private String address;
 
 	public AccountRegisterDTO() {
