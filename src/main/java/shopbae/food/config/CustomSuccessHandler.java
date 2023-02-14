@@ -24,6 +24,18 @@ import shopbae.food.util.Auth;
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
+	private static final String ACCOUNT = "account";
+
+	private static final String MERCHANT = "merchant";
+
+	private static final String USER = "user";
+
+	private static final String USER_ID = "userId";
+
+	private static final String USERNAME = "username";
+
+	private static final String AUTHORITIES = "authorities";
+
 	@Autowired
 	private IAccountService accountService;
 
@@ -42,16 +54,16 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		HttpSession session = request.getSession();
 		session.setMaxInactiveInterval(600);
 		Account account = accountService.findByName(authentication.getName());
-		session.setAttribute("account", account);
+		session.setAttribute(ACCOUNT, account);
 		if (account.getMerchant() != null) {
-			session.setAttribute("merchant", account.getMerchant());
+			session.setAttribute(MERCHANT, account.getMerchant());
 		}
 		if (account.getUser() != null) {
-			session.setAttribute("user", account.getUser());
-			session.setAttribute("userId", account.getUser().getId());
+			session.setAttribute(USER, account.getUser());
+			session.setAttribute(USER_ID, account.getUser().getId());
 		}
-		session.setAttribute("username", account.getUserName());
-		session.setAttribute("authorities", authentication.getAuthorities());
+		session.setAttribute(USERNAME, account.getUserName());
+		session.setAttribute(AUTHORITIES, authentication.getAuthorities());
 
 		redirectStrategy.sendRedirect(request, response, targetUrl);
 	}

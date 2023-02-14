@@ -1,6 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+    <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <link rel="stylesheet" href="${ pageContext.request.contextPath }/static/css/bootstrap.css">
 <style>
 
@@ -437,7 +438,7 @@
                   <td class="merchant-item">${order.totalPrice} đ</td>
                   <td class="merchant-item">${order.orderdate}</td>
                   
-                  <td class="merchant-item" size="50px">${order.status} </td>
+                  <td class="merchant-item" size="50px"><spring:message code="${order.status}"/> </td>
               
                     </tr>
                 </c:forEach>
@@ -526,9 +527,12 @@
                   </tbody>
                 </table>
            <input name="sum" value="${sum}" hidden="true"/> 
-</c:if> <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-left: 8px">
+           <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-left: 8px">
               Đặt hàng
             </button>
+</c:if> 
+
+
 </form>
             </div>
            

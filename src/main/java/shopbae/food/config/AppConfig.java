@@ -127,6 +127,9 @@ public class AppConfig implements WebMvcConfigurer {
 		return ret;
 	}
 
+	/**
+	 * this method use for setting
+	 */
 	@Bean
 	@Override
 	public Validator getValidator() {

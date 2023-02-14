@@ -11,6 +11,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
 @Component
 public class IntercepterI18n implements HandlerInterceptor {
+	/**
+	 * this method use for setting
+	 */
 	@Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
 		System.out.println("i18nIceptor");

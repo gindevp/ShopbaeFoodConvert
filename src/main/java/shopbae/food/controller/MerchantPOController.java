@@ -1,6 +1,5 @@
 package shopbae.food.controller;
 
-
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -58,20 +57,20 @@ public class MerchantPOController {
 		try {
 			product = productService
 					.getAllByDeleteFlagTrueAndMerchant(((Merchant) httpSession.getAttribute("merchant")).getId());
+			List<Object> name = new ArrayList<>();
+			List<Object> num = new ArrayList<>();
+			product.stream().forEach(c -> name.add("'" + c.getName() + "'"));
+			product.stream().forEach(c -> num.add(c.getNumberOrder()));
+			model.addAttribute("name", name);
+			System.out.println(name);
+			model.addAttribute("num", num);
+			model.addAttribute("page", "dashboard.jsp");
+			model.addAttribute("nav", 1);
+			return "merchant/merchant-layout";
 		} catch (Exception e) {
-			// TODO: handle exception
 			return "redirect:/home";
 		}
-		List<Object> name = new ArrayList<>();
-		List<Object> num = new ArrayList<>();
-		product.stream().forEach(c -> name.add("'" + c.getName() + "'"));
-		product.stream().forEach(c -> num.add(c.getNumberOrder()));
-		model.addAttribute("name", name);
-		System.out.println(name);
-		model.addAttribute("num", num);
-		model.addAttribute("page", "dashboard.jsp");
-		model.addAttribute("nav", 1);
-		return "merchant/merchant-layout";
+
 	}
 
 // Hiển thị trang thông tin merchant cá nhân
@@ -115,18 +114,31 @@ public class MerchantPOController {
 
 // Hiển thị trang list product 
 	@RequestMapping("/product")
-	public String product(Model model, HttpSession httpSession) {
+	public String product(Model model, HttpSession httpSession, @RequestParam(defaultValue = "0") int page) {
 		try {
-			model.addAttribute("products", productService
-					.getAllByDeleteFlagTrueAndMerchant(((Merchant) httpSession.getAttribute("merchant")).getId()));
+			int pageSize = 5; // số lượng phần tử trên mỗi trang
+			List<Product> listProducts = productService
+					.getAllByDeleteFlagTrueAndMerchant(((Merchant) httpSession.getAttribute("merchant")).getId());
+			// tính toán số trang cần hiển thị
+			int totalPages = listProducts.size() / pageSize;
+			if (listProducts.size() % pageSize > 0) {
+				totalPages++;
+			}
+			// lấy dữ liệu cho trang hiện tại
+			int fromIndex = page * pageSize;
+			int toIndex = Math.min(fromIndex + pageSize, listProducts.size());
+			List<Product> currentPageProduct = listProducts.subList(fromIndex, toIndex);
+
+			model.addAttribute("products", currentPageProduct);
+			model.addAttribute("page", "product-list.jsp");
+			model.addAttribute("nav", 3);
+			model.addAttribute("totalPages", totalPages);
+			model.addAttribute("currentPage", page);
+			return "merchant/merchant-layout";
 		} catch (Exception e) {
-			// TODO: handle exception
 			return "redirect:/home";
 		}
 
-		model.addAttribute("page", "product-list.jsp");
-		model.addAttribute("nav", 3);
-		return "merchant/merchant-layout";
 	}
 
 // Hiển thị trang add product
@@ -194,11 +206,27 @@ public class MerchantPOController {
 
 // Thực hiện tìm kiểm product theo name gần đúng
 	@GetMapping("/product/search")
-	public String findProductByName(@RequestParam String name, Model model, HttpSession httpSession) {
-		List<Product> product = productService
+	public String findProductByName(@RequestParam String name, @RequestParam(defaultValue = "0") int page, Model model,
+			HttpSession httpSession) {
+		
+		int pageSize = 5; // số lượng phần tử trên mỗi trang
+		List<Product> listProducts = productService
 				.fAllByDeleFlagTAndMerAndNameContai(((Merchant) httpSession.getAttribute("merchant")).getId(), name);
-		model.addAttribute("products", product);
+		// tính toán số trang cần hiển thị
+		int totalPages = listProducts.size() / pageSize;
+		if (listProducts.size() % pageSize > 0) {
+			totalPages++;
+		}
+		// lấy dữ liệu cho trang hiện tại
+		int fromIndex = page * pageSize;
+		int toIndex = Math.min(fromIndex + pageSize, listProducts.size());
+		List<Product> currentPageProduct = listProducts.subList(fromIndex, toIndex);
+
+		model.addAttribute("products", currentPageProduct);
 		model.addAttribute("page", "product-list.jsp");
+		model.addAttribute("nav", 3);
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("currentPage", page);
 		return "merchant/merchant-layout";
 	}
 

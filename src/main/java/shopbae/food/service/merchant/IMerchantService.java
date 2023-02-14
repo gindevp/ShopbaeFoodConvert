@@ -10,12 +10,29 @@ import shopbae.food.model.Merchant;
 import shopbae.food.service.IGeneral;
 
 public interface IMerchantService extends IGeneral<Merchant> {
+	/**
+	 * This method use find by name
+	 * 
+	 * @return a merchant
+	 */
 	Merchant findByName(String name);
-
+	/**
+	 * This method use find all by status
+	 * 
+	 * @return List merchant
+	 */
 	List<Merchant> getAllByMerchantStatus(String status);
-
+	/**
+	 * This method use find all merchant by name container
+	 * 
+	 * @return List merchant
+	 */
 	List<Merchant> findAllMerchantAndNameContainer(String name);
-
+	/**
+	 * This method use find by id of account
+	 * 
+	 * @return merchant
+	 */
 	Merchant findByAccount(Long id);
 
 	/**

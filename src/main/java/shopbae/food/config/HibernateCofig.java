@@ -18,6 +18,9 @@ public class HibernateCofig {
 	@Autowired
 	private Environment env;
 
+	/**
+	 * this method use for setting
+	 */
 	@Bean
 	public LocalSessionFactoryBean getSessionFactory() {
 		LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
@@ -27,6 +30,9 @@ public class HibernateCofig {
 		return sessionFactory;
 	}
 
+	/**
+	 * this method use for setting
+	 */
 	@Bean
 	public DataSource dataSource() {
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -37,6 +43,9 @@ public class HibernateCofig {
 		return dataSource;
 	}
 
+	/**
+	 * this method use for setting
+	 */
 	public Properties hibernateProperties() {
 		Properties properties = new Properties();
 		properties.setProperty("hibernate.hbm2ddl.auto", "update");

@@ -1,7 +1,41 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="${ pageContext.request.contextPath }/static/css/bootstrap.css">
-
+<style>
+.pagination a:hover {
+	font-size: 24px;
+    background-color: #cf2127;
+    color:blue;
+    text-decoration: none;
+}
+.pagination a {
+    font-size: 12px;
+    border-radius: 2px;
+    -moz-border-radius: 2px;
+    -webkit-border-radius: 7px;
+    width: 72px;
+    height: 46px;
+    text-align: center;
+    line-height: 31px;
+    color: #252525;
+    display: inline-block;
+    margin: 5px 5px;
+    position: relative;
+    top: -5px;
+    cursor: pointer;
+    transition: .2s;
+}
+.pagination {
+    text-align: center;
+    margin-top: 22px;
+    max-height: 47px;
+    overflow: hidden;
+    list-style: none;
+}
+.actived{
+background-color: #bf191987
+}
+</style>
 <div class="container">
   <div class="row" >
     <a type="button" class="col-2 btn btn-outline-danger" href="<c:url value = "/merchant/product/add"/>">
@@ -57,8 +91,41 @@
     </c:forEach>
     </tbody>
   </table>
+  
+   <nav >
+  <ul class="pagination" >
+   
+    <li class="page-item ${currentPage == 0 ? 'disabled' : ''}"><a class="page-link" href="${ pageContext.request.contextPath }/merchant/product?page=${currentPage - 1}" tabindex="-1">&laquo;</a></li>
+    <c:forEach var="i" begin="0" end="${totalPages-1}">
+            <li class="page-item ">
+                <a class="page-link ${currentPage == i ? 'actived' : ''}" href="${ pageContext.request.contextPath }/merchant/product?page=${i}">${i+1}</a>
+            </li>
+        </c:forEach>
+    <li class="page-item ${currentPage == totalPages-1 ? 'disabled' : ''}"><a class="page-link " href="${ pageContext.request.contextPath }/merchant/product?page=${currentPage + 1}">&raquo;</a>
+    </li>
+  </ul>
+</nav> 
+
+<%-- <nav >
+    <ul class="pagination">
+        <li class="page-item ${currentPage == 0 ? 'disabled' : ''}">
+            <a href="${ pageContext.request.contextPath }/merchant/product?page=${currentPage - 1}">&laquo;</a>
+        </li>
+
+        <c:forEach var="i" begin="0" end="${totalPages-1}">
+            <li class="page-item ${currentPage == i ? 'active' : ''}">
+                <a class="page-link" href="${ pageContext.request.contextPath }/merchant/product?page=${i}">${i+1}</a>
+            </li>
+        </c:forEach>
+
+        <li class="page-item ${currentPage == totalPages-1 ? 'disabled' : ''}">
+            <a href="${ pageContext.request.contextPath }/merchant/product?page=${currentPage + 1}">&raquo;</a>
+        </li>
+    </ul>
+</nav> --%>
 </div>
 </div>
+
 <div class="txt-center mt-2"><button  class="btn-none btn-load-more link"><span
   class="pr-1">Xem thêm</span><i class="fas fa-redo font12 "></i></button></div>
 

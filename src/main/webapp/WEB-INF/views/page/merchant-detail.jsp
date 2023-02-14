@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 
 <style>
 <%@include file="/static/css/login.css"%>
@@ -287,7 +288,7 @@
 	        //xử lý khi thành công
 	        success: function (data) {
 	      	console.log("suss");  
-	      	swal({title:"Thêm thành công",
+	      	swal({title:"<spring:message code="cartSuccess"/>",
 	      		icon: "success",
 	      	});
 	        }

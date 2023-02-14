@@ -11,10 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 import org.springframework.transaction.annotation.Transactional;
-
-import shopbae.food.model.AppUser;
 import shopbae.food.model.Order;
-import shopbae.food.repository.merchant.IMerchantRepository;
 import shopbae.food.repository.user.IAppUserRepository;
 
 @Repository
@@ -23,8 +20,6 @@ import shopbae.food.repository.user.IAppUserRepository;
 public class OrderRepository implements IOrderRepository {
 	@Autowired
 	private SessionFactory sessionFactory;
-	@Autowired
-	private IMerchantRepository merchantRepository;
 	@Autowired
 	private IAppUserRepository appUserRepository;
 

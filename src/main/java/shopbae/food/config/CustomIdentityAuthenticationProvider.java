@@ -19,10 +19,9 @@ public class CustomIdentityAuthenticationProvider implements AuthenticationProvi
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
-
 	@Autowired
 	private IAccountService accountService;
-
+	
 	UserDetails isValidUser(String username, String password) {
 		Account account = accountService.findByName(username);
 		if (account != null && username.equalsIgnoreCase(account.getUserName())
@@ -59,6 +58,8 @@ public class CustomIdentityAuthenticationProvider implements AuthenticationProvi
 			if (account.getMerchant() != null) {
 				if (AccountStatus.PENDING.toString().equals(account.getMerchant().getStatus())) {
 					throw new BadCredentialsException(message.PENDING);
+//					System.out.println(LocaleContextHolder.getLocale());
+//					throw new BadCredentialsException(messageSource.getMessage("greeting", null,LocaleContextHolder.getLocale()));
 				}
 				if (AccountStatus.BLOCK.toString().equals(account.getMerchant().getStatus())) {
 					throw new BadCredentialsException(message.BLOCK);
