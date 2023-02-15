@@ -15,7 +15,6 @@ import shopbae.food.service.account.IAccountService;
 
 @Component
 public class CustomIdentityAuthenticationProvider implements AuthenticationProvider {
-	private Message message = new Message();
 
 	@Autowired
 	PasswordEncoder passwordEncoder;
@@ -43,35 +42,24 @@ public class CustomIdentityAuthenticationProvider implements AuthenticationProvi
 
 		if (userDetails != null) {
 			Account account = accountService.findByName(username);
-			if (account.getUser() != null) {
-				if (AccountStatus.PENDING.toString().equals(account.getUser().getStatus())) {
-					throw new BadCredentialsException(message.PENDING);
-				}
-				if (AccountStatus.BLOCK.toString().equals(account.getUser().getStatus())) {
-					throw new BadCredentialsException(message.BLOCK);
-				}
-				if (AccountStatus.REFUSE.toString().equals(account.getUser().getStatus())) {
-					throw new BadCredentialsException(message.REFUSE);
-				}
-			}
-
-			if (account.getMerchant() != null) {
+			
+			if (account.getMerchant() != null||account.getUser() != null) {
 				if (AccountStatus.PENDING.toString().equals(account.getMerchant().getStatus())) {
-					throw new BadCredentialsException(message.PENDING);
+					throw new BadCredentialsException(AccountStatus.PENDING.toString());
 //					System.out.println(LocaleContextHolder.getLocale());
 //					throw new BadCredentialsException(messageSource.getMessage("greeting", null,LocaleContextHolder.getLocale()));
 				}
 				if (AccountStatus.BLOCK.toString().equals(account.getMerchant().getStatus())) {
-					throw new BadCredentialsException(message.BLOCK);
+					throw new BadCredentialsException(AccountStatus.BLOCK.toString());
 				}
 				if (AccountStatus.REFUSE.toString().equals(account.getMerchant().getStatus())) {
-					throw new BadCredentialsException(message.REFUSE);
+					throw new BadCredentialsException(AccountStatus.REFUSE.toString());
 				}
 			}
 
 			return new UsernamePasswordAuthenticationToken(username, password, userDetails.getAuthorities());
 		} else {
-			throw new BadCredentialsException(message.ERORR_UP);
+			throw new BadCredentialsException(AccountStatus.ERORR_UP.toString());
 		}
 	}
 

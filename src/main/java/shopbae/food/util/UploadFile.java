@@ -29,6 +29,13 @@ public class UploadFile {
 		}
 		return fileName;
 	}
+	/**
+	 * Phương thức này giúp lưu file
+	 * 
+	 * @param newImg MultipartFile file cần lưu
+	 * @return tên file vừa lưu
+	 * @throws IOException
+	 */
 	public String uploadFile(MultipartFile newImg) throws IOException {
 		MultipartFile multipartFile = newImg;
 		String fileName = multipartFile.getOriginalFilename();

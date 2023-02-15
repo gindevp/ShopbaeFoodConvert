@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 
 import shopbae.food.model.Merchant;
+import shopbae.food.model.Product;
 import shopbae.food.service.IGeneral;
 
 public interface IMerchantService extends IGeneral<Merchant> {
@@ -51,5 +52,6 @@ public interface IMerchantService extends IGeneral<Merchant> {
 	 * @param model
 	 * @param session
 	 */
-	void homePage(Model model, HttpSession session);
+	void homePage(Model model, HttpSession session,int page,int pageSize);
+
 }

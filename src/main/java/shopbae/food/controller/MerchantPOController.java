@@ -114,9 +114,9 @@ public class MerchantPOController {
 
 // Hiển thị trang list product 
 	@RequestMapping("/product")
-	public String product(Model model, HttpSession httpSession, @RequestParam(defaultValue = "0") int page) {
+	public String product(Model model, HttpSession httpSession, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int pageSize) {
 		try {
-			int pageSize = 5; // số lượng phần tử trên mỗi trang
+
 			List<Product> listProducts = productService
 					.getAllByDeleteFlagTrueAndMerchant(((Merchant) httpSession.getAttribute("merchant")).getId());
 			// tính toán số trang cần hiển thị
@@ -124,12 +124,8 @@ public class MerchantPOController {
 			if (listProducts.size() % pageSize > 0) {
 				totalPages++;
 			}
-			// lấy dữ liệu cho trang hiện tại
-			int fromIndex = page * pageSize;
-			int toIndex = Math.min(fromIndex + pageSize, listProducts.size());
-			List<Product> currentPageProduct = listProducts.subList(fromIndex, toIndex);
-
-			model.addAttribute("products", currentPageProduct);
+	
+			model.addAttribute("products",new Page().paging(page,pageSize,listProducts));
 			model.addAttribute("page", "product-list.jsp");
 			model.addAttribute("nav", 3);
 			model.addAttribute("totalPages", totalPages);
@@ -217,12 +213,8 @@ public class MerchantPOController {
 		if (listProducts.size() % pageSize > 0) {
 			totalPages++;
 		}
-		// lấy dữ liệu cho trang hiện tại
-		int fromIndex = page * pageSize;
-		int toIndex = Math.min(fromIndex + pageSize, listProducts.size());
-		List<Product> currentPageProduct = listProducts.subList(fromIndex, toIndex);
 
-		model.addAttribute("products", currentPageProduct);
+		model.addAttribute("products", new Page().paging(page,pageSize,listProducts));
 		model.addAttribute("page", "product-list.jsp");
 		model.addAttribute("nav", 3);
 		model.addAttribute("totalPages", totalPages);

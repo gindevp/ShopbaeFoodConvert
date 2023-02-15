@@ -62,8 +62,12 @@
 				<text><![CDATA[- - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - - -]]></text>
 			</staticText>
 			<image>
-				<reportElement x="80" y="0" width="90" height="81" uuid="41242e95-6d81-45c7-b5d5-08de695d5e6d"/>
+				<reportElement x="90" y="0" width="69" height="67" uuid="a20eb4ab-d0ec-4a5a-94ad-43b2eeccaa8e"/>
 				<imageExpression><![CDATA["D:/eclipse/eclipse-workspace/ShobaeFood/src/main/webapp/static/img/hoadon.png"]]></imageExpression>
+			</image>
+			<image>
+				<reportElement x="400" y="6" width="98" height="68" uuid="9292c2e8-af9e-4eee-9285-fcf94a636110"/>
+				<imageExpression><![CDATA["D:/eclipse/eclipse-workspace/ShobaeFood/src/main/webapp/static/img/Foodlogo.png"]]></imageExpression>
 			</image>
 		</band>
 	</title>

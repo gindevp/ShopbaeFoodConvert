@@ -1,17 +1,18 @@
  <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <script src="${ pageContext.request.contextPath }/static/js/sweetalert.js"></script>
 
  <!--form login-->
     <div class="now-login">
       <div class="content">
-        <div class="title">Đăng nhập</div>
+        <div class="title"><spring:message code="login"/></div>
         <div class="login-via">
-          <div class="item phone"><span class="fas fa-mobile-alt"></span>Số điện thoại</div>
+          <div class="item phone"><span class="fas fa-mobile-alt"></span>Phone</div>
           <div class="item fb"><span class="fab fa-facebook-f"></span>Facebook</div>
           <div class="item plus"><i class="fab fa-google-plus-g"></i>Google</div>
         </div>
-        <p class="text">Hoặc đăng nhập bằng tài khoản của bạn</p>
+        <p class="text"><spring:message code="or_login"/></p>
 
         <!--        form login-->
         
@@ -26,23 +27,23 @@
             <div class="field-group">
               <div class="input-group">
               <i class="far fa-user"></i>
-              <input type="text" name="userName" placeholder="Tên đăng nhập">
+              <input type="text" name="userName" placeholder="<spring:message code="name_login"/>">
               </div>
             </div>
              <div class="field-group">
                 <div class="input-group">
                 <i class="fas fa-lock"></i>
-                <input type="password" name="password" placeholder="Mật khẩu">
+                <input type="password" name="password" placeholder="<spring:message code="pass"/>">
                 </div>
              </div>
             <c:if test="${not empty sessionScope.SPRING_SECURITY_LAST_EXCEPTION}">
     <!-- Display error message --> 
-    <p style="color:red">${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}</p>
+    
  <script>
 
  swal({
-	  title: "${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}",
-	  text: "Hãy nhập lại đi nào!",
+	  title: "<spring:message code="${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}"/>",
+	  text: "<spring:message code="Please"/>",
 	  icon: "error",
 	});
 </script>
@@ -51,22 +52,19 @@
     
 
             <div class="form-group clearfix">
-              <div class="float-left"><input type="checkbox" id="RememberMe" checked=""><label for="RememberMe">Lưu
-                thông tin đăng nhập</label></div>
-              <span class="float-right"><a href="${ pageContext.request.contextPath }/forgotpass">Quên mật
-                                    khẩu?</a></span>
+              <div class="float-left"><input type="checkbox" id="RememberMe" checked=""><label for="RememberMe"><spring:message code="save_login"/></label></div>
+              <span class="float-right"><a href="${ pageContext.request.contextPath }/forgotpass"><spring:message code="forgotpass"/></a></span>
             </div>
-            <button class="btn btn-block btn-submit" type="submit">Đăng nhập</button>
+            <button class="btn btn-block btn-submit" type="submit"><spring:message code="login"/></button>
 
          <!--    <a th:href="@{/register/merchant}" class="btn btn-block btn-dark">Đăng ký</a> -->
-            <a href="${ pageContext.request.contextPath }/register/user" class="btn btn-block btn-dark">Đăng ký</a>
+            <a href="${ pageContext.request.contextPath }/register/user" class="btn btn-block btn-dark"><spring:message code="register"/></a>
           </div>
           <br>
 
         </form>
 
-        <div class="login-mess-policy">Chúng tôi không sử dụng thông tin của bạn với bất kỳ mục đích nào. Bằng cách đăng
-          nhập hoặc đăng ký, bạn đồng ý với <a
+        <div class="login-mess-policy"><a
             style="color: #0495ba; border-bottom: 2px solid; text-decoration: none !important;" target="_blank"
             href="https://shopeefood.vn/gioi-thieu#footer-bottom">Chính sách quy định của Foody</a></div>
       </div>

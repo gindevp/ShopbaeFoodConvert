@@ -14,6 +14,7 @@ import org.springframework.ui.Model;
 import shopbae.food.model.Account;
 import shopbae.food.util.*;
 import shopbae.food.model.Merchant;
+import shopbae.food.model.Product;
 import shopbae.food.repository.merchant.IMerchantRepository;
 import shopbae.food.service.account.IAccountService;
 import shopbae.food.service.product.IProductService;
@@ -104,7 +105,7 @@ public class MerchantService implements IMerchantService {
 		return false;
 	}
 
-	public void homePage(Model model, HttpSession session) {
+	public void homePage(Model model, HttpSession session,int page, int pageSize) {
 		String userName = (String) session.getAttribute("username");
 		Account account = accountService.findByName(userName);
 
@@ -132,11 +133,21 @@ public class MerchantService implements IMerchantService {
 				role = "merchant";
 			}
 		}
+		List<Merchant> listMerchant= this.getAllByMerchantStatus(AccountStatus.ACTIVE.toString());
+		// tính toán số trang cần hiển thị
+					int totalPages = listMerchant.size() / pageSize;
+					if (listMerchant.size() % pageSize > 0) {
+						totalPages++;
+					}
 		session.setAttribute("name", name);
 		session.setAttribute("avatar", avatar);
 		session.setAttribute("role", role);
 		session.setAttribute("message", message);
-		model.addAttribute("merchants", this.getAllByMerchantStatus(AccountStatus.ACTIVE.toString()));
+		model.addAttribute("merchants", new Page().paging(page, pageSize, listMerchant));
 		model.addAttribute("page", "home.jsp");
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("currentPage", page);
 	}
+	
+
 }

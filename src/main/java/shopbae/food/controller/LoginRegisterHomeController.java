@@ -1,5 +1,7 @@
 package shopbae.food.controller;
 
+import java.util.List;
+
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -26,7 +28,6 @@ import shopbae.food.service.merchant.IMerchantService;
 import shopbae.food.service.product.IProductService;
 import shopbae.food.service.role.IRoleService;
 import shopbae.food.service.user.IAppUserService;
-import shopbae.food.util.Email;
 
 @Controller
 public class LoginRegisterHomeController {
@@ -74,9 +75,17 @@ public class LoginRegisterHomeController {
 
 // Vào trang hiển thị tất cả merchant
 	@GetMapping("/merchantp/all")
-	public String allMerchant(Model model) {
-		model.addAttribute("merchants", merchantService.getAllByMerchantStatus(AccountStatus.ACTIVE.toString()));
+	public String allMerchant(Model model,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
+		List<Merchant> listMerchants = merchantService.getAllByMerchantStatus(AccountStatus.ACTIVE.toString());
+		// tính toán số trang cần hiển thị
+					int totalPages = listMerchants.size() / pageSize;
+					if (listMerchants.size() % pageSize > 0) {
+						totalPages++;
+					}
+		model.addAttribute("merchants",new Page().paging(page, pageSize, listMerchants)  );
 		model.addAttribute("page", "all-merchant-list.jsp");
+		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("currentPage", page);
 		return "page/home-layout";
 	}
 
@@ -97,8 +106,8 @@ public class LoginRegisterHomeController {
 
 // Trang home show các merchant và set các thông tin session của người dùng
 	@GetMapping("/home")
-	public String home(Model model, HttpSession session) {
-		merchantService.homePage(model, session);
+	public String home(Model model, HttpSession session,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "9") int pageSize) {
+		merchantService.homePage(model, session, page, pageSize);
 		return "page/home-layout";
 	}
 

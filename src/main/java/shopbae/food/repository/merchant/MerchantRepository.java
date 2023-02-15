@@ -109,7 +109,6 @@ public class MerchantRepository implements IMerchantRepository {
 			TypedQuery<Merchant> query = getSession().createQuery("From merchant a where a.status=: status",
 					Merchant.class);
 			query.setParameter("status", status);
-			query.setMaxResults(9);
 			return query.getResultList();
 		} catch (NoResultException e) {
 			return null;
