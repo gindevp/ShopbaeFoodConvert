@@ -171,9 +171,9 @@ public class LoginRegisterHomeController {
 
 // THực  hiện đăng ký cho merchant
 	@PostMapping("/register/merchant")
-	public String addMerchant(@ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model) {
+	public String addMerchant(@Valid @ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model, BindingResult bindingResult) {
 		try {
-			if (!accountService.existsAccountByUserName(accountRegisterDTO.getUserName())) {
+			if (!bindingResult.hasErrors()) {
 				boolean isEnabled = true;
 				String pass = encoder.encode(accountRegisterDTO.getPassword());
 				Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled,
