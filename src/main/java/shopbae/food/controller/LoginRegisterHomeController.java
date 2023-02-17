@@ -56,8 +56,9 @@ public class LoginRegisterHomeController {
 
 // Vào trang login
 	@GetMapping("/login")
-	public String showLoginForm(Model model, HttpSession httpSession) {
+	public String showLoginForm(Model model, HttpSession httpSession,@RequestParam(defaultValue = "") String mess) {
 		model.addAttribute("page", "login.jsp");
+		model.addAttribute("mess",mess);
 		return "account/account-layout";
 
 	}
@@ -148,6 +149,12 @@ public class LoginRegisterHomeController {
 				String status = messageSource.getMessage("register_success", null, LocaleContextHolder.getLocale());
 
 				messagingTemplate.convertAndSend("/topic/register", status);
+				Mail mail = new Mail();
+				mail.setMailTo(accountRegisterDTO.getEmail());
+				mail.setMailFrom(messageMail.MAIL);
+				mail.setMailSubject(messageMail.MESS);
+				mail.setMailContent(messageMail.MESSAGE);
+				mailService.sendEmail(mail);
 				return "redirect:/login";
 			} else {
 				model.addAttribute("page", "register-user.jsp");
@@ -181,6 +188,12 @@ public class LoginRegisterHomeController {
 				String status = messageSource.getMessage("register_success", null, LocaleContextHolder.getLocale());
 
 				messagingTemplate.convertAndSend("/topic/register", status);
+				Mail mail = new Mail();
+				mail.setMailTo(accountRegisterDTO.getEmail());
+				mail.setMailFrom(messageMail.MAIL);
+				mail.setMailSubject(messageMail.MESS);
+				mail.setMailContent(messageMail.MESSAGE);
+				mailService.sendEmail(mail);
 				return "redirect:/login";
 			} else {
 				model.addAttribute("page", "register-merchant.jsp");

@@ -23,7 +23,9 @@
         
         <form action="${ pageContext.request.contextPath }/login" method="post">
           <div class="form-login-input">
-             <span style="">${mess}</span>
+          <c:if test="${mess=='timeout' }">
+             <span style="color: red"><spring:message code="${mess }"/></span>
+             </c:if>
             <div class="field-group">
               <div class="input-group">
               <i class="far fa-user"></i>
@@ -47,6 +49,7 @@
 	  icon: "error",
 	});
 </script>
+
 </c:if>
         
     

@@ -8,7 +8,7 @@ import org.springframework.security.config.annotation.authentication.builders.Au
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
-
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -49,9 +49,11 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 				.hasRole("USER").antMatchers("/merchant/**").hasRole("MERCHANT").antMatchers("/**").hasAnyRole("ADMIN")
 				.and().formLogin().loginPage("/login").usernameParameter("userName")
 				.successHandler(customSuccessHandler).and().logout()
-				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).and().csrf().disable();
+				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).clearAuthentication(true)
+				.deleteCookies("JSESSIONID").invalidateHttpSession(true).and().csrf().disable();
 
-		http.sessionManagement().maximumSessions(1).expiredUrl("/login?expired=true");
+		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
+				.invalidSessionUrl("/login?mess=timeout"));
 
 	}
 

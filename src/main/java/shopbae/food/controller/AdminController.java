@@ -9,18 +9,22 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import shopbae.food.util.*;
 import shopbae.food.model.AppUser;
+import shopbae.food.model.Mail;
 import shopbae.food.model.Merchant;
+import shopbae.food.service.mail.MailService;
 import shopbae.food.service.merchant.IMerchantService;
 import shopbae.food.service.user.IAppUserService;
 
 @Controller
 @RequestMapping("/admin")
 public class AdminController {
+	Email messageMail = new Email();
 	@Autowired
 	private IMerchantService merchantService;
 	@Autowired
 	private IAppUserService appUserService;
-
+	@Autowired
+	MailService mailService;
 	@GetMapping("")
 	public String defaultt() {
 		return "redirect:/admin/merchant";
@@ -68,6 +72,12 @@ public class AdminController {
 		Merchant merchant = merchantService.findById(id);
 
 		merchant.setStatus(AccountStatus.ACTIVE.toString());
+		Mail mail = new Mail();
+		mail.setMailTo(merchant.getAccount().getEmail());
+		mail.setMailFrom(messageMail.MAIL);
+		mail.setMailSubject(messageMail.MESS);
+		mail.setMailContent(messageMail.MESSAGE);
+		mailService.sendEmail(mail);
 		merchantService.update(merchant);
 		return "redirect:/admin/merchant/pending";
 	}
@@ -152,6 +162,12 @@ public class AdminController {
 
 		merchant.setStatus(AccountStatus.ACTIVE.toString());
 		appUserService.update(merchant);
+		Mail mail = new Mail();
+		mail.setMailTo(merchant.getAccount().getEmail());
+		mail.setMailFrom(messageMail.MAIL);
+		mail.setMailSubject(messageMail.MESS);
+		mail.setMailContent(messageMail.MESSAGE);
+		mailService.sendEmail(mail);
 		return "redirect:/admin/user/pending";
 	}
 
