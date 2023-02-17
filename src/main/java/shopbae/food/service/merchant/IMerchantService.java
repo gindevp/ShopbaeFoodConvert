@@ -7,7 +7,6 @@ import javax.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 
 import shopbae.food.model.Merchant;
-import shopbae.food.model.Product;
 import shopbae.food.service.IGeneral;
 
 public interface IMerchantService extends IGeneral<Merchant> {

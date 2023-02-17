@@ -52,7 +52,7 @@ public class MerchantPOController {
 
 // Hiển thị trang dashboard thống kê doanh số đã bán ra của từng sản phẩm 
 	@GetMapping
-	public String chart(Model model, HttpSession httpSession) {
+	public String chart(Model model, HttpSession httpSession, @RequestParam(defaultValue = "bar") String type) {
 		List<Product> product = new ArrayList<>();
 		try {
 			product = productService
@@ -66,6 +66,8 @@ public class MerchantPOController {
 			model.addAttribute("num", num);
 			model.addAttribute("page", "dashboard.jsp");
 			model.addAttribute("nav", 1);
+			System.out.println("chart"+type);
+			model.addAttribute("chart","'"+ type+"'");
 			return "merchant/merchant-layout";
 		} catch (Exception e) {
 			return "redirect:/home";

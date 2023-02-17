@@ -50,7 +50,6 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			System.out.println("Can't redirect");
 			return;
 		}
-
 		HttpSession session = request.getSession();
 		session.setMaxInactiveInterval(600);
 		Account account = accountService.findByName(authentication.getName());

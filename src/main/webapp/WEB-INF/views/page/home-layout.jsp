@@ -36,6 +36,10 @@
       j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
       f.parentNode.insertBefore(j, f);
     })(window, document, 'script', 'dataLayer', 'GTM-KZSQTX3');
+    
+    
+    
+	
   </script>
   <style>
   .now-wrapper-chat .live-chat .group-event .icon-add {
@@ -4457,10 +4461,10 @@ input.required-data, select.required-data {
       </div>
     </header>
     
-     <body class="portal" style="font-size:calc(8px + 0.5vw);"> 
+ 
     <jsp:include page="/WEB-INF/views/page/${page}"></jsp:include>
       
-</body>
+
       <footer class="main-footer">
       <div id="footer-bottom">
       <div class="now-container-coporation" >

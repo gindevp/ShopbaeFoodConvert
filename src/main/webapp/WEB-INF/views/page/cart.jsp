@@ -2,9 +2,16 @@
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+    <script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script
+	src="${ pageContext.request.contextPath }/static/js/sockjs-0.3.4.js"></script>
+<script src="${ pageContext.request.contextPath }/static/js/stomp.js"></script>
 <link rel="stylesheet" href="${ pageContext.request.contextPath }/static/css/bootstrap.css">
 <style>
-
+tr.highlight {
+  background-color: yellow;
+}
 .gradient-custom {
   /* fallback for old browsers */
   background: #6a11cb;
@@ -314,7 +321,27 @@
   border-radius: 5px;
 }
 </style>
+<script src="${ pageContext.request.contextPath }/static/js/sweetalert.js"></script>
+<script>
+var stompClient = null;
+function connect() {
+	var socket = new SockJS('${ pageContext.request.contextPath }/chat');
+	stompClient = Stomp.over(socket);
+	stompClient.connect({}, function(frame) {
+	    console.log('Connected: ' + frame);
+	    stompClient.subscribe('/topic/order', function(data) {
+	        var dataOrder = JSON.parse(data.body);
+	        console.log('data', dataOrder);
+	        var elementOrder = document.getElementById('order_' + dataOrder.id);
+	        elementOrder.innerHTML = `<td class="merchant-item " style="background-color: yellow;" size="50px" id="order_${dataOrder.id}">`+dataOrder.status+` </td>`;
+	        swal({title:dataOrder.status,
+	      		icon: "success",
+	      	});
+	    });
+	});
 
+}</script>
+     <body class="portal" style="font-size:calc(8px + 0.5vw);" onload="connect()">
 <section class="h-100 gradient-custom">
   <div class="container py-5">
   <a class="btn btn-primary btn-orderDetail" href="${ pageContext.request.contextPath }/merchantp/detail/${sessionScope.merchantId}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
@@ -405,7 +432,7 @@
             <p><strong>Lịch sử mua hàng</strong></p>
 
             <div class="table-responsive container">
-              <table class="table table-striped table-sm">
+              <table class="table table-sm">
                 <thead>
                 <tr>
                 <th scope="col" colspan="3" style="text-align: center;">Hành động</th>
@@ -421,7 +448,7 @@
                 </thead>
                 <tbody>
                 <c:forEach  var="order" items="${orders}">
-                <tr>
+                <tr >
                 
                 <td class="merchant-item" size="150px" style="width: 101px;"><c:if test="${order.status=='MERCHANT_RECEIVED' }"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/received/${order.id}">Nhận hàng</a></c:if><c:if test="${order.status!='MERCHANT_RECEIVED' }"><button class="btn btn-order" disabled="disabled">Nhận hàng</button></c:if></td>
                     <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/refuse/${order.id}">Từ chối</a></td>
@@ -438,7 +465,7 @@
                   <td class="merchant-item">${order.totalPrice} đ</td>
                   <td class="merchant-item">${order.orderdate}</td>
                   
-                  <td class="merchant-item" size="50px"><spring:message code="${order.status}"/> </td>
+                  <td class="merchant-item" size="50px" id="order_${order.id}"><spring:message code="${order.status}"/> </td>
               
                     </tr>
                 </c:forEach>
@@ -542,3 +569,4 @@
         </div>
       </div>
 </section>
+</body>

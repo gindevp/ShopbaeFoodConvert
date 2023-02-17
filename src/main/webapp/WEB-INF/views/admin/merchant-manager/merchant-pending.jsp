@@ -34,6 +34,7 @@
 </svg></i> Từ chối</td></a>
     </tr>
 </c:forEach>
+<tr id="add"></tr>
   </table>
   <div class="txt-center mt-2"><button (click)="plus()" class="btn-none btn-load-more link"><span
     class="pr-1">Xem thêm</span><i class="fas fa-redo font12 "></i></button></div>

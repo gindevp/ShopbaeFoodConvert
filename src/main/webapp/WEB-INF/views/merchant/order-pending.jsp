@@ -39,6 +39,7 @@
  <td class="merchant-item" size="50px"><spring:message code="${order.status}"/> </td>
         </tr>
         </c:forEach>
+        <tr id="add"></tr>
     </tbody>
   </table>
 </div>

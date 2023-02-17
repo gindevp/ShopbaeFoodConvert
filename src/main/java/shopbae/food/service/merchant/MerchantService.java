@@ -14,7 +14,6 @@ import org.springframework.ui.Model;
 import shopbae.food.model.Account;
 import shopbae.food.util.*;
 import shopbae.food.model.Merchant;
-import shopbae.food.model.Product;
 import shopbae.food.repository.merchant.IMerchantRepository;
 import shopbae.food.service.account.IAccountService;
 import shopbae.food.service.product.IProductService;
@@ -27,6 +26,7 @@ public class MerchantService implements IMerchantService {
 	private IProductService productService;
 	@Autowired
 	IAccountService accountService;
+	
 
 	@Override
 	public Merchant findById(Long id) {

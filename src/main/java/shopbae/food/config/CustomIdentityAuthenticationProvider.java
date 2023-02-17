@@ -43,7 +43,7 @@ public class CustomIdentityAuthenticationProvider implements AuthenticationProvi
 		if (userDetails != null) {
 			Account account = accountService.findByName(username);
 			
-			if (account.getMerchant() != null||account.getUser() != null) {
+			if (account.getMerchant() != null) {
 				if (AccountStatus.PENDING.toString().equals(account.getMerchant().getStatus())) {
 					throw new BadCredentialsException(AccountStatus.PENDING.toString());
 //					System.out.println(LocaleContextHolder.getLocale());
@@ -53,6 +53,19 @@ public class CustomIdentityAuthenticationProvider implements AuthenticationProvi
 					throw new BadCredentialsException(AccountStatus.BLOCK.toString());
 				}
 				if (AccountStatus.REFUSE.toString().equals(account.getMerchant().getStatus())) {
+					throw new BadCredentialsException(AccountStatus.REFUSE.toString());
+				}
+			}
+			if (account.getUser() != null) {
+				if (AccountStatus.PENDING.toString().equals(account.getUser().getStatus())) {
+					throw new BadCredentialsException(AccountStatus.PENDING.toString());
+//					System.out.println(LocaleContextHolder.getLocale());
+//					throw new BadCredentialsException(messageSource.getMessage("greeting", null,LocaleContextHolder.getLocale()));
+				}
+				if (AccountStatus.BLOCK.toString().equals(account.getUser().getStatus())) {
+					throw new BadCredentialsException(AccountStatus.BLOCK.toString());
+				}
+				if (AccountStatus.REFUSE.toString().equals(account.getUser().getStatus())) {
 					throw new BadCredentialsException(AccountStatus.REFUSE.toString());
 				}
 			}

@@ -6,6 +6,9 @@ import java.util.List;
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -36,6 +39,11 @@ public class CartController {
 	IOrderService orderService;
 	@Autowired
 	IOrderDetailService orderDetailService;
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+	@Autowired
+	private MessageSource messageSource;
+
 
 	// Thêm rỏ hàng cho người mua
 	@PostMapping("/product/{productid}/user/{userid}")
@@ -56,6 +64,9 @@ public class CartController {
 	public String oder(Model model, @PathVariable Long userId, @PathVariable Long merchantId, @RequestParam String note,
 			String address, double sum) {
 		cartService.ordeing(userId, merchantId, note, address, sum);
+		String status = messageSource.getMessage("order_new", null, LocaleContextHolder.getLocale());
+
+		messagingTemplate.convertAndSend("/topic/ordeing", status);
 		return "redirect:/cart/user/" + userId;
 	}
 

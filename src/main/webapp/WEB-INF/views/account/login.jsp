@@ -56,17 +56,13 @@
               <span class="float-right"><a href="${ pageContext.request.contextPath }/forgotpass"><spring:message code="forgotpass"/></a></span>
             </div>
             <button class="btn btn-block btn-submit" type="submit"><spring:message code="login"/></button>
-
-         <!--    <a th:href="@{/register/merchant}" class="btn btn-block btn-dark">Đăng ký</a> -->
             <a href="${ pageContext.request.contextPath }/register/user" class="btn btn-block btn-dark"><spring:message code="register"/></a>
           </div>
           <br>
 
         </form>
 
-        <div class="login-mess-policy"><a
-            style="color: #0495ba; border-bottom: 2px solid; text-decoration: none !important;" target="_blank"
-            href="https://shopeefood.vn/gioi-thieu#footer-bottom">Chính sách quy định của Foody</a></div>
+
       </div>
     </div>
     <!-- end form login -->

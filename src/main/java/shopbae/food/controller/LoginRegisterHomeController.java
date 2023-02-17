@@ -6,6 +6,9 @@ import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,6 +49,10 @@ public class LoginRegisterHomeController {
 	MailService mailService;
 	@Autowired
 	PasswordEncoder encoder;
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+	@Autowired
+	private MessageSource messageSource;
 
 // Vào trang login
 	@GetMapping("/login")
@@ -75,14 +82,15 @@ public class LoginRegisterHomeController {
 
 // Vào trang hiển thị tất cả merchant
 	@GetMapping("/merchantp/all")
-	public String allMerchant(Model model,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "10") int pageSize) {
+	public String allMerchant(Model model, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int pageSize) {
 		List<Merchant> listMerchants = merchantService.getAllByMerchantStatus(AccountStatus.ACTIVE.toString());
 		// tính toán số trang cần hiển thị
-					int totalPages = listMerchants.size() / pageSize;
-					if (listMerchants.size() % pageSize > 0) {
-						totalPages++;
-					}
-		model.addAttribute("merchants",new Page().paging(page, pageSize, listMerchants)  );
+		int totalPages = listMerchants.size() / pageSize;
+		if (listMerchants.size() % pageSize > 0) {
+			totalPages++;
+		}
+		model.addAttribute("merchants", new Page().paging(page, pageSize, listMerchants));
 		model.addAttribute("page", "all-merchant-list.jsp");
 		model.addAttribute("totalPages", totalPages);
 		model.addAttribute("currentPage", page);
@@ -106,7 +114,8 @@ public class LoginRegisterHomeController {
 
 // Trang home show các merchant và set các thông tin session của người dùng
 	@GetMapping("/home")
-	public String home(Model model, HttpSession session,@RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "9") int pageSize) {
+	public String home(Model model, HttpSession session, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "9") int pageSize) {
 		merchantService.homePage(model, session, page, pageSize);
 		return "page/home-layout";
 	}
@@ -119,10 +128,12 @@ public class LoginRegisterHomeController {
 
 // Thực hiện đăng ký cho user
 	@PostMapping("/register/user")
-	public String addUser(@Valid @ModelAttribute AccountRegisterDTO accountRegisterDTO,BindingResult bindingResult, Model model) {
-		try {System.out.println("erors "+bindingResult.hasErrors());
+	public String addUser(@Valid @ModelAttribute AccountRegisterDTO accountRegisterDTO, BindingResult bindingResult,
+			Model model) {
+		try {
+			System.out.println("erors " + bindingResult.hasErrors());
 			if (!bindingResult.hasErrors()) {
-				
+
 				boolean isEnabled = true;
 				String pass = encoder.encode(accountRegisterDTO.getPassword());
 				Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled,
@@ -134,6 +145,9 @@ public class LoginRegisterHomeController {
 
 				userSevice.save(new AppUser(accountRegisterDTO.getName(), accountRegisterDTO.getAddress(),
 						accountRegisterDTO.getPhone(), avatar, AccountStatus.PENDING.toString(), account2));
+				String status = messageSource.getMessage("register_success", null, LocaleContextHolder.getLocale());
+
+				messagingTemplate.convertAndSend("/topic/register", status);
 				return "redirect:/login";
 			} else {
 				model.addAttribute("page", "register-user.jsp");
@@ -164,6 +178,9 @@ public class LoginRegisterHomeController {
 
 				merchantService.save(new Merchant(accountRegisterDTO.getName(), accountRegisterDTO.getPhone(),
 						accountRegisterDTO.getAddress(), avatar, AccountStatus.PENDING.toString(), account2));
+				String status = messageSource.getMessage("register_success", null, LocaleContextHolder.getLocale());
+
+				messagingTemplate.convertAndSend("/topic/register", status);
 				return "redirect:/login";
 			} else {
 				model.addAttribute("page", "register-merchant.jsp");

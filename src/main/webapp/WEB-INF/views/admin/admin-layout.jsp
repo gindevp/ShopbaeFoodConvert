@@ -5,6 +5,42 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.2.0/css/all.min.css"
       integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
       <title>Admin</title>
+<script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script
+	src="${ pageContext.request.contextPath }/static/js/sockjs-0.3.4.js"></script>
+<script src="${ pageContext.request.contextPath }/static/js/stomp.js"></script>
+<script src="${ pageContext.request.contextPath }/static/js/sweetalert.js"></script>
+<script>
+var stompClient = null;
+function connect() {
+	var socket = new SockJS('${ pageContext.request.contextPath }/chat');
+	stompClient = Stomp.over(socket);
+	stompClient.connect({}, function(frame) {
+	    console.log('Connected: ' + frame);
+	    stompClient.subscribe('/topic/register', function(data) {
+	      /*   var dataRegister = JSON.parse(data.body);
+	        console.log('data', dataOrder);
+	        var elementOrder = document.getElementById('add');
+	        dataRegister.innerHTML = `<tr >
+	            <td>${merchant.id}</td>
+	            <td><img src="${ pageContext.request.contextPath }/static/storage/${merchant.avatar}"  style="height: 40px;
+	          width: 40px;
+	          border-radius: 50%;"></td>
+	            <td class="merchant-item">${merchant.name}</td>
+	            <td class="merchant-item">${merchant.phone}</td>
+	            <td class="merchant-item">${merchant.address}</td>
+	            <td class="merchant-item" size="50px">Mở:${merchant.openTime}  Đóng:${merchant.closeTime}</td>
+	      <!--      <td class="merchant-item">{{merchant.closeTime}}</td>-->
+	            <td class="action-icon"><a href="${ pageContext.request.contextPath }/admin/merchant/block/${merchant.id}"><i class="fa-regular fas fa-lock"></i></a></td>
+	          </tr>`; */
+	    	swal({title:data.body,
+	      		icon: "info",
+	      	});
+	    });
+	});
+
+}</script>
 <style>
 <%@include file="/static/css/login.css"%>
 html {
@@ -171,7 +207,7 @@ color: white;
 
 
 <%--    --%>
-
+<body onload="connect()">
 <div class="now-container-coporation now-container-content">
   <div class="row">
 <!--    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">-->
@@ -288,7 +324,7 @@ color: white;
 <!--  <a class="link-warning fw-bold " routerLink="pending" >Chờ duyệt</a> | <a class="link fw-bold" routerLink="active" >Đang hoạt động</a> | <a class="link-danger fw-bold" routerLink="block" >Đang bị khóa</a>-->
 
 
-
+</body>
 
 
 
