@@ -333,7 +333,9 @@ function connect() {
 	        var dataOrder = JSON.parse(data.body);
 	        console.log('data', dataOrder);
 	        var elementOrder = document.getElementById('order_' + dataOrder.id);
+	        var elementOrder2 = document.getElementById('btn_' + dataOrder.id);
 	        elementOrder.innerHTML = `<td class="merchant-item " style="background-color: yellow;" size="50px" id="order_${dataOrder.id}">`+dataOrder.status+` </td>`;
+	        elementOrder2.innerHTML = `<td class="merchant-item" size="150px" style="width: 101px;"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/received/`+dataOrder.id+`">Nhận hàng</a></td>`
 	        swal({title:dataOrder.status,
 	      		icon: "success",
 	      	});
@@ -351,7 +353,7 @@ function connect() {
       <div class="col-md-8">
         <div class="card mb-4">
           <div class="card-header py-3">
-            <h5 class="mb-0">  Sản phẩm</h5>
+            <h5 class="mb-0">Sản phẩm</h5>
           </div>
           <div class="card-body">
 
@@ -450,7 +452,7 @@ function connect() {
                 <c:forEach  var="order" items="${orders}">
                 <tr >
                 
-                <td class="merchant-item" size="150px" style="width: 101px;"><c:if test="${order.status=='MERCHANT_RECEIVED' }"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/received/${order.id}">Nhận hàng</a></c:if><c:if test="${order.status!='MERCHANT_RECEIVED' }"><button class="btn btn-order" disabled="disabled">Nhận hàng</button></c:if></td>
+                <td id="btn_${order.id}" class="merchant-item" size="150px" style="width: 101px;"><c:if test="${order.status=='MERCHANT_RECEIVED' }"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/received/${order.id}">Nhận hàng</a></c:if><c:if test="${order.status!='MERCHANT_RECEIVED' }"><button class="btn btn-order" disabled="disabled">Nhận hàng</button></c:if></td>
                     <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/refuse/${order.id}">Từ chối</a></td>
 
                   
@@ -465,7 +467,7 @@ function connect() {
                   <td class="merchant-item">${order.totalPrice} đ</td>
                   <td class="merchant-item">${order.orderdate}</td>
                   
-                  <td class="merchant-item" size="50px" id="order_${order.id}"><spring:message code="${order.status}"/> </td>
+                  <td  class="merchant-item" size="50px" id="order_${order.id}"><spring:message code="${order.status}"/> </td>
               
                     </tr>
                 </c:forEach>

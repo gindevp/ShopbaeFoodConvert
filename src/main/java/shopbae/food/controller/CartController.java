@@ -39,10 +39,7 @@ public class CartController {
 	IOrderService orderService;
 	@Autowired
 	IOrderDetailService orderDetailService;
-	@Autowired
-	private SimpMessagingTemplate messagingTemplate;
-	@Autowired
-	private MessageSource messageSource;
+
 
 
 	// Thêm rỏ hàng cho người mua
@@ -64,9 +61,7 @@ public class CartController {
 	public String oder(Model model, @PathVariable Long userId, @PathVariable Long merchantId, @RequestParam String note,
 			String address, double sum) {
 		cartService.ordeing(userId, merchantId, note, address, sum);
-		String status = messageSource.getMessage("order_new", null, LocaleContextHolder.getLocale());
-
-		messagingTemplate.convertAndSend("/topic/ordeing", status);
+		
 		return "redirect:/cart/user/" + userId;
 	}
 

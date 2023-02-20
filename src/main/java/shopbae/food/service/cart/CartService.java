@@ -1,11 +1,16 @@
 package shopbae.food.service.cart;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.MessageSource;
+import org.springframework.context.i18n.LocaleContextHolder;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.Model;
 
@@ -35,6 +40,10 @@ public class CartService implements ICartService {
 	IOrderDetailService orderDetailService;
 	@Autowired
 	ICartService cartService;
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+	@Autowired
+	private MessageSource messageSource;
 
 	@Override
 	public Cart findById(Long id) {
@@ -192,5 +201,10 @@ public class CartService implements ICartService {
 			cart.setDeleteFlag(false);
 			cartService.update(cart);
 		}
+		String status = messageSource.getMessage("order_new", null, LocaleContextHolder.getLocale());
+		Map<String,Object> map= new HashMap<>();
+		map.put("status", status);
+		map.put("object", oder);
+		messagingTemplate.convertAndSend("/topic/ordeing/"+merchantId, map);
 	}
 }

@@ -36,6 +36,7 @@
 background-color: #bf191987
 }
 </style>
+<body onload="connect()">
 <div class="container">
   <div class="row" >
     <a type="button" class="col-2 btn btn-outline-danger" href="<c:url value = "/merchant/product/add"/>">
@@ -128,4 +129,4 @@ background-color: #bf191987
 
 <div class="txt-center mt-2"><button  class="btn-none btn-load-more link"><span
   class="pr-1">Xem thêm</span><i class="fas fa-redo font12 "></i></button></div>
-
+</body>

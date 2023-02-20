@@ -25,7 +25,7 @@
 <div>
   <canvas id="myChart"></canvas>
 </div>
-
+<body onload="connect()"></body>
 <script src="
 https://cdn.jsdelivr.net/npm/chart.js@4.2.1/dist/chart.umd.min.js
 "></script>

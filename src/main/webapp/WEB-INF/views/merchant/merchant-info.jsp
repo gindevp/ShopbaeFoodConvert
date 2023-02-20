@@ -92,6 +92,7 @@
   margin:16px 100px;
 }
 </style>
+<body onload="connect()">
 <div class="container m-md-5 border" style=" width: 800px;">
 
   <div class="row">
@@ -212,3 +213,4 @@
 </form:form>
 <p style="color:red">${message }</p>
 </div>
+</body>

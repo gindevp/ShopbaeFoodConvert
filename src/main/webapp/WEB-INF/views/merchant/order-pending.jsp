@@ -1,7 +1,23 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
+<script>
+var stompClient = null;
+function connect() {
+	var socket = new SockJS('${ pageContext.request.contextPath }/chat');
+	stompClient = Stomp.over(socket);
+	stompClient.connect({}, function(frame) {
+	    console.log('Connected: ' + frame);
+	    stompClient.subscribe('/topic/ordeing/'+${merchant.id}, function(data) {
+	    	console.log(data.body);
+	    	swal({title:,
+	      		icon: "info",
+	      	});
+	    });
+	});
 
+}</script>
+<body onload="connect()">
 <div class="table-responsive container">
   <table class="table table-striped table-sm">
     <thead>
@@ -39,7 +55,8 @@
  <td class="merchant-item" size="50px"><spring:message code="${order.status}"/> </td>
         </tr>
         </c:forEach>
-        <tr id="add"></tr>
+        <tr id="odr"></tr>
     </tbody>
   </table>
 </div>
+</body>

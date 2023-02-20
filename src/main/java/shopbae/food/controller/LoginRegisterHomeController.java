@@ -162,7 +162,6 @@ public class LoginRegisterHomeController {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			model.addAttribute("page", "register-user.jsp");
 			return "account/account-layout";
 		}
