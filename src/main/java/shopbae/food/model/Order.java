@@ -112,5 +112,11 @@ public class Order {
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
 	}
+	@Override
+	public String toString() {
+		return "Order [id=" + id + ", appUser=" + appUser + ", note=" + note + ", orderdate=" + orderdate + ", status="
+				+ status + ", merchant_id=" + merchant_id + ", totalPrice=" + totalPrice + ", deliveryAddress="
+				+ deliveryAddress + ", flag=" + flag + "]";
+	}
 
 }

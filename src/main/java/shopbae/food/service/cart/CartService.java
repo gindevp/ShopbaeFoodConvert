@@ -20,6 +20,7 @@ import shopbae.food.model.Order;
 import shopbae.food.model.OrderDetail;
 import shopbae.food.util.*;
 import shopbae.food.model.Product;
+import shopbae.food.model.dto.OrderDTO;
 import shopbae.food.repository.cart.ICartRepository;
 import shopbae.food.service.order.IOrderService;
 import shopbae.food.service.orderDetail.IOrderDetailService;
@@ -201,10 +202,19 @@ public class CartService implements ICartService {
 			cart.setDeleteFlag(false);
 			cartService.update(cart);
 		}
-		String status = messageSource.getMessage("order_new", null, LocaleContextHolder.getLocale());
-		Map<String,Object> map= new HashMap<>();
-		map.put("status", status);
-		map.put("object", oder);
-		messagingTemplate.convertAndSend("/topic/ordeing/"+merchantId, map);
+		String mess = messageSource.getMessage("order_new", null, LocaleContextHolder.getLocale());
+		String status = messageSource.getMessage(oder.getStatus(), null, LocaleContextHolder.getLocale());
+		OrderDTO dto= new OrderDTO();
+		dto.setId(orderId);
+		dto.setImage(appUserService.findById(userId).getAvatar());
+		dto.setName(appUserService.findById(userId).getName());
+		dto.setSdt(appUserService.findById(userId).getPhone());
+		dto.setAddress(address);
+		dto.setTime(String.valueOf(oder.getOrderdate()));
+		dto.setNote(note);
+		dto.setStatus(status);
+		dto.setMessage(mess);
+		
+		messagingTemplate.convertAndSend("/topic/ordeing/"+merchantId, dto);
 	}
 }

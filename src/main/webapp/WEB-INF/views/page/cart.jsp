@@ -439,7 +439,7 @@ function connect() {
                 <tr>
                 <th scope="col" colspan="3" style="text-align: center;">Hành động</th>
                  
-                  <th scope="col">Tên quán </th>
+
                   <th scope="col">Chi tiết</th>
                   <th scope="col">Tổng tiền</th>
                   <th scope="col">Thời gian đặt mua hàng</th>
@@ -460,7 +460,7 @@ function connect() {
                   <td class="merchant-item" size="50px"><a class="btn-order" href="${ pageContext.request.contextPath }/cart/delete/order/${order.id}/user/${sessionScope.userId}"><i class="fa-solid fa-trash"></i></a></td>
                 
                   
-                  <td class="merchant-item">${order.merchant_id}</td>
+                  
                   <td class="action-icon show-detail"><a href="${ pageContext.request.contextPath }/cart/order/detail/${order.id}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-left-square" viewBox="0 0 16 16">
   <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm10.096 3.146a.5.5 0 1 1 .707.708L6.707 9.95h2.768a.5.5 0 1 1 0 1H5.5a.5.5 0 0 1-.5-.5V6.475a.5.5 0 1 1 1 0v2.768l4.096-4.097z"/>
 </svg></a></td>
