@@ -41,6 +41,40 @@
     
 	
   </script>
+  <script
+	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
+<script
+	src="${ pageContext.request.contextPath }/static/js/sockjs-0.3.4.js"></script>
+<script src="${ pageContext.request.contextPath }/static/js/stomp.js"></script>
+<script src="${ pageContext.request.contextPath }/static/js/sweetalert.js"></script>
+<script>
+var stompClient = null;
+var userId=${userId};
+console.log("user"+userId);
+function connect() {
+if(userId!=""){
+	var socket = new SockJS('${ pageContext.request.contextPath }/chat');
+	stompClient = Stomp.over(socket);
+	stompClient.connect({}, function(frame) {
+	    console.log('Connected: ' + frame);
+	    stompClient.subscribe('/topic/order/'+${userId}, function(data) {
+	        var dataOrder = JSON.parse(data.body);
+	        console.log('data', dataOrder);
+	        var elementOrder = document.getElementById('order_' + dataOrder.id);
+	        var elementOrder2 = document.getElementById('btn_' + dataOrder.id);
+	        if(elementOrder!=null){
+	        elementOrder.innerHTML = `<td class="merchant-item " style="background-color: yellow;" size="50px" id="order_${dataOrder.id}">`+dataOrder.status+` </td>`;
+	        elementOrder2.innerHTML = `<td class="merchant-item" size="150px" style="width: 101px;"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/received/`+dataOrder.id+`">Nhận hàng</a></td>`
+	        
+	        }
+	        swal({title:dataOrder.status+"\n"+" name: "+dataOrder.merchant,
+	      		icon: "success",
+	      	});
+	    });
+	});
+
+}
+}</script>
   <style>
   .now-wrapper-chat .live-chat .group-event .icon-add {
   font-size: 16px;
@@ -4291,7 +4325,9 @@ input.required-data, select.required-data {
 <c:if test="${sessionScope.message == 'chua dang nhap'}">
             <div class="user-acc col-auto">
               <a href="${ pageContext.request.contextPath }/login"><button type="button" class="btn btn-none-bg btn-login">
-                <span class="font14"><spring:message code="login"/></span>
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-key-fill" viewBox="0 0 16 16">
+  <path d="M3.5 11.5a3.5 3.5 0 1 1 3.163-5H14L15.5 8 14 9.5l-1-1-1 1-1-1-1 1-1-1-1 1H6.663a3.5 3.5 0 0 1-3.163 2zM2.5 9a1 1 0 1 0 0-2 1 1 0 0 0 0 2z"/>
+</svg><span class="font14"><spring:message code="login"/></span>
               </button></a>
             </div>
             </c:if>
@@ -4461,9 +4497,9 @@ input.required-data, select.required-data {
       </div>
     </header>
     
- 
+ <body onload="connect()">
     <jsp:include page="/WEB-INF/views/page/${page}"></jsp:include>
-      
+      </body>
 
       <footer class="main-footer">
       <div id="footer-bottom">
@@ -4605,9 +4641,6 @@ input.required-data, select.required-data {
   </div>
 </div>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-<script></script>
 
 
 

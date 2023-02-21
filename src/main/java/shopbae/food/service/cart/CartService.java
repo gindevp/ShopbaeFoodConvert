@@ -1,8 +1,7 @@
 package shopbae.food.service.cart;
 
-import java.util.HashMap;
+
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -214,6 +213,7 @@ public class CartService implements ICartService {
 		dto.setNote(note);
 		dto.setStatus(status);
 		dto.setMessage(mess);
+		dto.setUser(appUserService.findById(userId).getName());
 		
 		messagingTemplate.convertAndSend("/topic/ordeing/"+merchantId, dto);
 	}

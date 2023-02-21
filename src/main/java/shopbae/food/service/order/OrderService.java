@@ -9,9 +9,11 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Service;
 
+import shopbae.food.model.Merchant;
 import shopbae.food.model.Order;
 import shopbae.food.model.dto.OrderStatusDTO;
 import shopbae.food.repository.order.IOrderRepository;
+import shopbae.food.service.merchant.IMerchantService;
 
 @Service
 public class OrderService implements IOrderService {
@@ -21,6 +23,8 @@ public class OrderService implements IOrderService {
 	private MessageSource messageSource;
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
+	@Autowired
+	private IMerchantService merchantService;
 
 	@Override
 	public Order findById(Long id) {
@@ -35,14 +39,6 @@ public class OrderService implements IOrderService {
 	@Override
 	public void update(Order t) {
 		orderRepository.update(t);
-		if (t.isFlag()) {
-			OrderStatusDTO dto = new OrderStatusDTO();
-			dto.setId(t.getId());
-			String status = messageSource.getMessage(t.getStatus(), null, LocaleContextHolder.getLocale());
-			dto.setStatus(status);
-			messagingTemplate.convertAndSend("/topic/order", dto);
-		}
-
 	}
 
 	@Override
@@ -70,4 +66,15 @@ public class OrderService implements IOrderService {
 		return orderRepository.savee(t);
 	}
 
+	@Override
+	public void send(Order t, Long userId) {
+		OrderStatusDTO dto = new OrderStatusDTO();
+		dto.setId(t.getId());
+		String status = messageSource.getMessage(t.getStatus(), null, LocaleContextHolder.getLocale());
+		dto.setStatus(status);
+		Merchant merchant= merchantService.findById(t.getMerchant_id());
+		dto.setMerchant(merchant.getName());
+		messagingTemplate.convertAndSend("/topic/order/"+userId, dto);
+	}
+	
 }

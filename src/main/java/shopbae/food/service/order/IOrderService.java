@@ -31,4 +31,10 @@ public interface IOrderService extends IGeneral<Order> {
 	 * @return List order
 	 */
 	Serializable savee(Order t);
+	/**
+	 * This metohd send mes to user when have merchant received order
+	 * @param t
+	 * @param userId
+	 */
+	void send(Order t, Long userId);
 }

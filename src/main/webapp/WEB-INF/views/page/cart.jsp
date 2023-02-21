@@ -2,11 +2,7 @@
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
     <%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
-    <script
-	src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.1/jquery.min.js"></script>
-<script
-	src="${ pageContext.request.contextPath }/static/js/sockjs-0.3.4.js"></script>
-<script src="${ pageContext.request.contextPath }/static/js/stomp.js"></script>
+    
 <link rel="stylesheet" href="${ pageContext.request.contextPath }/static/css/bootstrap.css">
 <style>
 tr.highlight {
@@ -321,39 +317,18 @@ tr.highlight {
   border-radius: 5px;
 }
 </style>
-<script src="${ pageContext.request.contextPath }/static/js/sweetalert.js"></script>
-<script>
-var stompClient = null;
-function connect() {
-	var socket = new SockJS('${ pageContext.request.contextPath }/chat');
-	stompClient = Stomp.over(socket);
-	stompClient.connect({}, function(frame) {
-	    console.log('Connected: ' + frame);
-	    stompClient.subscribe('/topic/order', function(data) {
-	        var dataOrder = JSON.parse(data.body);
-	        console.log('data', dataOrder);
-	        var elementOrder = document.getElementById('order_' + dataOrder.id);
-	        var elementOrder2 = document.getElementById('btn_' + dataOrder.id);
-	        elementOrder.innerHTML = `<td class="merchant-item " style="background-color: yellow;" size="50px" id="order_${dataOrder.id}">`+dataOrder.status+` </td>`;
-	        elementOrder2.innerHTML = `<td class="merchant-item" size="150px" style="width: 101px;"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/received/`+dataOrder.id+`">Nhận hàng</a></td>`
-	        swal({title:dataOrder.status,
-	      		icon: "success",
-	      	});
-	    });
-	});
 
-}</script>
-     <body class="portal" style="font-size:calc(8px + 0.5vw);" onload="connect()">
+     <body class="portal" style="font-size:calc(8px + 0.5vw);" >
 <section class="h-100 gradient-custom">
   <div class="container py-5">
   <a class="btn btn-primary btn-orderDetail" href="${ pageContext.request.contextPath }/merchantp/detail/${sessionScope.merchantId}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
   <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
-</svg>Quay lại quán</a>
+</svg><spring:message code="back_merchant"/></a>
     <div class="row d-flex justify-content-center my-4">
       <div class="col-md-8">
         <div class="card mb-4">
           <div class="card-header py-3">
-            <h5 class="mb-0">Sản phẩm</h5>
+            <h5 class="mb-0"><spring:message code="product"/></h5>
           </div>
           <div class="card-body">
 
@@ -383,8 +358,8 @@ function connect() {
                   <div class="col-lg-5 col-md-6 mb-4 mb-lg-0">
                     <!-- Data -->
                     <p><strong>${product.product.name}</strong></p>
-                    <p>Mô tả: ${product.product.shortDescription}</p>
-                    <p>Đơn giá: ${product.product.newPrice} đ</p>
+                    <p><spring:message code="description"/>: ${product.product.shortDescription}</p>
+                    <p><spring:message code="price"/>: ${product.product.newPrice} đ</p>
                     <a href="${ pageContext.request.contextPath }/cart/remove-item/${product.product.id}"><button type="button" class="btn btn-primary btn-sm me-1 mb-2" data-mdb-toggle="tooltip"
                             title="Remove item" style="font-size: 1.45rem;" >
                       <i class="fas fa-trash"></i>
@@ -401,7 +376,7 @@ function connect() {
                     <div class="d-flex mb-4" style="max-width: 300px">
 
                       <div class="form-outline">
-                        <label class="form-label" for="form1">Số lượng</label>
+                        <label class="form-label" for="form1"><spring:message code="quantity"/></label>
                         <input id="form1" min="0" name="quantity"value="${product.quantity}" type="number" class="form-control" />
 
                       </div>
@@ -410,7 +385,7 @@ function connect() {
 
                     <!-- Price -->
                     <p class="text-start text-md-center">
-                      <strong>Giá tiền: </strong>
+                      <strong><spring:message code="price"/>: </strong>
                       <strong>${product.totalPrice } đ</strong>
                     </p>
                     <!-- Price -->
@@ -431,20 +406,20 @@ function connect() {
         
         <c:if test="${page2!='order-detail.jsp'}">
           <div class="card-body">
-            <p><strong>Lịch sử mua hàng</strong></p>
+            <p><strong><spring:message code="purchase_history"/></strong></p>
 
             <div class="table-responsive container">
               <table class="table table-sm">
                 <thead>
                 <tr>
-                <th scope="col" colspan="3" style="text-align: center;">Hành động</th>
+                <th scope="col" colspan="3" style="text-align: center;"><spring:message code="action"/></th>
                  
 
-                  <th scope="col">Chi tiết</th>
-                  <th scope="col">Tổng tiền</th>
-                  <th scope="col">Thời gian đặt mua hàng</th>
+                  <th scope="col"><spring:message code="detail"/></th>
+                  <th scope="col"><spring:message code="total_price"/></th>
+                  <th scope="col"><spring:message code="time_order"/></th>
                   
-                  <th scope="col" >Trạng thái</th>
+                  <th scope="col" ><spring:message code="status"/></th>
                   
                 </tr>
                 </thead>
@@ -452,8 +427,8 @@ function connect() {
                 <c:forEach  var="order" items="${orders}">
                 <tr >
                 
-                <td id="btn_${order.id}" class="merchant-item" size="150px" style="width: 101px;"><c:if test="${order.status=='MERCHANT_RECEIVED' }"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/received/${order.id}">Nhận hàng</a></c:if><c:if test="${order.status!='MERCHANT_RECEIVED' }"><button class="btn btn-order" disabled="disabled">Nhận hàng</button></c:if></td>
-                    <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/refuse/${order.id}">Từ chối</a></td>
+                <td id="btn_${order.id}" class="merchant-item" size="150px" style="width: 101px;"><c:if test="${order.status=='MERCHANT_RECEIVED' }"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/received/${order.id}"><spring:message code="receive"/></a></c:if><c:if test="${order.status!='MERCHANT_RECEIVED' }"><button class="btn btn-order" disabled="disabled"><spring:message code="receive"/></button></c:if></td>
+                    <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/refuse/${order.id}"><spring:message code="refuse"/></a></td>
 
                   
 
@@ -500,7 +475,7 @@ function connect() {
       <div class="col-md-4">
         <div class="card mb-4">
           <div class="card-header py-3">
-            <h5 class="mb-0">Hóa đơn</h5>
+            <h5 class="mb-0"><spring:message code="bill"/></h5>
           </div>
           <div class="card-body">
 
@@ -512,9 +487,9 @@ function connect() {
                 <table class="table table-striped table-sm">
                   <thead>
                   <tr>
-                    <th scope="col">Tên </th>
-                    <th scope="col">Số lượng</th>
-                    <th scope="col">Đơn giá</th>
+                    <th scope="col"><spring:message code="name"/> </th>
+                    <th scope="col"><spring:message code="quantity"/></th>
+                    <th scope="col"><spring:message code="price"/></th>
                   </tr>
                   </thead>
                 </table>
@@ -526,9 +501,9 @@ function connect() {
                 <table class="table table-striped table-sm">
                   <thead>
                   <tr>
-                    <th scope="col">Tên </th>
-                    <th scope="col">Số lượng</th>
-                    <th scope="col">Đơn giá</th>
+                    <th scope="col"><spring:message code="name"/> </th>
+                    <th scope="col"><spring:message code="quantity"/></th>
+                    <th scope="col"><spring:message code="price"/></th>
                   </tr>
                   </thead>
                   <tbody>
@@ -542,22 +517,22 @@ function connect() {
                   </c:forEach>
                   
                   <tr>
-                    <th scope="col" colspan="2">Tổng tiền </th>
+                    <th scope="col" colspan="2"><spring:message code="total_price"/></th>
                     <th scope="col" >${sum} đ</th>
                   </tr>
                   <tr>
-                    <td scope="col">Ghi chú </td>
-                    <td scope="col" colspan="2"><input class="note" type="text" placeholder="Ghi chú" name="note"></td>
+                    <td scope="col"><spring:message code="note"/></td>
+                    <td scope="col" colspan="2"><input class="note" type="text" placeholder="<spring:message code="note"/>" name="note"></td>
                   </tr>
                   <tr>
-                    <td scope="col">Địa chỉ</td>
-                    <td scope="col" colspan="2"><input class="note" type="text" placeholder="Địa chỉ giao hàng" name="address" ></td>
+                    <td scope="col"><spring:message code="address"/></td>
+                    <td scope="col" colspan="2"><input class="note" type="text" placeholder="<spring:message code="address"/>" name="address" ></td>
                   </tr>
                   </tbody>
                 </table>
            <input name="sum" value="${sum}" hidden="true"/> 
            <button type="submit" class="btn btn-primary btn-lg btn-block" style="margin-left: 8px">
-              Đặt hàng
+              <spring:message code="order"/>
             </button>
 </c:if> 
 
@@ -571,4 +546,3 @@ function connect() {
         </div>
       </div>
 </section>
-</body>

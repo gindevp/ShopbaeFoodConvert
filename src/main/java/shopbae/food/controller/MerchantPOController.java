@@ -262,6 +262,7 @@ public class MerchantPOController {
 		httpSession.setAttribute("a", 3);
 		httpSession.setAttribute("order", order);
 		httpSession.setAttribute("time", new SimpleDateFormat("dd-M-yyyy hh:mm:ss").format(new Date()));
+		orderService.send(order, order.getAppUser().getId());
 		return "redirect:/jasper/report";
 	}
 

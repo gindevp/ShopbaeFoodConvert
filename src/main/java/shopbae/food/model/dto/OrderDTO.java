@@ -2,6 +2,7 @@ package shopbae.food.model.dto;
 
 public class OrderDTO {
 	private Long id;
+	private String user;
 	private String image;
 	private String name;
 	private String sdt;
@@ -10,6 +11,13 @@ public class OrderDTO {
 	private String note;
 	private String status;
 	private String message;
+	
+	public String getUser() {
+		return user;
+	}
+	public void setUser(String user) {
+		this.user = user;
+	}
 	public Long getId() {
 		return id;
 	}

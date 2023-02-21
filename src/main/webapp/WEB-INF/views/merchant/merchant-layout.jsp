@@ -11,13 +11,51 @@
 <script src="${ pageContext.request.contextPath }/static/js/sweetalert.js"></script>
 <script>
 var stompClient = null;
+//Lấy đối tượng table theo ID
+
 function connect() {
 	var socket = new SockJS('${ pageContext.request.contextPath }/chat');
 	stompClient = Stomp.over(socket);
 	stompClient.connect({}, function(frame) {
 	    console.log('Connected: ' + frame);
 	    stompClient.subscribe('/topic/ordeing/'+${merchant.id}, function(data) {
-	    	swal({title:data.body,
+			var dataOrder = JSON.parse(data.body);
+	    	
+	    	let table = document.getElementById("tbl");
+	    	if(table!=null){
+	    	// Thêm một hàng mới
+	    	let newRow = table.insertRow();
+
+	    	// Thêm các ô vào hàng mới
+	    	let newCell1 = newRow.insertCell(0);
+	    	let newCell2 = newRow.insertCell(1);
+	    	let newCell3 = newRow.insertCell(2);
+	    	let newCell4 = newRow.insertCell(3);
+	    	let newCell5 = newRow.insertCell(4);
+	    	let newCell6 = newRow.insertCell(5);
+	    	let newCell7 = newRow.insertCell(6);
+	    	let newCell8 = newRow.insertCell(7);
+	    	let newCell9 = newRow.insertCell(8);
+
+	    	// Đặt nội dung cho các ô mới
+	    	newCell1.innerHTML = dataOrder.id;
+	    	newCell2.innerHTML = `<img src="${ pageContext.request.contextPath }/static/storage/`+dataOrder.image+`" alt="" style="height: 40px;
+		          width: 40px;
+	          border-radius: 50%;">`;
+	    	newCell3.innerHTML = dataOrder.name;
+	    	newCell4.innerHTML = dataOrder.sdt;
+	    	newCell5.innerHTML = dataOrder.address;
+	    	newCell6.innerHTML = dataOrder.time;
+	    	newCell7.innerHTML = dataOrder.note;
+	    	newCell8.innerHTML = `<a href="${ pageContext.request.contextPath }/merchant/order/detail/`+dataOrder.id+`"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-left-square" viewBox="0 0 16 16">
+		    <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm10.096 3.146a.5.5 0 1 1 .707.708L6.707 9.95h2.768a.5.5 0 1 1 0 1H5.5a.5.5 0 0 1-.5-.5V6.475a.5.5 0 1 1 1 0v2.768l4.096-4.097z"/>
+			  	  </svg></a>`;
+	    	newCell9.innerHTML = dataOrder.status;
+	    	}
+
+	    	
+	      	
+	    	swal({title:dataOrder.message+"\n"+" name: "+dataOrder.user,
 	      		icon: "info",
 	      	});
 	    });
@@ -63,7 +101,9 @@ color: white;
   border-radius: 5px;
   transform: translateX(20px);
 }
-
+.now-container-coporation {
+    background-color: #100f0f0a;
+    }
 </style>
 <header class="main-header">
  
@@ -81,7 +121,10 @@ color: white;
             <span></span>
             <div class="user-acc-dropdown">
              <a href="${ pageContext.request.contextPath }/logout"><button type="button"  class="btn btn-none-bg btn-login">
-                  <span class="font14">Đăng xuất</span>
+                  <span class="font14"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-box-arrow-in-right" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M6 3.5a.5.5 0 0 1 .5-.5h8a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-8a.5.5 0 0 1-.5-.5v-2a.5.5 0 0 0-1 0v2A1.5 1.5 0 0 0 6.5 14h8a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-8A1.5 1.5 0 0 0 5 3.5v2a.5.5 0 0 0 1 0v-2z"/>
+  <path fill-rule="evenodd" d="M11.854 8.354a.5.5 0 0 0 0-.708l-3-3a.5.5 0 1 0-.708.708L10.293 7.5H1.5a.5.5 0 0 0 0 1h8.793l-2.147 2.146a.5.5 0 0 0 .708.708l3-3z"/>
+</svg>   Đăng xuất</span>
                 </button></a>
             </div>
           </div>
@@ -181,7 +224,7 @@ color: white;
 
 <div class="now-container-coporation now-container-content">
   <div class="row">
-    <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
+    <nav id="sidebarMenu" style="background-color:#ffffff!important; border-radius: 7px" class="col-md-3 col-lg-2 d-md-block bg-light sidebar collapse">
       <div class="position-sticky pt-3 sidebar-sticky">
         <ul class="nav flex-column">
           <li class="nav-item" >
