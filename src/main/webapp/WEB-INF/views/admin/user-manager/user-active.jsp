@@ -14,10 +14,10 @@
     </tr>
   
     
-    <c:forEach var="merchant" items="${merchants}">
+    <c:forEach var="merchant" items="${merchants}" varStatus="status">
     <c:if test="${merchant.id != 1 }">
-    <tr >
-      <td>${merchant.id}</td>
+    <tr style="text-align: center;">
+      <td>${status.index+1}</td>
       <td><img src="${ pageContext.request.contextPath }/static/storage/${merchant.avatar}"  style="height: 40px;
     width: 40px;
     border-radius: 50%;"></td>

@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="spring" uri="http://www.springframework.org/tags"%>
 <link rel="stylesheet" href="${ pageContext.request.contextPath }/static/css/bootstrap.css">
 <style>
 .pagination a:hover {
@@ -35,20 +36,15 @@
 .actived{
 background-color: #bf191987
 }
+
 </style>
 <body onload="connect()">
 <div class="container">
   <div class="row" >
     <form action="${ pageContext.request.contextPath }/merchant/product/search" method="get" class="col-2 " role="search" style="width: 40% ; margin-left: 10px">
-      <a type="button" class="btn btn-outline-danger" href="<c:url value = "/merchant/product/add"/>">
-      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
-        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
-        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
-      </svg>
-      Thêm SP
-    </a>
+      
     &nbsp;
-      <input id = "name" style="width: 205%;" type="search" class="form-control form-control-search" placeholder="Search..." aria-label="Search" name="name" >
+      <input id = "name" style="width: 205%;" type="search" class="form-control form-control-search" placeholder="<spring:message code="search"/>..." aria-label="Search" name="name" >
 
     </form>
 
@@ -56,22 +52,22 @@ background-color: #bf191987
   </div>
 
 
-<div class="table-responsive">
+<div class="table-responsive" style="height:350px">
   <table class="table table-striped table-sm">
     <thead>
     <tr>
-      <th scope="col">id</th>
-      <th scope="col">Ảnh</th>
-      <th scope="col">Tên</th>
-      <th scope="col">Giá sản phẩm</th>
-      <th scope="col">Mô tả</th>
-      <th scope="col" colspan="2">Hành động</th>
+      <th scope="col">Stt</th>
+      <th scope="col"><spring:message code="img"/></th>
+      <th scope="col"><spring:message code="name"/></th>
+      <th scope="col"><spring:message code="price"/></th>
+      <th scope="col"><spring:message code="description"/></th>
+      <th scope="col" colspan="2"><spring:message code="action"/></th>
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="p" items="${products}">
+    <c:forEach var="p" items="${products}" varStatus="status">
     <tr>
-      <td>${p.id}</td>
+      <td>${status.index+1}</td>
       <td><img src="<c:url value = "/static/storage/${p.image }"/>" alt="a" style="height: 40px;
     width: 40px;
     border-radius: 50%;"></td>
@@ -89,19 +85,7 @@ background-color: #bf191987
     </tbody>
   </table>
   
-   <nav >
-  <ul class="pagination" >
-   
-    <li class="page-item ${currentPage == 0 ? 'disabled' : ''}"><a class="page-link" href="${ pageContext.request.contextPath }/merchant/product?page=${currentPage - 1}" tabindex="-1">&laquo;</a></li>
-    <c:forEach var="i" begin="0" end="${totalPages-1}">
-            <li class="page-item ">
-                <a class="page-link ${currentPage == i ? 'actived' : ''}" href="${ pageContext.request.contextPath }/merchant/product?page=${i}">${i+1}</a>
-            </li>
-        </c:forEach>
-    <li class="page-item ${currentPage == totalPages-1 ? 'disabled' : ''}"><a class="page-link " href="${ pageContext.request.contextPath }/merchant/product?page=${currentPage + 1}">&raquo;</a>
-    </li>
-  </ul>
-</nav> 
+ 
 
 <%-- <nav >
     <ul class="pagination">
@@ -121,6 +105,30 @@ background-color: #bf191987
     </ul>
 </nav> --%>
 </div>
+  <nav class="paging">
+  <a type="button" style="
+    height: 46px;
+    width: 209px;
+    margin-left: 10px;
+" class="btn btn-outline-danger" href="<c:url value = "/merchant/product/add"/>">
+      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-circle" viewBox="0 0 16 16">
+        <path d="M8 15A7 7 0 1 1 8 1a7 7 0 0 1 0 14zm0 1A8 8 0 1 0 8 0a8 8 0 0 0 0 16z"></path>
+        <path d="M8 4a.5.5 0 0 1 .5.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3A.5.5 0 0 1 8 4z"></path>
+      </svg>
+      <spring:message code="add"/>
+    </a>
+  <ul class="pagination" >
+   
+    <li class="page-item ${currentPage == 0 ? 'disabled' : ''}"><a class="page-link" href="${ pageContext.request.contextPath }/merchant/product?page=${currentPage - 1}" tabindex="-1">&laquo;</a></li>
+    <c:forEach var="i" begin="0" end="${totalPages-1}">
+            <li class="page-item ">
+                <a class="page-link ${currentPage == i ? 'actived' : ''}" href="${ pageContext.request.contextPath }/merchant/product?page=${i}">${i+1}</a>
+            </li>
+        </c:forEach>
+    <li class="page-item ${currentPage == totalPages-1 ? 'disabled' : ''}"><a class="page-link " href="${ pageContext.request.contextPath }/merchant/product?page=${currentPage + 1}">&raquo;</a>
+    </li>
+  </ul>
+</nav> 
 </div>
 
 <div class="txt-center mt-2"><button  class="btn-none btn-load-more link"><span

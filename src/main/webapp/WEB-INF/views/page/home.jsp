@@ -41,12 +41,12 @@ background-color: #bf191987
             </div>
             </form>
           <div class="category-list-filter"><a href="${ pageContext.request.contextPath }/merchantp/all"><span
-              class="category-item ">All</span></a><a href="${ pageContext.request.contextPath }/home/search/merchant?search=do an"><span
-              class="category-item ">Đồ ăn</span></a><a href="${ pageContext.request.contextPath }/home/search/merchant?search=do uong"><span class="category-item ">Đồ uống</span></a><a
+              class="category-item "> <spring:message code="all"/></span></a><a href="${ pageContext.request.contextPath }/home/search/merchant?search=do an"><span
+              class="category-item "> <spring:message code="food"/></span></a><a href="${ pageContext.request.contextPath }/home/search/merchant?search=do uong"><span class="category-item "> <spring:message code="drinks"/></span></a><a
               href="${ pageContext.request.contextPath }/home/search/merchant?search=do chay"><span
-              class="category-item ">Đồ chay</span></a><a
+              class="category-item "><spring:message code="v_food"/></span></a><a
               href="${ pageContext.request.contextPath }/home/search/merchant?search=banh kem"><span
-              class="category-item ">Bánh kem</span></a><a
+              class="category-item "><spring:message code="cake"/></span></a><a
               href="${ pageContext.request.contextPath }/home/search/merchant?search=trang mieng"><span
               class="category-item ">Tráng miệng</span></a><a
               href="${ pageContext.request.contextPath }/home/search/merchant?search=homemade"><span
@@ -91,23 +91,15 @@ background-color: #bf191987
     <div class="contain-main-home clearfix">
       <div class="container">
         <div class="main-right-home">
-          <div class="user-get-local">
-            <div class="row align-items-center no-gutters pointer">
-              <div class="col-auto"><span class="txt-blue txt-bold">Đồ ăn</span><i
-                      class="fas fa-long-arrow-alt-right txt-gray-7 ml-2 font12"></i></div>
-              <div class="col pl-2 pr-2 txt-elipsis">Chọn địa chỉ giao hàng</div>
-              <div class="col-auto"><span class="pl-2 pr-2 link" data-toggle="modal"><i
-                      class="fas fa-angle-right txt-gray-7"></i></span></div>
-            </div>
-          </div>
+        
           <div class="now-list-restaurant deal-tab">
             <div class="title-wrapper">
-              <h2 class="title">Ưu đãi</h2><a class="view-all-deal" href="${ pageContext.request.contextPath }/merchantp/all"><span
+              <h2 class="title"><spring:message code="shop"/></h2><a class="view-all-deal" href="${ pageContext.request.contextPath }/merchantp/all"><span
                     class="icon-list-deal"><span class="square"></span><span
                     class="square"></span><span class="square"></span><span
-                    class="square"></span></span>Xem tất cả</a>
+                    class="square"></span></span><spring:message code="see_all"/></a>
             </div>
-            <div class="list-restaurant">
+            <div class="list-restaurant" >
               <div class="now-loading-restaurant  ">
                 <div class="box-loading">
                   <div class="box-thumbnail"></div>
@@ -176,7 +168,7 @@ background-color: #bf191987
                     <h4 class="name-res" title="${shops.name}">${shops.name}</h4>
                     <div class="address-res" title="${shops.address}">${shops.address}</div>
                   </div>
-                  <p class="content-promotion"><i class="fas fa-tag"></i>Giảm 100%</p>
+                  <p class="content-promotion"><i class="fas fa-tag"></i><spring:message code="sale"/> 100%</p>
                   <div class="opentime-status"><span class="stt online" title="Mở cửa"
                                                      style="color: rgb(35, 152, 57); background-color: rgb(35, 152, 57);"></span>
 
@@ -283,7 +275,7 @@ background-color: #bf191987
               </div>
             </div>
           </div>
-          <div class="now-list-restaurant now-list-restaurant-row home-tab">
+          <!-- <div class="now-list-restaurant now-list-restaurant-row home-tab">
             <div class="header-tab row align-items-center">
               <div class="col"><button class="item-tab active">Gần tôi</button><button
                       class="item-tab false">Bán chạy</button><button class="item-tab false">Đánh
@@ -308,7 +300,7 @@ background-color: #bf191987
                 <option value="945">Nam Từ Liêm</option>
               </select></div>
             </div>
-          </div>
+          </div> -->
           <div class="end-check-point"></div>
         </div>
       </div>

@@ -99,7 +99,7 @@ nav a {
 color: white;
   background: #f16464;
   border-radius: 5px;
-  transform: translateX(20px);
+  transform: translateX(13px);
 }
 .now-container-coporation {
     background-color: #100f0f0a;

@@ -83,7 +83,7 @@
         <div class="stars"><span class="full"><i class="fas fa-star"></i></span><span class="full"><i
           class="fas fa-star"></i></span><span class="full"><i class="fas fa-star"></i></span><span class="full"><i
           class="fas fa-star"></i></span><span class="half"><i class="fas fa-star-half-alt"></i></span></div>
-        <span class="number-rating">999+</span>đánh giá trên ShopeeFood
+        <span class="number-rating">999+</span><spring:message code="review"/>
       </div>
 <!--      <div class="view-more-rating"><a href="https://foody.vn/ha-noi/doi-sun-pate-shop-online"-->
 <!--                                       rel="noopener noreferrer nofollow" target="_blank" class="number-review">Xem thêm-->
@@ -118,15 +118,15 @@
 <div class="container relative clearfix" style="padding: 0 25px 0 0;">
   <div class="now-menu-restaurant">
     <div class="menu-restaurant-tab">
-      <div class="item active">Thực đơn</div>
+      <div class="item active"><spring:message code="menu"/></div>
     </div>
     <div class="menu-restaurant-content-tab">
       <div class="menu-restaurant-container">
         <div class="menu-restaurant-category">
           <div class="list-category" id="scroll-spy">
             <div class="scrollbar-container ps">
-              <div class="item"><span id="1001658" title="HÔM NAY CÓ GÌ HOT"
-                                      class="item-link active">HÔM NAY CÓ GÌ HOT</span></div>
+              <div class="item"><span id="1001658" title="<spring:message code="hot"/>"
+                                      class="item-link active"><spring:message code="hot"/></span></div>
               <div class="item"><span id="772307" title="Đồ Uống siêu hot ngày hè" class="item-link ">Đồ Uống siêu hot ngày hè</span>
               </div>
               <div class="item"><span id="4764644" title="Ăn vặt mê ly" class="item-link ">Ăn vặt mê ly</span></div>
@@ -184,7 +184,7 @@
             <div class="search-items"><p class="input-group"><i class="fas fa-search"></i>
             <input type="search"
                                                                                                  name="name"
-                                                                                                 placeholder="Tìm món"
+                                                                                                 placeholder="<spring:message code="find_food"/>"
                                                                                                  ></p>
                                                                                                 </div></form> 
             <div id="restaurant-item">
@@ -195,7 +195,7 @@
                      style="width: 100%; height: auto; max-height: 6097px; position: relative;">
                   <div class="menu-group" id="section-group-menu-1001658"
                        style="height: 56px; left: 0px; position: absolute; top: 0px; width: 100%;">
-                    <div class="title-menu">HÔM NAY CÓ GÌ HOT</div>
+                    <div class="title-menu"><spring:message code="hot"/></div>
                   </div>
 
                   <table style="width: 100%">

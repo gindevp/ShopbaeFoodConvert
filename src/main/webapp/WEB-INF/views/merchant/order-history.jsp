@@ -6,7 +6,7 @@
   <table class="table table-striped table-sm">
     <thead>
     <tr>
-      <th scope="col">id</th>
+      <th scope="col">Stt</th>
       <th scope="col">Ảnh</th>
       <th scope="col">Người đặt </th>
       <th scope="col">Điện thoại</th>
@@ -18,9 +18,9 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="order" items="${orders }">
+    <c:forEach var="order" items="${orders }" varStatus="status">
         <tr >
-          <td>${order.id}</td>
+          <td>${status.index+1}</td>
           <td><img src="${ pageContext.request.contextPath }/static/storage/${order.appUser.avatar}" alt="" style="height: 40px;
         width: 40px;
         border-radius: 50%;"></td>

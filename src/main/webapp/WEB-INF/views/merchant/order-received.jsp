@@ -18,9 +18,9 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="order" items="${orders }">
+    <c:forEach var="order" items="${orders }" varStatus="status">
         <tr >
-          <td>${order.id}</td>
+          <td>${status.index+1}</td>
           <td><img src="${ pageContext.request.contextPath }/static/storage/${order.appUser.avatar}" alt="image" style="height: 40px;
         width: 40px;
         border-radius: 50%;"></td>

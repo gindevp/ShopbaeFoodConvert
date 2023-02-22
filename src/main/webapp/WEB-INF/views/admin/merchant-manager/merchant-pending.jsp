@@ -15,9 +15,9 @@
     </tr>
   
     
-    <c:forEach var="merchant" items="${merchants}">
-    <tr >
-      <td>${merchant.id}</td>
+    <c:forEach var="merchant" items="${merchants}" varStatus="status">
+    <tr style="text-align: center;" >
+      <td>${status.index+1}</td>
       <td><img src="${ pageContext.request.contextPath }/static/storage/${merchant.avatar}"  style="height: 40px;
     width: 40px;
     border-radius: 50%;"></td>

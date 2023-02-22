@@ -7,7 +7,7 @@
 </style>
 
 <div class="now-list-restaurant" >
-    <div class="list-restaurant" >
+    <div class="list-restaurant" style="height:530px" >
       <c:forEach var="shops" items="${merchants}">
               <div class="item-restaurant"><a  class="item-content"
                                               href="${ pageContext.request.contextPath }/merchantp/detail/${shops.id}">	

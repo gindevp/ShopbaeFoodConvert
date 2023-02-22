@@ -4261,7 +4261,7 @@ input.required-data, select.required-data {
             <div class="select-local col-auto">
               <div class="dropdown">
                 <div class="dropdown-toggle" role="button" id="local-dropdown"
-                     data-toggle="dropdown" aria-haspopup="true">Hà Nội</div>
+                     data-toggle="dropdown" aria-haspopup="true"> <spring:message code="ha_noi"/></div>
                 <div class="dropdown-menu" style="font-size:14px">
                   <div class="dropdown-item"><span class="name col">TP. HCM</span><span
                           class="count col-auto">85849 địa điểm</span></div>
@@ -4312,7 +4312,7 @@ input.required-data, select.required-data {
             </div>
 <div class="dropdown">
   <button style="background-color: #f56043;"  class="btn btn-secondary dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-    Language
+    <spring:message code="language"/>
   </button>
   <div class="dropdown-menu">
     <a class="dropdown-item" href="?language=en_US">English</a>|

@@ -10,7 +10,7 @@
   <table class="table table-striped table-sm">
     <thead>
     <tr>
-      <th scope="col">id</th>
+      <th scope="col">Stt</th>
       <th scope="col"><spring:message code="img"/></th>
       <th scope="col"><spring:message code="name"/></th>
       <th scope="col"><spring:message code="quantity"/></th>
@@ -19,9 +19,9 @@
     </tr>
     </thead>
     <tbody>
-    <c:forEach var="orderDetail" items="${oderDetail}">
+    <c:forEach var="orderDetail" items="${oderDetail}" varStatus="status">
     <tr >
-      <td>${orderDetail.product.id}</td>
+      <td>${status.index+1}</td>
       <td><img src="${ pageContext.request.contextPath }/static/storage/${orderDetail.product.image}" alt="" style="height: 40px;
         width: 40px;
         border-radius: 50%;"></td>
