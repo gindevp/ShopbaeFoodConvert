@@ -4,7 +4,7 @@
 <div class="table-responsive container">
   <table class="table table-striped table-sm">
   
-    <tr style="text-align: center">
+    <tr style="text-align: center; background-color: #f16464">
       <th scope="col">Stt</th>
       <th scope="col">Ảnh</th>
       <th scope="col">Tên</th>
@@ -24,12 +24,12 @@
       <td class="merchant-item">${merchant.phone}</td>
       <td class="merchant-item">${merchant.address}</td>
 <!--      <td class="merchant-item">{{merchant.closeTime}}</td>-->
-      <td class="action-icon" ><a href="${ pageContext.request.contextPath }/admin/user/active/${merchant.id}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check2" viewBox="0 0 16 16">
-  <path d="M13.854 3.646a.5.5 0 0 1 0 .708l-7 7a.5.5 0 0 1-.708 0l-3.5-3.5a.5.5 0 1 1 .708-.708L6.5 10.293l6.646-6.647a.5.5 0 0 1 .708 0z"/>
-</svg></i> Đồng ý</td></a>
-      <td class="action-icon" ><a href="${ pageContext.request.contextPath }/admin/user/refuse/${merchant.id}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-  <path d="M2.146 2.854a.5.5 0 1 1 .708-.708L8 7.293l5.146-5.147a.5.5 0 0 1 .708.708L8.707 8l5.147 5.146a.5.5 0 0 1-.708.708L8 8.707l-5.146 5.147a.5.5 0 0 1-.708-.708L7.293 8 2.146 2.854Z"/>
-</svg></i> Từ chối</td></a>
+      <td class="action-icon" ><a class="btn btn-danger" href="${ pageContext.request.contextPath }/admin/user/active/${merchant.id}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-check-square-fill" viewBox="0 0 16 16">
+  <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm10.03 4.97a.75.75 0 0 1 .011 1.05l-3.992 4.99a.75.75 0 0 1-1.08.02L4.324 8.384a.75.75 0 1 1 1.06-1.06l2.094 2.093 3.473-4.425a.75.75 0 0 1 1.08-.022z"/>
+</svg></i> OK</td></a>
+      <td class="action-icon" ><a class="btn btn-danger" href="${ pageContext.request.contextPath }/admin/user/refuse/${merchant.id}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-square-fill" viewBox="0 0 16 16">
+  <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm3.354 4.646L8 7.293l2.646-2.647a.5.5 0 0 1 .708.708L8.707 8l2.647 2.646a.5.5 0 0 1-.708.708L8 8.707l-2.646 2.647a.5.5 0 0 1-.708-.708L7.293 8 4.646 5.354a.5.5 0 1 1 .708-.708z"/>
+</svg></i> NO</td></a>
     </tr>
 </c:forEach>
   </table>

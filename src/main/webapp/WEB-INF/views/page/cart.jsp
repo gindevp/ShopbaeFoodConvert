@@ -405,10 +405,10 @@ tr.highlight {
         
         
         <c:if test="${page2!='order-detail.jsp'}">
-          <div class="card-body">
+          <div class="card-body " >
             <p><strong><spring:message code="purchase_history"/></strong></p>
 
-            <div class="table-responsive container">
+            <div class="table-responsive container ">
               <table class="table table-sm">
                 <thead>
                 <tr>
@@ -436,8 +436,8 @@ tr.highlight {
                 
                   
                   
-                  <td class="action-icon show-detail"><a href="${ pageContext.request.contextPath }/cart/order/detail/${order.id}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-down-left-square" viewBox="0 0 16 16">
-  <path fill-rule="evenodd" d="M15 2a1 1 0 0 0-1-1H2a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V2zM0 2a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2zm10.096 3.146a.5.5 0 1 1 .707.708L6.707 9.95h2.768a.5.5 0 1 1 0 1H5.5a.5.5 0 0 1-.5-.5V6.475a.5.5 0 1 1 1 0v2.768l4.096-4.097z"/>
+                  <td class="action-icon show-detail"><a href="${ pageContext.request.contextPath }/cart/order/detail/${order.id}" cl><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16">
+  <path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12zM5.904 10.803 10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707z"/>
 </svg></a></td>
                   <td class="merchant-item">${order.totalPrice} đ</td>
                   <td class="merchant-item">${order.orderdate}</td>

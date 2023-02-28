@@ -70,10 +70,4 @@ public class UserController {
 		// tạo changedto để binding dữ liệu của cả merchant và account
 		return "page/home-layout";
 	}
-	@GetMapping("/")
-	public void alo() {
-		
-		System.out.println(accountService.findById(626L).getUserName());
-		
-	}
 }

@@ -4,7 +4,7 @@
 <div class="table-responsive container">
   <table class="table table-striped table-sm">
   
-    <tr style="text-align: center">
+    <tr style="text-align: center; background-color: #f16464">
       <th scope="col">Stt</th>
       <th scope="col">Ảnh</th>
       <th scope="col">Tên</th>
@@ -25,7 +25,9 @@
       <td class="merchant-item">${merchant.phone}</td>
       <td class="merchant-item">${merchant.address}</td>
 <!--      <td class="merchant-item">{{merchant.closeTime}}</td>-->
-      <td class="action-icon"><a href="${ pageContext.request.contextPath }/admin/user/block/${merchant.id}"><i class="fa-regular fas fa-lock"></i></a></td>
+      <td class="action-icon"><a href="${ pageContext.request.contextPath }/admin/user/block/${merchant.id}"><i class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="22" height="22" fill="currentColor" class="bi bi-lock-fill" viewBox="0 0 16 16">
+  <path d="M8 1a2 2 0 0 1 2 2v4H6V3a2 2 0 0 1 2-2zm3 6V3a3 3 0 0 0-6 0v4a2 2 0 0 0-2 2v5a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2z"/>
+</svg> Block</i></a></td>
     </tr>
     </c:if>
 </c:forEach>

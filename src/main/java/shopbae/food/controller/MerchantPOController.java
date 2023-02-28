@@ -219,7 +219,7 @@ public class MerchantPOController {
 		model.addAttribute("products", new Page().paging(page,pageSize,listProducts));
 		model.addAttribute("page", "product-list.jsp");
 		model.addAttribute("nav", 3);
-		model.addAttribute("totalPages", totalPages);
+		model.addAttribute("totalPages", totalPages+1);
 		model.addAttribute("currentPage", page);
 		return "merchant/merchant-layout";
 	}

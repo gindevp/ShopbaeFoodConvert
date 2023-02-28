@@ -2,6 +2,7 @@ package shopbae.food.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
 
@@ -56,10 +57,31 @@ public class LoginRegisterHomeController {
 
 // Vào trang login
 	@GetMapping("/login")
-	public String showLoginForm(Model model, HttpSession httpSession,@RequestParam(defaultValue = "") String mess) {
-		model.addAttribute("page", "login.jsp");
-		model.addAttribute("mess",mess);
-		return "account/account-layout";
+	public String showLoginForm(Model model, HttpSession httpSession, @RequestParam(defaultValue = "") String mess,
+			HttpServletResponse response) {
+		Account account = (Account) httpSession.getAttribute("account");
+
+		// xóa cache k lưu trang login vào cache
+		response.setHeader("Cache-Control", "no-cache, no-store, must-revalidate"); // HTTP 1.1.
+		response.setHeader("Pragma", "no-cache"); // HTTP 1.0.
+		response.setDateHeader("Expires", 0); // Proxies.
+
+		if (account != null) {
+			if (account.getUser() != null) {
+				if (account.getUserName().equals("admin")) {
+					return "redirect:/admin";
+				} else {
+					return "redirect:/";
+				}
+			} else {
+				return "redirect:/merchant";
+			}
+
+		} else {
+			model.addAttribute("mess", mess);
+			model.addAttribute("page", "login.jsp");
+			return "account/account-layout";
+		}
 
 	}
 
@@ -170,7 +192,8 @@ public class LoginRegisterHomeController {
 
 // THực  hiện đăng ký cho merchant
 	@PostMapping("/register/merchant")
-	public String addMerchant(@Valid @ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model, BindingResult bindingResult) {
+	public String addMerchant(@Valid @ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model,
+			BindingResult bindingResult) {
 		try {
 			if (!bindingResult.hasErrors()) {
 				boolean isEnabled = true;
@@ -201,7 +224,6 @@ public class LoginRegisterHomeController {
 			}
 
 		} catch (Exception e) {
-			// TODO: handle exception
 			model.addAttribute("page", "register-merchant.jsp");
 			model.addAttribute("err", "trùng username");
 			return "account/account-layout";
@@ -291,8 +313,18 @@ public class LoginRegisterHomeController {
 
 // Tìm kiểm merchant theo name gần đúng
 	@GetMapping("home/search/merchant")
-	public String searchMerchant(Model model, @RequestParam String search) {
-		model.addAttribute("merchants", merchantService.findAllMerchantAndNameContainer(search));
+	public String searchMerchant(Model model, @RequestParam String search, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "10") int pageSize) {
+		List<Merchant> listMerchants = merchantService.findAllMerchantAndNameContainer(search);
+		// tính toán số trang cần hiển thị
+		int totalPages = listMerchants.size() / pageSize;
+		if (listMerchants.size() % pageSize > 0) {
+			totalPages++;
+		}
+		model.addAttribute("merchants", new Page().paging(page, pageSize, listMerchants));
+		model.addAttribute("page", "all-merchant-list.jsp");
+		model.addAttribute("totalPages", totalPages + 1);
+		model.addAttribute("currentPage", page);
 		model.addAttribute("page", "all-merchant-list.jsp");
 		return "page/home-layout";
 	}

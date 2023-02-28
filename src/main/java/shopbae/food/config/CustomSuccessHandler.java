@@ -44,6 +44,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 	@Override
 	protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
 			throws IOException {
+		System.out.println("auth");
 		String targetUrl = determineTargetUrl(authentication);
 
 		if (response.isCommitted()) {
@@ -53,6 +54,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		HttpSession session = request.getSession();
 		session.setMaxInactiveInterval(1600);
 		Account account = accountService.findByName(authentication.getName());
+		session.setAttribute("ss","true");
 		session.setAttribute(ACCOUNT, account);
 		if (account.getMerchant() != null) {
 			session.setAttribute(MERCHANT, account.getMerchant());

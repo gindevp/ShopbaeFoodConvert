@@ -20,11 +20,10 @@ try {
 	System.out.print("m1 "+m1);
 	JRDataSource jrDataSource=  new JRBeanCollectionDataSource(dataSource);
 	String jrxmlFile= session.getServletContext().getRealPath("/report/report.jrxml");
-	Path path= Paths.get(jrxmlFile);
+/* 	Path path= Paths.get(jrxmlFile);
 	String s= Files.readString(path,StandardCharsets.UTF_8);
-	InputStream input= new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8));
- 	/* InputStream input=  new FileInputStream(new File(jrxmlFile)); */ 
-/* 	InputStream input=  new ByteArrayInputStream(jrxmlFile.getBytes(StandardCharsets.UTF_8)); */
+	InputStream input= new ByteArrayInputStream(s.getBytes(StandardCharsets.UTF_8)); */
+ 	InputStream input=  new FileInputStream(new File(jrxmlFile)); 
 	JasperReport jasperReport= JasperCompileManager.compileReport(input);
 	JasperPrint jasperPrint= JasperFillManager.fillReport(jasperReport, m1, jrDataSource);
 	JasperExportManager.exportReportToPdfStream(jasperPrint, response.getOutputStream());

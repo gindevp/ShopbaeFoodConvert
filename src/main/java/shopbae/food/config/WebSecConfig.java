@@ -53,7 +53,8 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 				.deleteCookies("JSESSIONID").invalidateHttpSession(true).and().csrf().disable();
 
 		http.sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.ALWAYS)
-				.invalidSessionUrl("/login?mess=timeout"));
+				.invalidSessionUrl("/login?mess=timeout")
+				.maximumSessions(1).expiredUrl("/login?mess=timeout"));
 
 	}
 

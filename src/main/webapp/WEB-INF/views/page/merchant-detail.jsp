@@ -259,41 +259,57 @@
 <script>
 	function addToCart(user_id,product_id) {
 		if(user_id == 0){
-		
-			window.location="https://localhost:8443/ShobaeFood/login?mess=chua-dang-nhap";
+			swal({
+				  title: "Cần đăng nhập?",
+				  text: "Bạn chưa đăng nhập cần đăng nhập để đặt hàng!",
+				  icon: "warning",
+				  buttons: true,
+				  dangerMode: true,
+				})
+				.then((willDelete) => {
+				  if (willDelete) {
+				    window.location="https://localhost:8443/ShobaeFood/login?mess=chua-dang-nhap";
+				  } else {
+				    swal("Bạn chọn không!");
+				  }
+				});
+
 			
+			
+		}else{
+			console.log(user_id);
+		    console.log(product_id);
+		    let CartDTO = {
+		    	user_id: user_id,
+		    	product_id: product_id
+		    		
+		    };
+			
+		    $.ajax({
+		    	headers: {
+		             'Accept': 'application/json',
+		             'Content-Type': 'application/json'
+		         },
+		        type: "POST",
+		        data: JSON.stringify(CartDTO),
+		        //tên API
+		        url:`/ShobaeFood/cart/product/`+product_id+`/user/${sessionScope.userId}`,
+		        //xử lý khi thành công
+		        success: function (data) {
+		      	console.log("suss");  
+		      	swal({title:"<spring:message code="cartSuccess"/>",
+		      		icon: "success",
+		      	});
+		        }
+
+		      });
+		}
 		}
 
 	/*     let producer = $('#producer').val();
 	    let model = $('#model').val();
 	    let price = $('#price').val(); */
 	/*     console.log(price); */
-	    console.log(user_id);
-	    console.log(product_id);
-	    let CartDTO = {
-	    	user_id: user_id,
-	    	product_id: product_id
-	    		
-	    };
-		
-	    $.ajax({
-	    	headers: {
-	             'Accept': 'application/json',
-	             'Content-Type': 'application/json'
-	         },
-	        type: "POST",
-	        data: JSON.stringify(CartDTO),
-	        //tên API
-	        url:`/ShobaeFood/cart/product/`+product_id+`/user/${sessionScope.userId}`,
-	        //xử lý khi thành công
-	        success: function (data) {
-	      	console.log("suss");  
-	      	swal({title:"<spring:message code="cartSuccess"/>",
-	      		icon: "success",
-	      	});
-	        }
-
-	      });
-	}
+	    
 
 </script>
