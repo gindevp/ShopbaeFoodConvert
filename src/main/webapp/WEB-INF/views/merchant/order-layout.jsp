@@ -5,7 +5,11 @@
 <style>
 .m-md-5 {
     margin: 0rem!important;
-}</style>
+}
+.container-fluid {
+    width: 114%;
+    padding-right: 15px;
+    padding-left: 15px;}</style>
 <main class="container-fluid m-md-5">
 <ul class="nav nav-pills mb-3 shadow-sm" id="pills-tab" role="tablist" style="background-color: white;">
     <li class="nav-item">

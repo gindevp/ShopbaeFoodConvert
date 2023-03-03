@@ -185,9 +185,9 @@
               <div class="title">Giờ hoạt động</div>
             </div>
             <div class="info">
-              <form:input class="text" path="openTime"></form:input>
+              <form:input class="text" path="openTime"  id="time-input-open" placeholder="hh:mm"></form:input>
               <span>--</span>
-              <form:input class="text"  path="closeTime"></form:input>
+              <form:input class="text"  path="closeTime"  id="time-input-close" placeholder="hh:mm"></form:input>
             </div>
 
           </div>
@@ -214,4 +214,24 @@
 </form:form>
 <p style="color:red">${message }</p>
 </div>
+<script>
+var timeInputOpen = document.getElementById("time-input-open");
+timeInputOpen.addEventListener("input", function() {
+    var value = this.value.replace(/\D/g, ''); // Loại bỏ tất cả các ký tự không phải số
+    if (value.length > 4) {
+        value = value.substring(0, 4);
+    }
+    value = value.replace(/^(\d{2})(\d)/g, "$1:$2"); // Thêm dấu ":" vào vị trí thích hợp
+    this.value = value;
+});
+var timeInputClose = document.getElementById("time-input-close");
+timeInputClose.addEventListener("input", function() {
+    var value = this.value.replace(/\D/g, ''); // Loại bỏ tất cả các ký tự không phải số
+    if (value.length > 4) {
+        value = value.substring(0, 4);
+    }
+    value = value.replace(/^(\d{2})(\d)/g, "$1:$2"); // Thêm dấu ":" vào vị trí thích hợp
+    this.value = value;
+});
+</script>
 </body>
