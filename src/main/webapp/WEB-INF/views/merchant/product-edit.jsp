@@ -73,7 +73,17 @@
       </div> -->
     </div>
   </div>
-
+<div class="mb-3 row">
+    <label for="quantity" class="col-sm-2 col-form-label">Số lượng tồn kho</label>
+    <div class="col-sm-10">
+      <form:input path="quantity" type="number" class="form-control" id="quantity" />
+      <!-- <div *ngIf="!oldPrice?.valid && (oldPrice?.dirty || oldPrice?.touched)">
+        <div [hidden]="!oldPrice?.errors?.['required']">
+          <p style="color: red">Giá cũ không được trống </p>
+        </div>
+      </div> -->
+    </div>
+  </div>
   <div class="mb-3 row">
     <label for="shortDescription" class="col-sm-2 col-form-label">Mô tả</label>
     <div class="col-sm-10">
