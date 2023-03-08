@@ -160,7 +160,10 @@ swal({
 			    	  text:"Xóa thành công",
 			    	  icon:"success"
 			      })
-			      location.reload();
+			      setTimeout(() => {
+					 location.reload();
+				}, 2000);
+			     
 			    	
 			    },
 			    error: function (xhr, status, error) {

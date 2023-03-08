@@ -18,7 +18,7 @@ function connect() {
 	var socket = new SockJS('${ pageContext.request.contextPath }/chat');
 	stompClient = Stomp.over(socket);
 	stompClient.connect({}, function(frame) {
-	    console.log('Connected: ' + frame);
+	    console.log('ConnectedAA: ' + frame);
 	    stompClient.subscribe('/topic/ordeing/'+${merchant.id}, function(data) {
 			var dataOrder = JSON.parse(data.body);
 	    	swal({title:dataOrder.message+"\n"+" name: "+dataOrder.user,
@@ -26,7 +26,7 @@ function connect() {
 	      	});
 	    	setTimeout(() => {
 	    		location.reload();
-			}, 1500);
+			}, 2000);
 	    });
 	});
 
@@ -392,7 +392,7 @@ color: white;
   </div>
 </div>
 <hr>
- <script src="${ pageContext.request.contextPath }/static/js/sweetalert.js"></script>
+
     <c:if test="${sessionScope.ss}">
     <script type="text/javascript">
     swal({title:"<spring:message code="login_success"/>",
