@@ -36,4 +36,12 @@ public interface IAccountService extends IGeneral<Account> {
 	 * @return Userdetail
 	 */
 	UserDetails loadUserByUsername(String username);
+
+	void resetFailedAttempts(Account account);
+
+	void increaseFailedAttempts(Account account);
+
+	void lock(Account account);
+
+	boolean unlockWhenTimeExpired(Account account);
 }

@@ -69,7 +69,7 @@ background-color: #bf191987
     <c:forEach var="p" items="${products}" varStatus="status">
     <tr style=" text-align: center;">
       <td style="border:5px solid white">${status.index+1}</td>
-      <td style="border:5px solid white"><img src="<c:url value = "/static/storage/${p.image }"/>" alt="a" style="height: 40px;
+      <td style="border:5px solid white"><img src="<c:url value = "/image/${p.image }"/>" alt="a" style="height: 40px;
     width: 40px;
     border-radius: 50%;"></td>
       <td style="border:5px solid white" class="merchant-item">${p.name}</td>
@@ -162,7 +162,7 @@ swal({
 			      })
 			      setTimeout(() => {
 					 location.reload();
-				}, 2000);
+				}, 1000);
 			     
 			    	
 			    },

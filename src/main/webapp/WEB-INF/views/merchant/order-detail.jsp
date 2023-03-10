@@ -29,7 +29,7 @@
 				<tr>
 					<td>${status.index+1}</td>
 					<td><img
-						src="${ pageContext.request.contextPath }/static/storage/${orderDetail.product.image}"
+						src="${ pageContext.request.contextPath }/image/${orderDetail.product.image}"
 						alt="" style="height: 40px; width: 40px; border-radius: 50%;"></td>
 					<td class="merchant-item">${orderDetail.product.name}</td>
 					<td class="merchant-item">${orderDetail.quantity}</td>
@@ -75,7 +75,10 @@
 	}
 	function checkoutAndOpenNewPage(url) {
 		window.open(url, '_blank');
-		checkout();
+		setTimeout(() => {
+			checkout();
+		}, 1000);
+	
 
 	}
 	function reOrder(order_id) {
@@ -84,7 +87,7 @@
 			  text: "Nếu ok thì sẽ đặt lại nhé ???",
 			  icon: "warning",
 			  buttons: true,
-			  dangerMode: true,
+			  dangerMode: true
 			})
 			.then((willDelete) => {
 			  if (willDelete) {
@@ -98,18 +101,18 @@
 					    	
 
 					    	// Reload trang
-					    	window.location = "https://localhost:8443/ShobaeFood/cart/user/"+${userId};
+					    	window.location = "https://localhost:8443/ShobaeFood/cart/user/${userId}";
 
 					    	// Cuộn đến vị trí trước khi trang được tải lại
 					    	
 					    },
 					    error: function (xhr, status, error) {
 					      // xử lý khi request thất bại
-					      console.log("Lỗi khi gửi request: " + error);
+					      console.log("Lỗi khi gửi request: " + error)
 					    }
 					  });
 			  } else {
-			    swal("Bạn chọn không!");
+			    swal("Bạn chọn không!")
 			  }
 			});
 	}

@@ -12,6 +12,7 @@ import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.context.support.ReloadableResourceBundleMessageSource;
+import org.springframework.core.env.Environment;
 import org.springframework.dao.annotation.PersistenceExceptionTranslationPostProcessor;
 import org.springframework.orm.hibernate5.HibernateTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
@@ -38,6 +39,8 @@ public class AppConfig implements WebMvcConfigurer {
 	private String fileUpload;
 	@Autowired
 	private IntercepterI18n i18n;
+	@Autowired
+	private Environment env;
 
 	/**
 	 * this method use for setting
@@ -90,7 +93,8 @@ public class AppConfig implements WebMvcConfigurer {
 	 */
 	@Override
 	public void addResourceHandlers(ResourceHandlerRegistry registry) {
-		registry.addResourceHandler("/image/**").addResourceLocations("file:" + fileUpload);
+		registry.addResourceHandler("/static/**").addResourceLocations("/static/");
+		registry.addResourceHandler("/image/**").addResourceLocations("file:" + env.getProperty("file-upload"));
 
 	}
 

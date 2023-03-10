@@ -15,13 +15,14 @@
       <th scope="col" style=" padding: 10px;border:5px solid white">Ghi chú</th>
       <th scope="col" style=" padding: 10px;border:5px solid white">Chi tiết</th>
       <th scope="col" style=" padding: 10px;border:5px solid white">Trạng thái</th>
+      <th scope="col" style=" padding: 10px;border:5px solid white">Hóa đơn</th>
     </tr>
     </thead>
     <tbody>
     <c:forEach var="order" items="${orders }" varStatus="status">
         <tr >
           <td style=" border:5px solid white">${status.index+1}</td>
-          <td style=" border:5px solid white"><img src="${ pageContext.request.contextPath }/static/storage/${order.appUser.avatar}" alt="image" style="height: 40px;
+          <td style=" border:5px solid white"><img src="${ pageContext.request.contextPath }/image/${order.appUser.avatar}" alt="image" style="height: 40px;
         width: 40px;
         border-radius: 50%;"></td>
           <td style=" border:5px solid white"class="merchant-item">${order.appUser.name}</td>
@@ -33,7 +34,9 @@
   <path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12zM5.904 10.803 10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707z"/>
 </svg></a></td>
  <td style=" border:5px solid white"class="merchant-item" size="50px"><spring:message code="${order.status}"/></td>
+ <td style=" border:5px solid white"class="merchant-item"><a href="${ pageContext.request.contextPath }/image/${order.pdf}" target="_blank"><img src="${ pageContext.request.contextPath }/static/img/PDF_32.png" alt="PDF"></a></td>
         </tr>
+        
         </c:forEach>
     </tbody>
   </table>

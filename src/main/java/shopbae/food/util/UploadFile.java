@@ -8,8 +8,6 @@ import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 
 public class UploadFile {
-	@Value("${file-upload}")
-	private String fileUpload;
 
 	/**
 	 * Phương thức này giúp lưu file
@@ -19,10 +17,9 @@ public class UploadFile {
 	 * @return tên file vừa lưu
 	 * @throws IOException
 	 */
-	public String uploadFile(MultipartFile newImg, String oldImg) throws IOException {
-		MultipartFile multipartFile = newImg;
-		String fileName = multipartFile.getOriginalFilename();
-		if (multipartFile.isEmpty()) {
+	public String uploadFile(MultipartFile newImg, String oldImg, String fileUpload) throws IOException {
+		String fileName = newImg.getOriginalFilename();
+		if (newImg.isEmpty()) {
 			fileName = oldImg;
 		} else {
 			FileCopyUtils.copy(newImg.getBytes(), new File(fileUpload + fileName));
@@ -36,10 +33,10 @@ public class UploadFile {
 	 * @return tên file vừa lưu
 	 * @throws IOException
 	 */
-	public String uploadFile(MultipartFile newImg) throws IOException {
-		MultipartFile multipartFile = newImg;
-		String fileName = multipartFile.getOriginalFilename();
-		if (multipartFile.isEmpty()) {
+	public String uploadFile(MultipartFile newImg, String fileUpload) throws IOException {
+		String fileName = newImg.getOriginalFilename();
+		System.out.println(fileUpload);
+		if (newImg.isEmpty()) {
 			fileName = "tet.jpg";
 		} else {
 			FileCopyUtils.copy(newImg.getBytes(), new File(fileUpload + fileName));

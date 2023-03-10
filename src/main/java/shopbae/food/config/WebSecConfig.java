@@ -21,6 +21,9 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 	private CustomSuccessHandler customSuccessHandler;
 
 	@Autowired
+	private CustomLoginFailureHandler customLoginFailureHandler;
+
+	@Autowired
 	private CustomIdentityAuthenticationProvider customIdentityAuthenticationProvider;
 
 	@Override
@@ -43,12 +46,14 @@ public class WebSecConfig extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 		http.authorizeRequests()
-				.antMatchers("/login", "/register/**", "/home/**", "/static/**", "/merchantp/**", "/forgotpass/**",
-						"/change-pass/**", "/account/", "/a/**", "/chat/**", "/jasper/**","/")
+				.antMatchers("/login", "/register/**", "/home/**", "/static/**", "/image/**", "/merchantp/**", "/forgotpass/**",
+						"/change-pass/**", "/account/", "/a/**", "/chat/**", "/jasper/**","/","/saveMerProToSession")
 				.permitAll().antMatchers("/admin/**").hasRole("ADMIN").antMatchers("/user-info/**", "/cart/**")
 				.hasRole("USER").antMatchers("/merchant/**").hasRole("MERCHANT").antMatchers("/**").hasAnyRole("ADMIN")
 				.and().formLogin().loginPage("/login").usernameParameter("userName")
-				.successHandler(customSuccessHandler).and().logout()
+				.successHandler(customSuccessHandler)
+				.failureHandler(customLoginFailureHandler)
+				.and().logout()
 				.logoutRequestMatcher(new AntPathRequestMatcher("/logout")).clearAuthentication(true)
 				.deleteCookies("JSESSIONID").invalidateHttpSession(true).and().csrf().disable();
 

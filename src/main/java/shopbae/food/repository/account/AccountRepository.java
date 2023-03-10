@@ -83,31 +83,10 @@ public class AccountRepository implements IAccountRepository {
 	@Override
 	public Account findByName(String name) {
 		try {
-
-			// Tạo CriteriaBuilder
-			CriteriaBuilder criteriaBuilder = entityManager.getCriteriaBuilder();
-
-			// Tạo CriteriaQuery
-			CriteriaQuery<Account> criteriaQuery = criteriaBuilder.createQuery(Account.class);
-
-			// Tạo Root
-			Root<Account> root = criteriaQuery.from(Account.class);
-
-			// Thêm điều kiện truy vấn
-			Predicate condition = criteriaBuilder.equal(root.get("userName"), name);
-
-			// Thêm điều kiện vào truy vấn
-			criteriaQuery.where(condition);
-
-			// Tạo truy vấn với điều kiện
-			TypedQuery<Account> query = entityManager.createQuery(criteriaQuery);
-
-			// Thực hiện truy vấn
-			Account result = query.getSingleResult();
-			return result;
-
+			TypedQuery<Account> query = getSession().createQuery("FROM account a where a.userName =: name", Account.class);
+			query.setParameter("name", name);
+			return query.getSingleResult();
 		} catch (Exception e) {
-//			throw new HandleException(500,"không tìm thấy ");
 			return null;
 		}
 	}
@@ -155,5 +134,5 @@ public class AccountRepository implements IAccountRepository {
 			return false;
 		}
 	}
-
+	
 }

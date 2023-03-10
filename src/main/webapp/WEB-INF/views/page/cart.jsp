@@ -1,3 +1,5 @@
+<%@page import="shopbae.food.model.Product"%>
+<%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
     <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
@@ -11,6 +13,7 @@ tr.highlight {
 .gradient-custom {
   /* fallback for old browsers */
   background: #6a11cb;
+  height: max-content;
 
   /* Chrome 10-25, Safari 5.1-6 */
   background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1));
@@ -316,10 +319,19 @@ tr.highlight {
   padding-left: 15px;
   border-radius: 5px;
 }
+.mb-4, .my-4 {
+    margin-bottom: 6rem!important;
+}
+button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  background-color: #00000057;
+  color: white;
+}
 </style>
 
      <body class="portal" style="font-size:calc(8px + 0.5vw);" >
-<section class="h-100 gradient-custom">
+<section class=" gradient-custom">
   <div class="container py-5">
   <a class="btn btn-primary btn-orderDetail" href="${ pageContext.request.contextPath }/merchantp/detail/${sessionScope.merchantId}"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-left-circle-fill" viewBox="0 0 16 16">
   <path d="M8 0a8 8 0 1 0 0 16A8 8 0 0 0 8 0zm3.5 7.5a.5.5 0 0 1 0 1H5.707l2.147 2.146a.5.5 0 0 1-.708.708l-3-3a.5.5 0 0 1 0-.708l3-3a.5.5 0 1 1 .708.708L5.707 7.5H11.5z"/>
@@ -334,7 +346,7 @@ tr.highlight {
 
 <c:if test="${message == 'khong co du lieu' }">
 
-              <img class="card-body-noimage" src="https://taphoa.cz/static/media/cart-empty-img.8b677cb3.png" alt="">
+              <img class="card-body-noimage" src="${ pageContext.request.contextPath }/static/img/cart-empty.png" alt="cart-empty">
 </c:if>
             
             
@@ -346,7 +358,7 @@ tr.highlight {
                   <div class="col-lg-3 col-md-12 mb-4 mb-lg-0">
                     <!-- Image -->
                     <div class="bg-image hover-overlay hover-zoom ripple rounded" data-mdb-ripple-color="light">
-                      <img src="${ pageContext.request.contextPath }/static/storage/${product.product.image}"
+                      <img src="${ pageContext.request.contextPath }/image/${product.product.image}"
                            class="w-100 bg-image-img" alt="Blue Jeans Jacket" />
                       <a href="#!">
                         <div class="mask" style="background-color: rgba(251, 251, 251, 0.2)"></div>
@@ -364,10 +376,11 @@ tr.highlight {
                             title="Remove item" style="font-size: 1.45rem;" >
                       <i class="fas fa-trash"></i>
                     </button></a>
+                    <a href="${ pageContext.request.contextPath }/cart/favorite/${product.product.id}">
                     <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip"
                             title="Move to the wish list" style="font-size: 1.45rem;">
                       <i class="fas fa-heart"></i>
-                    </button>
+                    </button></a>
                     <!-- Data -->
                   </div>
 
@@ -377,8 +390,24 @@ tr.highlight {
 
                       <div class="form-outline">
                         <label class="form-label" for="form1"><spring:message code="quantity"/></label>
-                        <input id="form1" min="0" name="quantity"value="${product.quantity}" type="number" class="form-control" />
+                        <input id="form1" min="0" name="quantity"value="${product.quantity}" type="text" readonly class="form-control" />
+<br>
 
+<div>
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+<a onclick="add(${product.product.id})" class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-plus-square-fill" viewBox="0 0 16 16">
+  <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm6.5 4.5v3h3a.5.5 0 0 1 0 1h-3v3a.5.5 0 0 1-1 0v-3h-3a.5.5 0 0 1 0-1h3v-3a.5.5 0 0 1 1 0z"/>
+</svg></a>&nbsp;<a
+<c:if test="${product.quantity!=1 }">
+ onclick="reduce(${product.product.id})" 
+ </c:if>
+ <c:if test="${product.quantity==1 }">
+ onclick="confirm(${product.product.id})" 
+ </c:if>
+ class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-dash-square-fill" viewBox="0 0 16 16">
+  <path d="M2 0a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V2a2 2 0 0 0-2-2H2zm2.5 7.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1 0-1z"/>
+</svg></a>
+</div>
                       </div>
                     </div>
                     <!-- Quantity -->
@@ -427,16 +456,26 @@ tr.highlight {
                 <c:forEach  var="order" items="${orders}">
                 <tr >
                 
-                <td id="btn_${order.id}" class="merchant-item" size="150px" style="width: 101px;"><c:if test="${order.status=='MERCHANT_RECEIVED' }"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/received/${order.id}"><spring:message code="receive"/></a></c:if><c:if test="${order.status!='MERCHANT_RECEIVED' }"><button class="btn btn-order" disabled="disabled"><spring:message code="receive"/></button></c:if></td>
-                    <td class="merchant-item" size="150px" style="width: 80px;"><a class="btn btn-order" href="${ pageContext.request.contextPath }/cart/refuse/${order.id}"><spring:message code="refuse"/></a></td>
+                <td id="btn_${order.id}" class="merchant-item" size="150px" style="width: 101px;"><c:if test="${order.status=='MERCHANT_RECEIVED' }"><a class="btn btn-order" onclick="receiveOrder(${order.id})"><spring:message code="receive"/></a></c:if><c:if test="${order.status!='MERCHANT_RECEIVED' }"><button class="btn btn-order" disabled="disabled"><spring:message code="receive"/></button></c:if></td>
+                    <td class="merchant-item" size="150px" style="width: 80px;"><button
+                    <c:if test="${order.status!='MERCHANT_PENDING'}">
+                   disabled
+                    </c:if>
+                     class="btn btn-order" onclick="refuseOrder(${order.id})"><spring:message code="refuse"/></button></td>
 
                   
 
-                  <td class="merchant-item" size="50px"><a class="btn-order" href="${ pageContext.request.contextPath }/cart/delete/order/${order.id}/user/${sessionScope.userId}"><i class="fa-solid fa-trash"></i></a></td>
+                  <td class="merchant-item" size="50px"><button
+                   <c:if test="${order.status=='MERCHANT_RECEIVED'||order.status=='MERCHANT_PENDING'}">
+                   disabled
+                    </c:if>
+                    class="btn btn-order" onclick="removeOrder(${order.id},${sessionScope.userId})" ><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash-fill" viewBox="0 0 16 16">
+  <path d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 1 0z"/>
+</svg></button></td>
                 
                   
                   
-                  <td class="action-icon show-detail"><a href="${ pageContext.request.contextPath }/cart/order/detail/${order.id}" cl><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16">
+                  <td class=""><a href="${ pageContext.request.contextPath }/cart/order/detail/${order.id}" cl><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor" class="bi bi-arrow-up-right-square-fill" viewBox="0 0 16 16">
   <path d="M14 0a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h12zM5.904 10.803 10 6.707v2.768a.5.5 0 0 0 1 0V5.5a.5.5 0 0 0-.5-.5H6.525a.5.5 0 1 0 0 1h2.768l-4.096 4.096a.5.5 0 0 0 .707.707z"/>
 </svg></a></td>
                   <td class="merchant-item">${order.totalPrice} đ</td>
@@ -546,3 +585,231 @@ tr.highlight {
         </div>
       </div>
 </section>
+<script>
+function receiveOrder(order_id) {
+	swal({
+		  title: "Bạn có chắc đã nhận được hàng",
+		  icon: "warning",
+		  buttons: true,
+		  dangerMode: true,
+		})
+		.then((willDelete) => {
+		  if (willDelete) {
+			  $.ajax({
+				    type: "GET",
+				    url: `${ pageContext.request.contextPath }/cart/received/`+order_id,
+				     // dữ liệu cần gửi lên server
+				    success: function (response) {
+				      // xử lý khi request thành công
+				    	// Lấy vị trí hiện tại của trang
+				    	let savedPosition = window.scrollY;
+
+				    	// Reload trang
+				    	location.reload();
+
+				    	// Cuộn đến vị trí trước khi trang được tải lại
+				    	window.scrollTo(0, savedPosition);
+				    },
+				    error: function (xhr, status, error) {
+				      // xử lý khi request thất bại
+				      console.log("Lỗi khi gửi request: " + error);
+				    }
+				  });
+		  } else {
+		    swal("Bạn chọn không!");
+		  }
+		});
+}
+	function removeOrder(order_id,user_id) {
+			swal({
+				  title: "Bạn có chắc muốn xóa order",
+				  text: "Nếu ok thì sẽ xóa khỏi danh sách",
+				  icon: "warning",
+				  buttons: true,
+				  dangerMode: true,
+				})
+				.then((willDelete) => {
+				  if (willDelete) {
+					  $.ajax({
+						    type: "GET",
+						    url: `${ pageContext.request.contextPath }/cart/delete/order/`+order_id+`/user/`+user_id,
+						     // dữ liệu cần gửi lên server
+						    success: function (response) {
+						      // xử lý khi request thành công
+						    	// Lấy vị trí hiện tại của trang
+						    	let savedPosition = window.scrollY;
+
+						    	// Reload trang
+						    	location.reload();
+
+						    	// Cuộn đến vị trí trước khi trang được tải lại
+						    	window.scrollTo(0, savedPosition);
+						    },
+						    error: function (xhr, status, error) {
+						      // xử lý khi request thất bại
+						      console.log("Lỗi khi gửi request: " + error);
+						    }
+						  });
+				  } else {
+				    swal("Bạn chọn không!");
+				  }
+				});
+		}
+	function refuseOrder(order_id) {
+		swal({
+			  title: "Bạn có chắc muốn xóa hủy đặt hàng",
+			  text: "Nếu ok thì sẽ hủy đơn hàng này nhé !!!!!!!",
+			  icon: "warning",
+			  buttons: true,
+			  dangerMode: true,
+			})
+			.then((willDelete) => {
+			  if (willDelete) {
+				  $.ajax({
+					    type: "GET",
+					    url: `${ pageContext.request.contextPath }/cart/refuse/`+order_id,
+					     // dữ liệu cần gửi lên server
+					    success: function (response) {
+					      // xử lý khi request thành công
+					    	// Lấy vị trí hiện tại của trang
+					    	let savedPosition = window.scrollY;
+
+					    	// Reload trang
+					    	location.reload();
+
+					    	// Cuộn đến vị trí trước khi trang được tải lại
+					    	window.scrollTo(0, savedPosition);
+					    },
+					    error: function (xhr, status, error) {
+					      // xử lý khi request thất bại
+					      console.log("Lỗi khi gửi request: " + error);
+					    }
+					  });
+			  } else {
+			    swal("Bạn chọn không!");
+			  }
+			});
+	}
+	function add(product_id) {
+		console.log(product_id+" "+${sessionScope.userId})
+		
+		$.ajax({
+	    	headers: {
+	             'Accept': 'application/json',
+	             'Content-Type': 'application/json'
+	         },
+	        type: "POST",
+
+	        //tên API
+	        url:`/ShobaeFood/cart/product/`+product_id+`/user/${sessionScope.userId}`,
+	        //xử lý khi thành công
+	        success: function (data) {
+	        	// Lấy vị trí hiện tại của trang
+		    	let savedPosition = window.scrollY;
+
+		    	// Reload trang
+		    	location.reload();
+
+		    	// Cuộn đến vị trí trước khi trang được tải lại
+		    	window.scrollTo(0, savedPosition);
+	        },
+	        error: function(xhr, textStatus, error) {
+	            console.log(xhr.responseText);
+	            console.log(xhr.statusText);
+	            console.log(textStatus);
+	            console.log(error);
+	            }
+
+	      });
+}
+function reduce(product_id) {
+		$.ajax({
+	    	headers: {
+	             'Accept': 'application/json',
+	             'Content-Type': 'application/json'
+	         },
+	        type: "GET",
+
+	        //tên API
+	        url:`/ShobaeFood/cart/product/`+product_id+`/user/${sessionScope.userId}`,
+	        //xử lý khi thành công
+	        success: function (data) {
+	        	// Lấy vị trí hiện tại của trang
+		    	let savedPosition = window.scrollY;
+
+		    	// Reload trang
+		    	location.reload();
+
+		    	// Cuộn đến vị trí trước khi trang được tải lại
+		    	window.scrollTo(0, savedPosition);
+	        }
+
+	      });
+}	
+function confirm(product_id) {
+	swal({
+		  title: "Bạn có chắc muốn giảm nữa",
+		  text: "Nếu giảm nữa đồng nghĩa với xóa sản phẩm khỏi rỏ hàng",
+		  icon: "warning",
+		  buttons: true,
+		  dangerMode: true,
+		})
+		.then((willDelete) => {
+		  if (willDelete) {
+			  $.ajax({
+			    	headers: {
+			             'Accept': 'application/json',
+			             'Content-Type': 'application/json'
+			         },
+			        type: "DELETE",
+
+			        //tên API
+			        url:`/ShobaeFood/cart/product/`+product_id+`/user/${sessionScope.userId}`,
+			        //xử lý khi thành công
+			        success: function (data) {
+			        	// Lấy vị trí hiện tại của trang
+				    	let savedPosition = window.scrollY;
+
+				    	// Reload trang
+				    	location.reload();
+
+				    	// Cuộn đến vị trí trước khi trang được tải lại
+				    	window.scrollTo(0, savedPosition);
+			        },
+			        error: function(xhr, textStatus, error) {
+			            console.log(xhr.responseText);
+			            console.log(xhr.statusText);
+			            console.log(textStatus);
+			            console.log(error);
+			            }
+
+			      });
+			  setTimeout(() => {
+				  location.reload();
+			}, 1000);
+		  } else {
+		    swal("Bạn chọn không!");
+		  }
+		});
+}	
+
+</script>
+		
+			
+
+<c:if test="${sessionScope.ss}">
+    <script type="text/javascript">
+    swal({title:"<spring:message code="success_order"/>",
+    	icon: "success"})</script></c:if>
+ <c:if test="${sessionScope.ss=='false'}">  	
+    <script>
+    swal({
+        title: "Có người nhanh tay hơn đặt mất đồ ăn rồi",
+        text: "Những món ăn đã hết hàng hoặc số lượng không đủ theo yêu cầu của bạn là:\n${productFail}",
+        icon: "info"
+    });
+</script>
+ </c:if>
+    <%
+    session.removeAttribute("ss");
+    %>

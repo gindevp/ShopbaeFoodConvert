@@ -62,7 +62,7 @@
 
   <div class="container">
     <div class="detail-restaurant-img"><img
-      src="<c:url value = "/static/storage/${merchant.avatar}"/>"
+      src="<c:url value = "/image/${merchant.avatar}"/>"
       alt="Dồi Sụn Nướng &amp; Ăn Vặt - Shop Online" class=""></div>
     <div class="detail-restaurant-info">
       <nav aria-label="breadcrumb">
@@ -89,7 +89,15 @@
 <!--                                       rel="noopener noreferrer nofollow" target="_blank" class="number-review">Xem thêm-->
 <!--        lượt đánh giá từ Foody</a></div>-->
       <div class="status-restaurant">
-        <div class="opentime-status"><span class="stt online" title="Mở cửa"></span></div>
+
+        
+        <c:if test="${statusMerchant=='true'}">
+                <div class="opentime-status"><span class="stt online" title="Mở cửa"></span></div>
+        </c:if>
+        <c:if test="${statusMerchant=='false'}">
+        <div class="opentime-status"><span class="stt offline" title="Đóng cửa"></span></div>
+        </c:if>
+        
         <div class="time"><i class="far fa-clock"></i>${merchant.openTime}-${merchant.closeTime}</div>
       </div>
 <!--      <div class="cost-restaurant"><i class="fas fa-dollar-sign"></i>17,000 - 100,000</div>-->
@@ -200,13 +208,13 @@
 
                   <table style="width: 100%">
                   <c:forEach var="product" items="${products}">
-                  <tr ><td><div class="item-restaurant-row "
+                  <tr title="Kho còn ${product.quantity}"><td><div class="item-restaurant-row "
                        style="height: 88px; left: 0px; position: inherit; top: 144px; width: 100%;"
                                style="height: 81px; left: 0px;  top: 50px; width: 100%;">
                     <div class="row" style="width: 750px">
                       <div class="col-auto item-restaurant-img" >
                         <button class="inline"><img
-                          src="${ pageContext.request.contextPath }/static/storage/${product.image}"
+                          src="${ pageContext.request.contextPath }/image/${product.image}"
                           alt="Set lẩu tok full topping 2-3 người ăn" width="60" height="60"></button>
                       </div>
                       <div class="col item-restaurant-info"><h2 class="item-restaurant-name">${product.name}</h2>
@@ -226,7 +234,11 @@
                           <a >
                           <div class="col-auto adding-food-cart txt-right">
                           
-                            <div class="btn-adding" onclick="addToCart(${sessionScope.userId},${product.id})">+</div>
+                            <div class="btn-adding" 
+                            <c:if test="${statusMerchant=='false'||role=='merchant'||role=='admin'|| product.quantity==0}">
+                            style="pointer-events: none;opacity: 0.5;"
+                            </c:if>
+                            onclick="addToCart(${sessionScope.userId},${product.id})">+</div>
                             
                           </div></a>
                         </div>
@@ -254,8 +266,6 @@
   </div>
 </div>
 <br>
-<script src="${ pageContext.request.contextPath }/static/js/sweetalert.js"></script>
-<script src="${ pageContext.request.contextPath }/static/js/jquerry.js"></script>
 <script>
 	function addToCart(user_id,product_id) {
 		if(user_id == 0){
@@ -268,7 +278,19 @@
 				})
 				.then((willDelete) => {
 				  if (willDelete) {
-				    window.location="https://localhost:8443/ShobaeFood/login?mess=chua-dang-nhap";
+					  $.ajax({
+						    type: "GET",
+						    url: `/ShobaeFood/saveMerProToSession?merchant_old_id=${sessionScope.merchantId}&product_old_id=`+product_id, // URL của API để lưu product_id vào session
+						     // dữ liệu cần gửi lên server
+						    success: function (response) {
+						      // xử lý khi request thành công
+						      window.location="https://localhost:8443/ShobaeFood/login?mess=chua-dang-nhap";
+						    },
+						    error: function (xhr, status, error) {
+						      // xử lý khi request thất bại
+						      console.log("Lỗi khi gửi request: " + error);
+						    }
+						  });
 				  } else {
 				    swal("Bạn chọn không!");
 				  }
@@ -279,19 +301,13 @@
 		}else{
 			console.log(user_id);
 		    console.log(product_id);
-		    let CartDTO = {
-		    	user_id: user_id,
-		    	product_id: product_id
-		    		
-		    };
-			
 		    $.ajax({
 		    	headers: {
 		             'Accept': 'application/json',
 		             'Content-Type': 'application/json'
 		         },
 		        type: "POST",
-		        data: JSON.stringify(CartDTO),
+
 		        //tên API
 		        url:`/ShobaeFood/cart/product/`+product_id+`/user/${sessionScope.userId}`,
 		        //xử lý khi thành công
@@ -313,3 +329,15 @@
 	    
 
 </script>
+    <c:if test="${sessionScope.ss}">
+    <script type="text/javascript">
+    swal({title:"<spring:message code="login_success"/>",
+    	icon: "success"})
+    	setTimeout(() => {
+    		  swal({title:"<spring:message code="cartSuccess"/>",
+    		    	icon: "success"})
+		},4000);
+    	</script></c:if>
+    <%
+    session.removeAttribute("ss");
+    %>

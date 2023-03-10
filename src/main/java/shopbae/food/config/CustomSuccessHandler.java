@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -19,6 +20,7 @@ import org.springframework.stereotype.Component;
 
 import shopbae.food.model.Account;
 import shopbae.food.service.account.IAccountService;
+import shopbae.food.service.cart.ICartService;
 import shopbae.food.util.Auth;
 
 @Component
@@ -36,6 +38,8 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
 	private static final String AUTHORITIES = "authorities";
 
+	@Autowired
+	ICartService cartService;
 	@Autowired
 	private IAccountService accountService;
 
@@ -60,6 +64,19 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			session.setAttribute(MERCHANT, account.getMerchant());
 		}
 		if (account.getUser() != null) {
+			if(session.getAttribute("merchant_old_id")!= null) {
+			Long merchant_old_id=(Long) session.getAttribute("merchant_old_id");
+			Long product_old_id=(Long) session.getAttribute("product_old_id");
+			targetUrl="/merchantp/detail/"+merchant_old_id;
+			cartService.addCart(product_old_id, account.getUser().getId());
+			session.removeAttribute("merchant_old_id");
+			session.removeAttribute("product_old_id");
+			session.setAttribute("message","da dang nhap");
+			session.setAttribute("name",account.getUser().getName());
+			session.setAttribute("avatar", account.getUser().getAvatar());
+			session.setAttribute("role", "user");
+			
+			}
 			session.setAttribute(USER, account.getUser());
 			session.setAttribute(USER_ID, account.getUser().getId());
 		}
@@ -69,7 +86,7 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		redirectStrategy.sendRedirect(request, response, targetUrl);
 	}
 
-	/*
+	/* 
 	 * This method extracts the roles of currently logged-in user and returns
 	 * appropriate URL according to his/her role.
 	 */
@@ -130,5 +147,15 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 	protected RedirectStrategy getRedirectStrategy() {
 		return redirectStrategy;
 	}
+	@Override
+    public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
+            Authentication authentication) throws IOException, ServletException {
+        Account account = accountService.findByName(authentication.getName());
+        if (account.getFailedAttempt() > 0) {
+            accountService.resetFailedAttempts(account);
+        }
+         
+        super.onAuthenticationSuccess(request, response, authentication);
+    }
 
 }

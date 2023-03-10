@@ -1,6 +1,7 @@
 package shopbae.food.service.cart;
 
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -82,7 +83,7 @@ public class CartService implements ICartService {
 
 	@Override
 	public Cart findByProductIdAndUserId(Long product_id, Long user_id) {
-		return findByProductIdAndUserId(product_id, user_id);
+		return cartRepository.findByProductIdAndUserId(product_id, user_id);
 	}
 
 	@Override
@@ -126,6 +127,7 @@ public class CartService implements ICartService {
 		cart.setProduct(product);
 		cart.setTotalPrice(totalPrice);
 		cartRepository.save(cart);
+		System.out.println(cartRepository.findByProductIdAndUserId(productId, userID));
 		Optional<Cart> cart1 = Optional.ofNullable(cartRepository.findByProductIdAndUserId(productId, userID));
 		this.setProductCart(cart1.get().getId(), productId);
 	}
@@ -145,9 +147,8 @@ public class CartService implements ICartService {
 	public void addCart(Long productid, Long userid) {
 		Cart cart = new Cart();
 		AppUser apUser = appUserService.findById(userid);
-		Product product = new Product();
-		product.setId(productid);
-		cart.setPrice(productService.findById(productid).getNewPrice());
+		Product product = productService.findById(productid);
+		cart.setPrice(product.getNewPrice());
 		cart.setProduct(product);
 		cart.setUser(apUser);
 		this.addToCart(cart);
@@ -176,7 +177,18 @@ public class CartService implements ICartService {
 	}
 
 	@Override
-	public void ordeing(Long userId, Long merchantId, String note, String address, double sum) {
+	public List<Product> ordeing(Long userId, Long merchantId, String note, String address, double sum) {
+		List<Cart> carts = this.findAllByUser(userId);
+		System.out.println("cart by userId:" + carts);
+		List<Cart> oderDetail = carts.stream().filter(a -> a.getProduct().getMerchant().getId() == (long) merchantId)
+				.collect(Collectors.toList());
+		List<Product> productFail= new ArrayList<>();
+		for(Cart cart : oderDetail) {
+			if((cart.getProduct().getQuantity()-cart.getQuantity())<0) {
+				productFail.add(cart.getProduct());
+			};
+		}
+		if(productFail.size()==0) {
 		Order oder = new Order();
 		oder.setOrderdate(java.time.LocalDateTime.now());
 		oder.setNote(note);
@@ -186,10 +198,7 @@ public class CartService implements ICartService {
 		oder.setMerchant_id(merchantId);
 		oder.setDeliveryAddress(address);
 		Long orderId = (Long) orderService.savee(oder);
-		List<Cart> carts = this.findAllByUser(userId);
-		System.out.println("cart by userId:" + carts);
-		List<Cart> oderDetail = carts.stream().filter(a -> a.getProduct().getMerchant().getId() == (long) merchantId)
-				.collect(Collectors.toList());
+	
 		System.out.println("cart by userId and merId:" + oderDetail);
 		for (Cart cart : oderDetail) {
 			OrderDetail orderDetail = new OrderDetail();
@@ -200,6 +209,10 @@ public class CartService implements ICartService {
 			orderDetailService.save(orderDetail);
 			cart.setDeleteFlag(false);
 			cartService.update(cart);
+			
+	cart.getProduct().setQuantity(cart.getProduct().getQuantity()-cart.getQuantity());
+	productService.update(cart.getProduct());
+			
 		}
 		String mess = messageSource.getMessage("order_new", null, LocaleContextHolder.getLocale());
 		String status = messageSource.getMessage(oder.getStatus(), null, LocaleContextHolder.getLocale());
@@ -216,5 +229,16 @@ public class CartService implements ICartService {
 		dto.setUser(appUserService.findById(userId).getName());
 		
 		messagingTemplate.convertAndSend("/topic/ordeing/"+merchantId, dto);
+		return productFail;
+		}else {
+			return productFail;
+		}
+	}
+
+	@Override
+	public List<Cart> findAllByProduct(Long id) {
+		List<Cart> list= cartRepository.findAll().stream().filter(c-> c.getProduct().getId()==(long) id).collect(Collectors.toList());
+		System.out.println("listCart"+list);
+		return list;
 	}
 }

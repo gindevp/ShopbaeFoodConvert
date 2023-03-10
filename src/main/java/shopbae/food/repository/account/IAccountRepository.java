@@ -25,4 +25,5 @@ public interface IAccountRepository extends IGeneral<Account> {
 	 * @return If it matches return true, opposite
 	 */
 	boolean existsAccountByUserName(String username);
+
 }

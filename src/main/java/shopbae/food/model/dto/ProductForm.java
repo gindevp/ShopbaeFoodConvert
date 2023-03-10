@@ -9,6 +9,7 @@ public class ProductForm {
     private Double oldPrice;
     private Double newPrice;
     private MultipartFile image;
+    private int quantity;
 	public ProductForm() {
 	
 	}
@@ -23,6 +24,23 @@ public class ProductForm {
 		this.image = image;
 	}
 	
+	public ProductForm(Long id, String name, String shortDescription, Double oldPrice, Double newPrice,
+			MultipartFile image, int quantity) {
+		super();
+		this.id = id;
+		this.name = name;
+		this.shortDescription = shortDescription;
+		this.oldPrice = oldPrice;
+		this.newPrice = newPrice;
+		this.image = image;
+		this.quantity = quantity;
+	}
+	public int getQuantity() {
+		return quantity;
+	}
+	public void setQuantity(int quantity) {
+		this.quantity = quantity;
+	}
 	public Long getId() {
 		return id;
 	}

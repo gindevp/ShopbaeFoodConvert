@@ -30,6 +30,7 @@ public class Order {
     private Long merchant_id;
     private double totalPrice;
     private String deliveryAddress;
+    private String pdf;
     @Column(name = "flag")
     private boolean flag=true;
 	public Order() {
@@ -111,6 +112,13 @@ public class Order {
 	}
 	public void setTotalPrice(double totalPrice) {
 		this.totalPrice = totalPrice;
+	}
+	
+	public String getPdf() {
+		return pdf;
+	}
+	public void setPdf(String pdf) {
+		this.pdf = pdf;
 	}
 	@Override
 	public String toString() {

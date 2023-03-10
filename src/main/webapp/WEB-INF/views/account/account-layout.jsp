@@ -2,7 +2,7 @@
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <link rel="stylesheet" href="${ pageContext.request.contextPath }/static/css/bootstrap.css">
 <link rel="icon" type="image/x-icon" href="${ pageContext.request.contextPath }/static/img/favicon.png">
-
+<script src='https://www.google.com/recaptcha/api.js?hl=en' async defer></script>
 <!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
@@ -10,6 +10,7 @@
 <style>
 <%@include file="/static/css/login.css"%>
 </style>
+
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.2.0/css/all.min.css"
       integrity="sha384-hWVjflwFxL6sNzntih27bfxkr27PmbbK/iSvJ+a4+0owXq79v+lsFkW54bOGbiDQ" crossorigin="anonymous">
 

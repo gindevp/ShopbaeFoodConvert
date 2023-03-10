@@ -1,5 +1,6 @@
 package shopbae.food.service.merchant;
 
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -72,9 +73,37 @@ public class MerchantService implements IMerchantService {
 	public Merchant findByAccount(Long id) {
 		return merchantRepository.findByAccount(id);
 	}
+public boolean checkStatusTime(String openTime, String closeTime) {
+	LocalTime openTime1 = LocalTime.parse(openTime);
+	LocalTime closeTime1 = LocalTime.parse(closeTime);
 
+	// Tạo đối tượng LocalTime cho thời gian hiện tại
+	LocalTime now = LocalTime.now();
+	return now.isAfter(openTime1) && now.isBefore(closeTime1);
+}
 	@Override
 	public String detailMer(Long id, Model model, HttpSession httpSession) {
+		try {
+			Merchant merchant= findById(id);
+		// Tạo đối tượng LocalTime từ chuỗi định dạng hh:mm
+		String openTime = merchant.getOpenTime();
+		String closeTime = merchant.getCloseTime();
+
+
+		// Kiểm tra thời gian hiện tại có nằm trong khoảng thời gian mở cửa và đóng cửa hay không
+		if (checkStatusTime(openTime, closeTime)) {
+		    // Thời gian hiện tại nằm trong khoảng thời gian mở cửa và đóng cửa
+		   model.addAttribute("statusMerchant","true"); 
+		} else {
+		    // Thời gian hiện tại không nằm trong khoảng thời gian mở cửa và đóng cửa
+		   model.addAttribute("statusMerchant","false");
+		}
+		} catch (Exception e) {
+			// TODO: handle exception
+			 model.addAttribute("statusMerchant","false");
+		}
+		
+		
 		httpSession.setAttribute("merchantId", id);
 		if (httpSession.getAttribute("userId") == null) {
 			httpSession.setAttribute("userId", 0);

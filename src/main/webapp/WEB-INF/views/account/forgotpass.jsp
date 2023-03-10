@@ -12,9 +12,10 @@
             <div class="field-group">
               <div class="input-group"><i class="far fa-user"></i><input class="input100" id="username" type="text" name="username" placeholder="Tên tài khoản của bạn"  >
 
-                </div>
-              </div><button class="btn btn-danger" >Gửi</button>
-            ${message}
+                </div>     
+              </div><div class="g-recaptcha"
+          data-sitekey="6LfkOOYkAAAAAIk_OSwp1hSH6DL0pfsEgNDvv6zg"></div><button class="btn btn-danger" >Gửi</button>        
+           <span style="color: red">${messagee}</span> 
             </div>
 
         </form>

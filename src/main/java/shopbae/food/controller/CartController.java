@@ -2,7 +2,6 @@ package shopbae.food.controller;
 
 import java.util.List;
 
-
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,20 +10,27 @@ import org.springframework.context.i18n.LocaleContextHolder;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import shopbae.food.model.AppUser;
 import shopbae.food.model.Cart;
+import shopbae.food.model.Favorite;
 import shopbae.food.model.Order;
 import shopbae.food.model.OrderDetail;
 import shopbae.food.model.Product;
+import shopbae.food.model.dto.OrderDTO;
 import shopbae.food.service.cart.ICartService;
+import shopbae.food.service.favorite.IFavoriteService;
 import shopbae.food.service.order.IOrderService;
 import shopbae.food.service.orderDetail.IOrderDetailService;
 import shopbae.food.service.product.IProductService;
+import shopbae.food.service.user.IAppUserService;
+import shopbae.food.util.OrderStatus;
 
 @Controller
 @RequestMapping("/cart")
@@ -39,9 +45,14 @@ public class CartController {
 	IOrderService orderService;
 	@Autowired
 	IOrderDetailService orderDetailService;
-
-
-
+	@Autowired
+	private MessageSource messageSource;
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+	@Autowired
+	IAppUserService appUserService;
+	@Autowired
+	IFavoriteService favoriteService;
 	// Thêm rỏ hàng cho người mua
 	@PostMapping("/product/{productid}/user/{userid}")
 	public String cart(@PathVariable Long productid, @PathVariable Long userid, HttpSession session) {
@@ -53,24 +64,73 @@ public class CartController {
 	@GetMapping("/user/{userId}")
 	public String userCart(Model model, @PathVariable Long userId, HttpSession session) {
 		cartService.cartDetail(model, userId, session);
+		Long id = (Long) session.getAttribute("merchantId");
+		session.setAttribute("merId", id);
 		return "page/home-layout";
 	}
 
 	// Đặt hàng
 	@PostMapping("/order/user/{userId}/merchant/{merchantId}")
 	public String oder(Model model, @PathVariable Long userId, @PathVariable Long merchantId, @RequestParam String note,
-			String address, double sum) {
-		cartService.ordeing(userId, merchantId, note, address, sum);
-		
+			String address, double sum, HttpSession session) {
+		List<Product> productFail = cartService.ordeing(userId, merchantId, note, address, sum);
+		String fail = "";
+		for (Product product : productFail) {
+			fail += "- " + product.getName() + "\\n";
+		}
+		System.out.println(fail);
+		if (productFail.size() > 0) {
+			session.setAttribute("ss", "false");
+			session.setAttribute("productFail", fail);
+		} else {
+			session.setAttribute("ss", "true");
+		}
 		return "redirect:/cart/user/" + userId;
 	}
-
+	//đặt lại
+	@GetMapping("/re-order/{order_id}")
+	public String ReOder(@PathVariable Long order_id, HttpSession session) {
+		Order order= orderService.findById(order_id);
+		order.setStatus(OrderStatus.MERCHANT_PENDING.toString());
+		order.setOrderdate(java.time.LocalDateTime.now());
+		Long id=(Long) orderService.savee(order);
+		List<OrderDetail> details= detailService.findByOrder(order_id);
+		for (OrderDetail orderDetail : details) {
+			orderDetail.setOrder(orderService.findById(id));
+			detailService.save(orderDetail);
+		}
+		session.setAttribute("ss", "true");
+		return "redirect:/cart/user/"+session.getAttribute("merchantId");
+	}
+	//giảm  rỏ hàng
+	@GetMapping("/product/{productid}/user/{userid}")
+	public String ReduceCart(@PathVariable Long productid, @PathVariable Long userid, HttpSession session) {
+		Cart cart= cartService.findByProductAndFlag(productid);
+		cart.setQuantity(cart.getQuantity()-1);
+		cartService.update(cart);
+		return "redirect:/cart/user/"+session.getAttribute("merchantId");
+	}
+	//Xóa khỏi rỏ khi rỏ còn 1
+	@DeleteMapping("/product/{productid}/user/{userid}")
+	public String deletCart(@PathVariable Long productid, @PathVariable Long userid, HttpSession session) {
+		Cart cart= cartService.findByProductAndFlag(productid);
+		if(cart.getQuantity()==1) {
+			cart.setQuantity(cart.getQuantity()-1);
+			cart.setDeleteFlag(false);
+			cartService.update(cart);
+		}
+		return "redirect:/cart/user/"+session.getAttribute("merchantId");
+	}
 	// Xóa đơn hàng theo userId
 	@GetMapping("/delete/order/{orderId}/user/{userId}")
-	public String deleteOrder(Model model, @PathVariable Long userId, @PathVariable Long orderId) {
+	public String deleteOrder(Model model, @PathVariable Long userId, @PathVariable Long orderId, HttpSession session) {
 		Order order = orderService.findById(orderId);
 		order.setFlag(false);
 		orderService.update(order);
+		OrderDTO dto= new OrderDTO();
+		dto.setUser(appUserService.findById(userId).getName());
+		dto.setMessage("người mua đã xóa 1 đơn hàng khỏi lịch sử");
+		messagingTemplate.convertAndSend("/topic/ordeing/"+session.getAttribute("merchantId"), dto);
 		return "redirect:/cart/user/" + userId;
 	}
 
@@ -100,6 +160,11 @@ public class CartController {
 		order.setStatus("USER_RECEIVED");
 		orderService.update(order);
 		Long userId = (Long) session.getAttribute("userId");
+		OrderDTO dto= new OrderDTO();
+		String status = messageSource.getMessage(order.getStatus(), null, LocaleContextHolder.getLocale());
+		dto.setUser(appUserService.findById(userId).getName());
+		dto.setMessage(status);
+		messagingTemplate.convertAndSend("/topic/ordeing/"+session.getAttribute("merchantId"), dto);
 		return "redirect:/cart/user/" + userId;
 	}
 
@@ -110,6 +175,19 @@ public class CartController {
 		order.setStatus("USER_REFUSE");
 		orderService.update(order);
 		Long userId = (Long) session.getAttribute("userId");
+
+		List<OrderDetail> details = detailService.findByOrder(id);
+
+		for (OrderDetail orderDetail : details) {
+			Product product = orderDetail.getProduct();
+			product.setQuantity(product.getQuantity() + orderDetail.getQuantity());
+			productService.update(product);
+		}
+		OrderDTO dto= new OrderDTO();
+		String status = messageSource.getMessage(order.getStatus(), null, LocaleContextHolder.getLocale());
+		dto.setUser(appUserService.findById(userId).getName());
+		dto.setMessage(status);
+		messagingTemplate.convertAndSend("/topic/ordeing/"+session.getAttribute("merchantId"), dto);
 		return "redirect:/cart/user/" + userId;
 	}
 
@@ -118,17 +196,33 @@ public class CartController {
 	@GetMapping("/order/detail/{id}")
 	public String oderDetail(Model model, @PathVariable Long id, HttpSession session) {
 		List<OrderDetail> details = detailService.findByOrder(id);
+		String status= orderService.findById(id).getStatus();
 		double sum = 0;
 		for (OrderDetail orderDetail : details) {
 			sum += orderDetail.getQuantity() * orderDetail.getProduct().getNewPrice();
 		}
+		Long id1 = (Long) session.getAttribute("merchantId");
+		session.setAttribute("merId", id1);
 		session.setAttribute("orderId", id);
 		model.addAttribute("sum", sum);
 		model.addAttribute("oderDetail", details);
 		model.addAttribute("page2", "order-detail.jsp");
 		model.addAttribute("page", "cart.jsp");
 		model.addAttribute("a", 2);
+		model.addAttribute("status", status);
 		model.addAttribute("message", "khong co du lieu");
 		return "page/home-layout";
+	}
+	//sở thích
+	@GetMapping("/favorite/{productId}")
+	public String favorite(Model model, @PathVariable Long productId, HttpSession session) {
+		Long userId= (Long) session.getAttribute("userId");
+		AppUser appUser= appUserService.findById(userId);
+		Product product= productService.findById(productId);
+		Favorite favorite= new Favorite();
+		favorite.setAppUser(appUser);
+		favorite.setProduct(product);
+		favoriteService.save(favorite);
+		return "redirect:/cart/user/" + userId;
 	}
 }

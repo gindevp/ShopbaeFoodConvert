@@ -38,15 +38,16 @@ public class Product {
 		this.merchant = merchant;
 	}
 	
-	public Product(String name, String shortDescription, Double oldPrice, Double newPrice, String image) {
+	public Product(String name, String shortDescription, Double oldPrice, Double newPrice, String image, int quantity) {
 		this.name = name;
 		this.shortDescription = shortDescription;
 		this.oldPrice = oldPrice;
 		this.newPrice = newPrice;
 		this.image = image;
+		this.quantity= quantity;
 	}
 
-	public Product(Long id, String name, String shortDescription,Double numberOrder, Double oldPrice, Double newPrice, String image) {
+	public Product(Long id, String name, String shortDescription,Double numberOrder, Double oldPrice, Double newPrice, String image, int quantity) {
 		this.id = id;
 		this.name = name;
 		this.numberOrder = numberOrder;
@@ -54,6 +55,7 @@ public class Product {
 		this.oldPrice = oldPrice;
 		this.newPrice = newPrice;
 		this.image = image;
+		this.quantity= quantity;
 	}
 
 	public Product() {

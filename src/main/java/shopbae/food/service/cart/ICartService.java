@@ -7,6 +7,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.ui.Model;
 
 import shopbae.food.model.Cart;
+import shopbae.food.model.Product;
 import shopbae.food.service.IGeneral;
 
 public interface ICartService extends IGeneral<Cart> {
@@ -105,5 +106,6 @@ public interface ICartService extends IGeneral<Cart> {
 	 * @param address    địa chỉ của người mua
 	 * @param sum        tổng tiền của order
 	 */
-	void ordeing(Long userId, Long merchantId, String note, String address, double sum);
+	List<Product> ordeing(Long userId, Long merchantId, String note, String address, double sum);
+	List<Cart> findAllByProduct(Long id);
 }

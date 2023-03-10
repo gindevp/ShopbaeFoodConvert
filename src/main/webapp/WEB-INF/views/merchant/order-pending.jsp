@@ -22,7 +22,7 @@
     <c:forEach var="order" items="${orders }" varStatus="status">
         <tr >
           <td style=" border:5px solid white">${status.index+1}</td>
-          <td style=" border:5px solid white"><img src="${ pageContext.request.contextPath }/static/storage/${order.appUser.avatar}" alt="" style="height: 40px;
+          <td style=" border:5px solid white"><img src="${ pageContext.request.contextPath }/image/${order.appUser.avatar}" alt="" style="height: 40px;
         width: 40px;
         border-radius: 50%;"></td>
           <td style=" border:5px solid white"class="merchant-item">${order.appUser.name}</td>

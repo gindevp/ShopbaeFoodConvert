@@ -21,6 +21,7 @@ import org.springframework.transaction.annotation.Transactional;
 import shopbae.food.model.Cart;
 import shopbae.food.model.Product;
 import shopbae.food.model.ProductCartMap;
+import shopbae.food.repository.product.IProductRepository;
 
 @Repository
 @Transactional
@@ -30,7 +31,8 @@ public class CartRepository implements ICartRepository {
 	private EntityManager entityManager;
 	@Autowired
 	private SessionFactory sessionFactory;
-
+	@Autowired
+	private IProductRepository productRepository;
 	private Session getSession() {
 		Session session = sessionFactory.getCurrentSession();
 		return session;
@@ -109,7 +111,7 @@ public class CartRepository implements ICartRepository {
 	@Override
 	public Cart findByProduct(Long id) {
 		TypedQuery<Cart> query = getSession().createQuery("FROM cart a where a.product =:id", Cart.class);
-		query.setParameter("userName", id);
+		query.setParameter("id", id);
 		try {
 			return query.getSingleResult();
 		} catch (NoResultException e) {
@@ -186,7 +188,7 @@ public class CartRepository implements ICartRepository {
 		try {
 			TypedQuery<Cart> query = getSession().createQuery("FROM cart a where a.deleteFlag=true and a.product =: id",
 					Cart.class);
-			query.setParameter("id", id);
+			query.setParameter("id", productRepository.findById(id));
 			return query.getSingleResult();
 		} catch (Exception e) {
 			return null;

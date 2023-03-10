@@ -12,7 +12,7 @@
               <div class="item-restaurant"><a  class="item-content"
                                               href="${ pageContext.request.contextPath }/merchantp/detail/${shops.id}">	
                 <div class="img-restaurant"><img
-                        src="${ pageContext.request.contextPath }/static/storage/${shops.avatar}"
+                        src="${ pageContext.request.contextPath }/image/${shops.avatar}"
                         class=""></div>
                 <div class="info-restaurant">
                   <div class="info-basic-res">

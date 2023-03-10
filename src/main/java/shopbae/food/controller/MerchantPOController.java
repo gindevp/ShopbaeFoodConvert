@@ -5,13 +5,14 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Stack;
 import java.util.stream.Collectors;
 
 import javax.servlet.http.HttpSession;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
-
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -19,8 +20,10 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import shopbae.food.model.Account;
+import shopbae.food.model.Cart;
 import shopbae.food.model.Merchant;
 import shopbae.food.model.Order;
 import shopbae.food.model.OrderDetail;
@@ -28,7 +31,8 @@ import shopbae.food.util.*;
 import shopbae.food.model.Product;
 import shopbae.food.model.dto.ChangeDTO;
 import shopbae.food.model.dto.ProductForm;
-import shopbae.food.service.account.AccountService;
+import shopbae.food.service.account.IAccountService;
+import shopbae.food.service.cart.ICartService;
 import shopbae.food.service.merchant.IMerchantService;
 import shopbae.food.service.order.IOrderService;
 import shopbae.food.service.orderDetail.IOrderDetailService;
@@ -46,7 +50,11 @@ public class MerchantPOController {
 	@Autowired
 	private IMerchantService merchantService;
 	@Autowired
-	AccountService accountService;
+	IAccountService accountService;
+	@Autowired
+	private SimpMessagingTemplate messagingTemplate;
+	@Autowired
+	ICartService cartService;
 	@Value("${file-upload}")
 	private String fileUpload;
 
@@ -66,8 +74,8 @@ public class MerchantPOController {
 			model.addAttribute("num", num);
 			model.addAttribute("page", "dashboard.jsp");
 			model.addAttribute("nav", 1);
-			System.out.println("chart"+type);
-			model.addAttribute("chart","'"+ type+"'");
+			System.out.println("chart" + type);
+			model.addAttribute("chart", "'" + type + "'");
 			return "merchant/merchant-layout";
 		} catch (Exception e) {
 			return "redirect:/home";
@@ -99,7 +107,7 @@ public class MerchantPOController {
 			throws IOException {
 		model.addAttribute("page", "merchant-info.jsp");
 		String fileName = new UploadFile().uploadFile(changeDTO.getAvatar(),
-				(String) httpSession.getAttribute("merchantAvt"));
+				(String) httpSession.getAttribute("merchantAvt"),fileUpload);
 		Merchant merchant = (Merchant) httpSession.getAttribute("merchant");
 		Account account = merchant.getAccount();
 		merchant.setName(changeDTO.getName());
@@ -116,18 +124,28 @@ public class MerchantPOController {
 
 // Hiển thị trang list product 
 	@RequestMapping("/product")
-	public String product(Model model, HttpSession httpSession, @RequestParam(defaultValue = "0") int page, @RequestParam(defaultValue = "5") int pageSize) {
+	public String product(Model model, HttpSession httpSession, @RequestParam(defaultValue = "0") int page,
+			@RequestParam(defaultValue = "5") int pageSize) {
 		try {
 
-			List<Product> listProducts = productService
+			List<Product> listProducts1 = productService
 					.getAllByDeleteFlagTrueAndMerchant(((Merchant) httpSession.getAttribute("merchant")).getId());
+			List<Product> listProducts = new ArrayList<>();
+			Stack<Product> stackPr = new Stack<>();
+			for (Product product : listProducts1) {
+				stackPr.push(product);
+			}
+			for (@SuppressWarnings("unused")
+			Product product : listProducts1) {
+				listProducts.add(stackPr.pop());
+			}
 			// tính toán số trang cần hiển thị
 			int totalPages = listProducts.size() / pageSize;
 			if (listProducts.size() % pageSize > 0) {
 				totalPages++;
 			}
-	
-			model.addAttribute("products",new Page().paging(page,pageSize,listProducts));
+
+			model.addAttribute("products", new Page().paging(page, pageSize, listProducts));
 			model.addAttribute("page", "product-list.jsp");
 			model.addAttribute("nav", 3);
 			model.addAttribute("totalPages", totalPages);
@@ -150,10 +168,11 @@ public class MerchantPOController {
 // Thực hiện việc thêm sản phẩm
 	@PostMapping("/product/save")
 	public String saveProduct(@ModelAttribute ProductForm productForm, HttpSession httpSession) throws IOException {
-		System.out.println("Upload");
-		String fileName = new UploadFile().uploadFile(productForm.getImage());
+		System.out.println("Upload" + fileUpload);
+		String fileName = new UploadFile().uploadFile(productForm.getImage(),fileUpload);
+		System.out.println("value"+productForm.getImage());
 		Product product = new Product(productForm.getName(), productForm.getShortDescription(),
-				productForm.getNewPrice(), productForm.getOldPrice(), fileName);
+				productForm.getOldPrice(), productForm.getNewPrice(), fileName, productForm.getQuantity());
 		product.setDeleteFlag(true);
 		Merchant merchant = new Merchant();
 		merchant.setId(((Merchant) httpSession.getAttribute("merchant")).getId());
@@ -163,12 +182,21 @@ public class MerchantPOController {
 	}
 
 // Thực hiện việc xóa product
-	@RequestMapping("/product/delete/{id}")
-	public String doDeleter(@PathVariable Long id, Model model) {
+	@RequestMapping(value = "/product/delete/{id}", method = RequestMethod.GET)
+	public String doDeleter(@PathVariable Long id, Model model, HttpSession httpSession) {
 		Product a = productService.findById(id);
 		a.setId(id);
 		a.setDeleteFlag(false);
 		productService.update(a);
+		List<Cart> cart = cartService.findAllByProduct(id);
+		for (Cart cart2 : cart) {
+			cart2.setDeleteFlag(false);
+			cartService.update(cart2);
+		}
+		Long merchantId = ((Merchant) httpSession.getAttribute("merchant")).getId();
+		messagingTemplate.convertAndSend("/topic/product/" + merchantId,
+				"Người bán đã xóa product có name: " + a.getName());
+		System.out.println("/topic/product/" + merchantId);
 		model.addAttribute("products", productService.findAll());
 		return "redirect:/merchant/product/";
 	}
@@ -178,7 +206,7 @@ public class MerchantPOController {
 	public String update(@PathVariable Long id, Model model, HttpSession httpSession) {
 		Product product = productService.findById(id);
 		ProductForm productForm = new ProductForm(product.getId(), product.getName(), product.getShortDescription(),
-				product.getNewPrice(), product.getOldPrice(), null);
+				product.getOldPrice(), product.getNewPrice(), null, product.getQuantity());
 		model.addAttribute("productForm", productForm);
 		httpSession.setAttribute("product", product);
 		model.addAttribute("page", "product-edit.jsp");
@@ -190,15 +218,18 @@ public class MerchantPOController {
 	public String editProduct(@ModelAttribute ProductForm productForm, HttpSession httpSession) throws IOException {
 		System.out.println("eidt " + productForm);
 		String fileName = new UploadFile().uploadFile(productForm.getImage(),
-				((Product) httpSession.getAttribute("product")).getImage());
+				((Product) httpSession.getAttribute("product")).getImage(),fileUpload);
 		Product product = new Product(productForm.getId(), productForm.getName(), productForm.getShortDescription(),
-				((Product) httpSession.getAttribute("product")).getNumberOrder(), productForm.getNewPrice(),
-				productForm.getOldPrice(), fileName);
+				((Product) httpSession.getAttribute("product")).getNumberOrder(), productForm.getOldPrice(),
+				productForm.getNewPrice(), fileName, productForm.getQuantity());
 		product.setDeleteFlag(true);
 		Merchant merchant = new Merchant();
 		merchant.setId(((Merchant) httpSession.getAttribute("merchant")).getId());
 		product.setMerchant(merchant);
 		productService.update(product);
+		Long merchantId = ((Merchant) httpSession.getAttribute("merchant")).getId();
+		messagingTemplate.convertAndSend("/topic/product/" + merchantId,
+				"Người bán đã sửa product có name: " + product.getName());
 		return "redirect:/merchant/product/";
 	}
 
@@ -206,7 +237,7 @@ public class MerchantPOController {
 	@GetMapping("/product/search")
 	public String findProductByName(@RequestParam String name, @RequestParam(defaultValue = "0") int page, Model model,
 			HttpSession httpSession) {
-		
+
 		int pageSize = 5; // số lượng phần tử trên mỗi trang
 		List<Product> listProducts = productService
 				.fAllByDeleFlagTAndMerAndNameContai(((Merchant) httpSession.getAttribute("merchant")).getId(), name);
@@ -216,10 +247,10 @@ public class MerchantPOController {
 			totalPages++;
 		}
 
-		model.addAttribute("products", new Page().paging(page,pageSize,listProducts));
+		model.addAttribute("products", new Page().paging(page, pageSize, listProducts));
 		model.addAttribute("page", "product-list.jsp");
 		model.addAttribute("nav", 3);
-		model.addAttribute("totalPages", totalPages+1);
+		model.addAttribute("totalPages", totalPages + 1);
 		model.addAttribute("currentPage", page);
 		return "merchant/merchant-layout";
 	}
@@ -263,7 +294,7 @@ public class MerchantPOController {
 		httpSession.setAttribute("order", order);
 		httpSession.setAttribute("time", new SimpleDateFormat("dd-M-yyyy hh:mm:ss").format(new Date()));
 		orderService.send(order, order.getAppUser().getId());
-		return "redirect:/jasper/report";
+		return "redirect:/jasper/report/"+id;
 	}
 
 // Hiển thị đơn hàng người bán đã nhận
@@ -305,6 +336,14 @@ public class MerchantPOController {
 		Order order = orderService.findById(id);
 		order.setStatus(OrderStatus.MERCHANT_REFUSE.toString());
 		orderService.update(order);
+
+		List<OrderDetail> details = detailService.findByOrder(id);
+		for (OrderDetail orderDetail : details) {
+			Product product = orderDetail.getProduct();
+			product.setQuantity(product.getQuantity() + orderDetail.getQuantity());
+			productService.update(product);
+		}
+		orderService.send(order, order.getAppUser().getId());
 		return "redirect:/merchant/order";
 	}
 

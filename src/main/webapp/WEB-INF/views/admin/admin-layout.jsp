@@ -88,7 +88,7 @@ color: white;
     margin-top: 0rem!important;
 }
 .now-container-coporation {
-    background-color: #100f0f0a;}
+    background-color: #100f0f1a;}
 </style>
 <header class="main-header">
 
@@ -446,7 +446,7 @@ color: white;
  <script src="${ pageContext.request.contextPath }/static/js/sweetalert.js"></script>
     <c:if test="${sessionScope.ss}">
     <script type="text/javascript">
-    swal({title:"Login success",
+    swal({title:"<spring:message code="login_success"/>",
     	icon: "success"})</script></c:if>
     <%
     session.removeAttribute("ss");

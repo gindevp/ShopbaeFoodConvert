@@ -40,7 +40,7 @@
              </div>
             <c:if test="${not empty sessionScope.SPRING_SECURITY_LAST_EXCEPTION}">
     <!-- Display error message --> 
-    
+    <span style="color: red"><spring:message code="${sessionScope.SPRING_SECURITY_LAST_EXCEPTION.message}"/></span>
  <script>
 
  swal({

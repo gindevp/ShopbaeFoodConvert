@@ -2,6 +2,7 @@ package shopbae.food.controller;
 
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
@@ -86,19 +87,11 @@ public class LoginRegisterHomeController {
 	}
 
 // Vào trang đăng ký user
-	@GetMapping("/register/user")
-	public String showRegisUser(Model model) {
-		model.addAttribute("page", "register-user.jsp");
-		model.addAttribute("title", "Đăng ký người dùng");
-		model.addAttribute("accountRegisterDTO", new AccountRegisterDTO());
-		return "account/account-layout";
-	}
-
-// Vào trang đăng ký cho merchant
-	@GetMapping("/register/merchant")
-	public String showRegisMerchant(Model model) {
-		model.addAttribute("page", "register-merchant.jsp");
-		model.addAttribute("title", "Đăng ký người bán");
+	@GetMapping("/register/{role}")
+	public String showRegisUser(Model model, @PathVariable String role) {
+		model.addAttribute("page", "register.jsp");
+		model.addAttribute("title", "Đăng ký " + role);
+		model.addAttribute("rolee", role);
 		model.addAttribute("accountRegisterDTO", new AccountRegisterDTO());
 		return "account/account-layout";
 	}
@@ -123,6 +116,8 @@ public class LoginRegisterHomeController {
 // Vào trang merchant để mua sản phẩm
 	@GetMapping("/merchantp/detail/{id}")
 	public String merchantDetail(@PathVariable Long id, Model model, HttpSession httpSession) {
+		httpSession.setAttribute("merchantId", id);
+		httpSession.setAttribute("merId", id);
 		return merchantService.detailMer(id, model, httpSession);
 	}
 
@@ -150,11 +145,27 @@ public class LoginRegisterHomeController {
 	}
 
 // Thực hiện đăng ký cho user
-	@PostMapping("/register/user")
+	@PostMapping("/register/{role}")
 	public String addUser(@Valid @ModelAttribute AccountRegisterDTO accountRegisterDTO, BindingResult bindingResult,
-			Model model) {
+			Model model, HttpServletResponse response, HttpServletRequest request, @PathVariable String role) {
 		try {
-			System.out.println("erors " + bindingResult.hasErrors());
+			boolean valid = true;
+			String err = null;
+
+			String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+
+			System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
+
+			// Verify CAPTCHA.
+			valid = VerifyUtils.verify(gRecaptchaResponse);
+			System.out.println("validddd" + valid);
+			if (!valid) {
+				err = "Captcha invalid!";
+				model.addAttribute("err", err);
+				model.addAttribute("rolee", role);
+				model.addAttribute("page", "register.jsp");
+				return "account/account-layout";
+			}
 			if (!bindingResult.hasErrors()) {
 
 				boolean isEnabled = true;
@@ -163,11 +174,19 @@ public class LoginRegisterHomeController {
 						accountRegisterDTO.getEmail());
 				accountService.save(account);
 				Account account2 = accountService.findByName(accountRegisterDTO.getUserName());
-				roleService.setDefaultRole(account2.getId(), 2L);
-				String avatar = "tet.jpg";
 
-				userSevice.save(new AppUser(accountRegisterDTO.getName(), accountRegisterDTO.getAddress(),
-						accountRegisterDTO.getPhone(), avatar, AccountStatus.PENDING.toString(), account2));
+				if (role.equals("user")) {
+					roleService.setDefaultRole(account2.getId(), 2L);
+					String avatar = "tet.jpg";
+					userSevice.save(new AppUser(accountRegisterDTO.getName(), accountRegisterDTO.getAddress(),
+							accountRegisterDTO.getPhone(), avatar, AccountStatus.PENDING.toString(), account2));
+				} else {
+					roleService.setDefaultRole(account2.getId(), 3L);
+					String avatar = "tet.jpg";
+					merchantService.save(new Merchant(accountRegisterDTO.getName(), accountRegisterDTO.getPhone(),
+							accountRegisterDTO.getAddress(), avatar, AccountStatus.PENDING.toString(), account2));
+				}
+
 				String status = messageSource.getMessage("register_success", null, LocaleContextHolder.getLocale());
 
 				messagingTemplate.convertAndSend("/topic/register", status);
@@ -177,57 +196,23 @@ public class LoginRegisterHomeController {
 				mail.setMailSubject(messageMail.MESS);
 				mail.setMailContent(messageMail.MESSAGE);
 				mailService.sendEmail(mail);
-				return "redirect:/login";
+				if (role.equals("user")) {
+					return "redirect:/login";
+				} else {
+					return "redirect:/home";
+				}
+
 			} else {
-				model.addAttribute("page", "register-user.jsp");
+				model.addAttribute("rolee", role);
+				model.addAttribute("page", "register.jsp");
 				return "account/account-layout";
 			}
 
 		} catch (Exception e) {
-			model.addAttribute("page", "register-user.jsp");
+			model.addAttribute("page", "register.jsp");
 			return "account/account-layout";
 		}
 
-	}
-
-// THực  hiện đăng ký cho merchant
-	@PostMapping("/register/merchant")
-	public String addMerchant(@Valid @ModelAttribute AccountRegisterDTO accountRegisterDTO, Model model,
-			BindingResult bindingResult) {
-		try {
-			if (!bindingResult.hasErrors()) {
-				boolean isEnabled = true;
-				String pass = encoder.encode(accountRegisterDTO.getPassword());
-				Account account = new Account(accountRegisterDTO.getUserName(), pass, isEnabled,
-						accountRegisterDTO.getEmail());
-				accountService.save(account);
-				Account account2 = accountService.findByName(accountRegisterDTO.getUserName());
-				roleService.setDefaultRole(account2.getId(), 3L);
-				String avatar = "tet.jpg";
-
-				merchantService.save(new Merchant(accountRegisterDTO.getName(), accountRegisterDTO.getPhone(),
-						accountRegisterDTO.getAddress(), avatar, AccountStatus.PENDING.toString(), account2));
-				String status = messageSource.getMessage("register_success", null, LocaleContextHolder.getLocale());
-
-				messagingTemplate.convertAndSend("/topic/register", status);
-				Mail mail = new Mail();
-				mail.setMailTo(accountRegisterDTO.getEmail());
-				mail.setMailFrom(messageMail.MAIL);
-				mail.setMailSubject(messageMail.MESS);
-				mail.setMailContent(messageMail.MESSAGE);
-				mailService.sendEmail(mail);
-				return "redirect:/login";
-			} else {
-				model.addAttribute("page", "register-merchant.jsp");
-				model.addAttribute("err", "trùng username");
-				return "account/account-layout";
-			}
-
-		} catch (Exception e) {
-			model.addAttribute("page", "register-merchant.jsp");
-			model.addAttribute("err", "trùng username");
-			return "account/account-layout";
-		}
 	}
 
 // Hiển thị trang quên mật khẩu
@@ -239,8 +224,25 @@ public class LoginRegisterHomeController {
 
 // Thực hiện nhận username và bắt xác nhận one time password (otp) để đổi pass
 	@PostMapping("/forgotpass")
-	public String fogot(Model model, @RequestParam String username, HttpSession session) {
+	public String fogot(Model model, @RequestParam String username, HttpSession session, HttpServletResponse response,
+			HttpServletRequest request) {
 		Account account = accountService.findByName(username);
+		
+		boolean valid = true;
+
+		String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
+
+		System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
+
+		// Verify CAPTCHA.
+		valid = VerifyUtils.verify(gRecaptchaResponse);
+		System.out.println("validddd" + valid);
+		if (!valid) {
+			model.addAttribute("messagee", "Capcha valid");
+			model.addAttribute("page", "forgotpass.jsp");
+			return "account/account-layout";
+		}
+		
 		if (account != null) {
 			double randomDouble = Math.random();
 			randomDouble = randomDouble * 1000000 + 1;
@@ -258,7 +260,7 @@ public class LoginRegisterHomeController {
 			return "account/account-layout";
 
 		} else {
-			model.addAttribute("message", messageMail.USER_EMPTY);
+			model.addAttribute("messagee", messageMail.USER_EMPTY);
 			model.addAttribute("page", "forgotpass.jsp");
 			return "account/account-layout";
 		}
@@ -327,5 +329,13 @@ public class LoginRegisterHomeController {
 		model.addAttribute("currentPage", page);
 		model.addAttribute("page", "all-merchant-list.jsp");
 		return "page/home-layout";
+	}
+
+	@GetMapping("/saveMerProToSession")
+	public String saveToSession(HttpSession httpSession, @RequestParam Long merchant_old_id, Long product_old_id) {
+		System.out.println("to session" + merchant_old_id + "  " + product_old_id);
+		httpSession.setAttribute("product_old_id", product_old_id);
+		httpSession.setAttribute("merchant_old_id", merchant_old_id);
+		return "redirect:/";
 	}
 }
