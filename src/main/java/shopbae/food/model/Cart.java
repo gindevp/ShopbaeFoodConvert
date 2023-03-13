@@ -15,6 +15,8 @@ public class Cart {
     private int quantity;
     private  Double price;
     private Double totalPrice;
+    @Column(name = "isFavorite")
+    private boolean isFavorite=true;
     @Column(name = "deleteFlag")
     private boolean deleteFlag=true;
 
@@ -28,14 +30,30 @@ public class Cart {
     private Product product;
 
 
+
+
 	@Override
 	public String toString() {
 		return "Cart [id=" + id + ", quantity=" + quantity + ", price=" + price + ", totalPrice=" + totalPrice
-				+ ", deleteFlag=" + deleteFlag + ", user=" + user + ", product=" + product + "]";
+				+ ", isFavorite=" + isFavorite + ", deleteFlag=" + deleteFlag + ", user=" + user + ", product="
+				+ product + "]";
 	}
 
 	public Cart() {
 
+	}
+
+	public Cart(Long id, int quantity, Double price, Double totalPrice, boolean isFavorite, boolean deleteFlag,
+			AppUser user, Product product) {
+		super();
+		this.id = id;
+		this.quantity = quantity;
+		this.price = price;
+		this.totalPrice = totalPrice;
+		this.isFavorite = isFavorite;
+		this.deleteFlag = deleteFlag;
+		this.user = user;
+		this.product = product;
 	}
 
 	public Cart(Long id, int quantity, Double price, Double totalPrice, boolean deleteFlag, AppUser user,
@@ -115,5 +133,14 @@ public class Cart {
 		this.product = product;
 	}
 
+	public boolean isFavorite() {
+		return isFavorite;
+	}
+
+	public void setFavorite(boolean isFavorite) {
+		this.isFavorite = isFavorite;
+	}
+
+ 
 
 }

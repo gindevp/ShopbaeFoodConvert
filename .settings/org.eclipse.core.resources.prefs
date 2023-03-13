@@ -8,5 +8,6 @@ encoding//src/main/webapp/WEB-INF/views/admin/admin-layout.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/merchant/merchant-layout.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/merchant/product-add.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/merchant/product-list.jsp=UTF-8
+encoding//src/main/webapp/WEB-INF/views/page/favorite.jsp=UTF-8
 encoding//src/main/webapp/WEB-INF/views/page/home-layout.jsp=UTF-8
 encoding//src/main/webapp/report/report.jrxml=UTF-8

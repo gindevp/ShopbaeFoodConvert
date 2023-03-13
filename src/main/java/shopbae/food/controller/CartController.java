@@ -219,10 +219,16 @@ public class CartController {
 		Long userId= (Long) session.getAttribute("userId");
 		AppUser appUser= appUserService.findById(userId);
 		Product product= productService.findById(productId);
+		Favorite faOptional= favoriteService.findByUserAndPro(appUser, product);
+		if(faOptional!=null) {
+			favoriteService.delete(faOptional);
+		}else {
 		Favorite favorite= new Favorite();
 		favorite.setAppUser(appUser);
 		favorite.setProduct(product);
-		favoriteService.save(favorite);
+		favoriteService.save(favorite);	
+		}
+		
 		return "redirect:/cart/user/" + userId;
 	}
 }

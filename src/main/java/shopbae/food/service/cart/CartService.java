@@ -16,12 +16,14 @@ import org.springframework.ui.Model;
 
 import shopbae.food.model.AppUser;
 import shopbae.food.model.Cart;
+import shopbae.food.model.Favorite;
 import shopbae.food.model.Order;
 import shopbae.food.model.OrderDetail;
 import shopbae.food.util.*;
 import shopbae.food.model.Product;
 import shopbae.food.model.dto.OrderDTO;
 import shopbae.food.repository.cart.ICartRepository;
+import shopbae.food.service.favorite.IFavoriteService;
 import shopbae.food.service.order.IOrderService;
 import shopbae.food.service.orderDetail.IOrderDetailService;
 import shopbae.food.service.product.IProductService;
@@ -40,7 +42,7 @@ public class CartService implements ICartService {
 	@Autowired
 	IOrderDetailService orderDetailService;
 	@Autowired
-	ICartService cartService;
+	IFavoriteService favoriteService;
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
 	@Autowired
@@ -160,6 +162,16 @@ public class CartService implements ICartService {
 		List<Cart> cart1 = this.findAllByUser(userId);
 		List<Cart> cart2 = cart1.stream().filter(c -> c.getProduct().getMerchant().getId() == merId)
 				.collect(Collectors.toList());
+		for (Cart cart : cart2) {
+			Favorite favorite =favoriteService.findByUserAndPro(appUserService.findById(userId), cart.getProduct());
+			if(favorite!=null) {
+				cart.setFavorite(true);
+			}else {
+				cart.setFavorite(false);
+			}
+			cartRepository.update(cart);
+		}
+		System.out.println("cart2: "+cart2);
 		model.addAttribute("products", cart2);
 		double sum = 0;
 		for (Cart x : cart2) {
@@ -208,7 +220,7 @@ public class CartService implements ICartService {
 			orderDetail.setQuantity(cart.getQuantity());
 			orderDetailService.save(orderDetail);
 			cart.setDeleteFlag(false);
-			cartService.update(cart);
+			cartRepository.update(cart);
 			
 	cart.getProduct().setQuantity(cart.getProduct().getQuantity()-cart.getQuantity());
 	productService.update(cart.getProduct());

@@ -5,40 +5,58 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import shopbae.food.model.AppUser;
 import shopbae.food.model.Favorite;
+import shopbae.food.model.Product;
 import shopbae.food.repository.favorite.IFavoriteRepository;
+
 @Service
-public class FavoriteService implements IFavoriteService{
+public class FavoriteService implements IFavoriteService {
 	@Autowired
 	private IFavoriteRepository favoriteRepository;
+
 	@Override
 	public Favorite findById(Long id) {
-		// TODO Auto-generated method stub
 		return favoriteRepository.findById(id);
 	}
 
 	@Override
 	public void save(Favorite t) {
-		// TODO Auto-generated method stub
-		 favoriteRepository.save(t);
+		favoriteRepository.save(t);
 	}
 
 	@Override
 	public void update(Favorite t) {
-		// TODO Auto-generated method stub
 		favoriteRepository.update(t);
 	}
 
 	@Override
 	public void delete(Favorite t) {
-		// TODO Auto-generated method stub
 		favoriteRepository.delete(t);
 	}
 
 	@Override
 	public List<Favorite> findAll() {
-		// TODO Auto-generated method stub
 		return favoriteRepository.findAll();
+	}
+
+	@Override
+	public Favorite findByUserAndPro(AppUser appUser, Product product) {
+		try {
+			List<Favorite> favorites = findAll();
+			Favorite favorite = null;
+			for (Favorite favorite1 : favorites) {
+				if (appUser.getId().equals(favorite1.getAppUser().getId())
+						&& product.getId().equals(favorite1.getProduct().getId())) {
+					favorite = favorite1;
+				}
+			}
+			return favorite;
+		} catch (Exception e) {
+			// TODO: handle exception
+			return null;
+		}
+
 	}
 
 }

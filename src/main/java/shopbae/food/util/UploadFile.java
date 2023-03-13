@@ -2,8 +2,6 @@ package shopbae.food.util;
 
 import java.io.File;
 import java.io.IOException;
-
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.util.FileCopyUtils;
 import org.springframework.web.multipart.MultipartFile;
 

@@ -1,3 +1,5 @@
+<%@page import="shopbae.food.model.Favorite"%>
+<%@page import="shopbae.food.service.favorite.FavoriteService"%>
 <%@page import="shopbae.food.model.Product"%>
 <%@page import="java.util.List"%>
 <%@ page language="java" contentType="text/html; charset=UTF-8"
@@ -378,8 +380,14 @@ button:disabled {
                     </button></a>
                     <a href="${ pageContext.request.contextPath }/cart/favorite/${product.product.id}">
                     <button type="button" class="btn btn-danger btn-sm mb-2" data-mdb-toggle="tooltip"
-                            title="Move to the wish list" style="font-size: 1.45rem;">
-                      <i class="fas fa-heart"></i>
+                            title="favorite" style="font-size: 1.45rem;"> 
+                            <c:if test="${product.isFavorite()==false}">
+                            <i class="fas fa-heart"></i>
+                            </c:if>
+                      <c:if test="${product.isFavorite()==true}">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heartbreak-fill" viewBox="0 0 16 16">
+  <path d="M8.931.586 7 3l1.5 4-2 3L8 15C22.534 5.396 13.757-2.21 8.931.586ZM7.358.77 5.5 3 7 7l-1.5 3 1.815 4.537C-6.533 4.96 2.685-2.467 7.358.77Z"/>
+</svg></c:if>
                     </button></a>
                     <!-- Data -->
                   </div>

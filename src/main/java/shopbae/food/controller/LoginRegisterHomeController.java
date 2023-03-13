@@ -1,5 +1,6 @@
 package shopbae.food.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.servlet.http.HttpServletRequest;
@@ -24,10 +25,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import shopbae.food.model.Account;
 import shopbae.food.util.*;
 import shopbae.food.model.AppUser;
+import shopbae.food.model.Favorite;
 import shopbae.food.model.Mail;
 import shopbae.food.model.Merchant;
+import shopbae.food.model.Product;
 import shopbae.food.model.dto.AccountRegisterDTO;
 import shopbae.food.service.account.IAccountService;
+import shopbae.food.service.favorite.IFavoriteService;
 import shopbae.food.service.mail.MailService;
 import shopbae.food.service.merchant.IMerchantService;
 import shopbae.food.service.product.IProductService;
@@ -51,6 +55,8 @@ public class LoginRegisterHomeController {
 	MailService mailService;
 	@Autowired
 	PasswordEncoder encoder;
+	@Autowired
+	IFavoriteService favoriteService;
 	@Autowired
 	private SimpMessagingTemplate messagingTemplate;
 	@Autowired
@@ -154,7 +160,8 @@ public class LoginRegisterHomeController {
 
 			String gRecaptchaResponse = request.getParameter("g-recaptcha-response");
 
-			System.out.println("gRecaptchaResponse=" + gRecaptchaResponse);
+			System.out.
+			println("gRecaptchaResponse=" + gRecaptchaResponse);
 
 			// Verify CAPTCHA.
 			valid = VerifyUtils.verify(gRecaptchaResponse);
@@ -327,7 +334,6 @@ public class LoginRegisterHomeController {
 		model.addAttribute("page", "all-merchant-list.jsp");
 		model.addAttribute("totalPages", totalPages + 1);
 		model.addAttribute("currentPage", page);
-		model.addAttribute("page", "all-merchant-list.jsp");
 		return "page/home-layout";
 	}
 
@@ -337,5 +343,19 @@ public class LoginRegisterHomeController {
 		httpSession.setAttribute("product_old_id", product_old_id);
 		httpSession.setAttribute("merchant_old_id", merchant_old_id);
 		return "redirect:/";
+	}
+	@GetMapping("/favorite")
+	private String favorite(HttpSession session, Model model ) {
+		Long id= (Long) session.getAttribute("userId");
+		List<Product> products= new ArrayList<>();
+		List<Favorite> favorites= favoriteService.findAll();
+		for (Favorite favorite : favorites) {
+			if(id.equals(favorite.getAppUser().getId())) {
+				products.add(favorite.getProduct());
+			}
+		}
+		model.addAttribute("page", "favorite.jsp");
+		model.addAttribute("products", products);
+		return "page/home-layout";
 	}
 }
