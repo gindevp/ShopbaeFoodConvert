@@ -26,135 +26,136 @@ import shopbae.food.util.Auth;
 @Component
 public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler {
 
-	private static final String ACCOUNT = "account";
+    private static final String ACCOUNT = "account";
 
-	private static final String MERCHANT = "merchant";
+    private static final String MERCHANT = "merchant";
 
-	private static final String USER = "user";
+    private static final String USER = "user";
 
-	private static final String USER_ID = "userId";
+    private static final String USER_ID = "userId";
 
-	private static final String USERNAME = "username";
+    private static final String USERNAME = "username";
 
-	private static final String AUTHORITIES = "authorities";
+    private static final String AUTHORITIES = "authorities";
 
-	@Autowired
-	ICartService cartService;
-	@Autowired
-	private IAccountService accountService;
+    @Autowired
+    ICartService cartService;
+    @Autowired
+    private IAccountService accountService;
 
-	private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
+    private RedirectStrategy redirectStrategy = new DefaultRedirectStrategy();
 
-	@Override
-	protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
-			throws IOException {
-		System.out.println("auth");
-		String targetUrl = determineTargetUrl(authentication);
+    @Override
+    protected void handle(HttpServletRequest request, HttpServletResponse response, Authentication authentication)
+            throws IOException {
+        System.out.println("auth");
+        String targetUrl = determineTargetUrl(authentication);
 
-		if (response.isCommitted()) {
-			System.out.println("Can't redirect");
-			return;
-		}
-		HttpSession session = request.getSession();
-		session.setMaxInactiveInterval(1600);
-		Account account = accountService.findByName(authentication.getName());
-		session.setAttribute("ss","true");
-		session.setAttribute(ACCOUNT, account);
-		if (account.getMerchant() != null) {
-			session.setAttribute(MERCHANT, account.getMerchant());
-		}
-		if (account.getUser() != null) {
-			if(session.getAttribute("merchant_old_id")!= null) {
-			Long merchant_old_id=(Long) session.getAttribute("merchant_old_id");
-			Long product_old_id=(Long) session.getAttribute("product_old_id");
-			targetUrl="/merchantp/detail/"+merchant_old_id;
-			cartService.addCart(product_old_id, account.getUser().getId());
-			session.removeAttribute("merchant_old_id");
-			session.removeAttribute("product_old_id");
-			session.setAttribute("message","da dang nhap");
-			session.setAttribute("name",account.getUser().getName());
-			session.setAttribute("avatar", account.getUser().getAvatar());
-			session.setAttribute("role", "user");
-			
-			}
-			session.setAttribute(USER, account.getUser());
-			session.setAttribute(USER_ID, account.getUser().getId());
-		}
-		session.setAttribute(USERNAME, account.getUserName());
-		session.setAttribute(AUTHORITIES, authentication.getAuthorities());
+        if (response.isCommitted()) {
+            System.out.println("Can't redirect");
+            return;
+        }
+        HttpSession session = request.getSession();
+        session.setMaxInactiveInterval(1600);
+        Account account = accountService.findByName(authentication.getName());
+        session.setAttribute("ss", "true");
+        session.setAttribute(ACCOUNT, account);
+        if (account.getMerchant() != null) {
+            session.setAttribute(MERCHANT, account.getMerchant());
+        }
+        if (account.getUser() != null) {
+            if (session.getAttribute("merchant_old_id") != null) {
+                Long merchant_old_id = (Long) session.getAttribute("merchant_old_id");
+                Long product_old_id = (Long) session.getAttribute("product_old_id");
+                targetUrl = "/merchantp/detail/" + merchant_old_id;
+                cartService.addCart(product_old_id, account.getUser().getId());
+                session.removeAttribute("merchant_old_id");
+                session.removeAttribute("product_old_id");
+                session.setAttribute("message", "da dang nhap");
+                session.setAttribute("name", account.getUser().getName());
+                session.setAttribute("avatar", account.getUser().getAvatar());
+                session.setAttribute("role", "user");
 
-		redirectStrategy.sendRedirect(request, response, targetUrl);
-	}
+            }
+            session.setAttribute(USER, account.getUser());
+            session.setAttribute(USER_ID, account.getUser().getId());
+        }
+        session.setAttribute(USERNAME, account.getUserName());
+        session.setAttribute(AUTHORITIES, authentication.getAuthorities());
 
-	/* 
-	 * This method extracts the roles of currently logged-in user and returns
-	 * appropriate URL according to his/her role.
-	 */
-	protected String determineTargetUrl(Authentication authentication) {
+        redirectStrategy.sendRedirect(request, response, targetUrl);
+    }
 
-		String url = "";
+    /*
+     * This method extracts the roles of currently logged-in user and returns
+     * appropriate URL according to his/her role.
+     */
+    protected String determineTargetUrl(Authentication authentication) {
 
-		Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
+        String url = "";
 
-		List<String> roles = new ArrayList<String>();
+        Collection<? extends GrantedAuthority> authorities = authentication.getAuthorities();
 
-		for (GrantedAuthority a : authorities) {
-			roles.add(a.getAuthority());
-		}
-		if (isAdmin(roles)) {
-			url = "/admin";
-			return url;
-		}
+        List<String> roles = new ArrayList<String>();
 
-		if (isMerchant(roles)) {
-			url = "/merchant";
-			return url;
-		}
+        for (GrantedAuthority a : authorities) {
+            roles.add(a.getAuthority());
+        }
+        if (isAdmin(roles)) {
+            url = "/admin";
+            return url;
+        }
 
-		if (isUser(roles)) {
-			url = "/home";
-			return url;
-		}
+        if (isMerchant(roles)) {
+            url = "/merchant";
+            return url;
+        }
 
-		return url;
-	}
+        if (isUser(roles)) {
+            url = "/home";
+            return url;
+        }
 
-	private boolean isUser(List<String> roles) {
-		if (roles.contains(Auth.ROLE_USER.toString())) {
-			return true;
-		}
-		return false;
-	}
+        return url;
+    }
 
-	private boolean isAdmin(List<String> roles) {
-		if (roles.contains(Auth.ROLE_ADMIN.toString())) {
-			return true;
-		}
-		return false;
-	}
+    private boolean isUser(List<String> roles) {
+        if (roles.contains(Auth.ROLE_USER.toString())) {
+            return true;
+        }
+        return false;
+    }
 
-	private boolean isMerchant(List<String> roles) {
-		if (roles.contains(Auth.ROLE_MERCHANT.toString())) {
-			return true;
-		}
-		return false;
-	}
+    private boolean isAdmin(List<String> roles) {
+        if (roles.contains(Auth.ROLE_ADMIN.toString())) {
+            return true;
+        }
+        return false;
+    }
 
-	public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
-		this.redirectStrategy = redirectStrategy;
-	}
+    private boolean isMerchant(List<String> roles) {
+        if (roles.contains(Auth.ROLE_MERCHANT.toString())) {
+            return true;
+        }
+        return false;
+    }
 
-	protected RedirectStrategy getRedirectStrategy() {
-		return redirectStrategy;
-	}
-	@Override
+    public void setRedirectStrategy(RedirectStrategy redirectStrategy) {
+        this.redirectStrategy = redirectStrategy;
+    }
+
+    protected RedirectStrategy getRedirectStrategy() {
+        return redirectStrategy;
+    }
+
+    @Override
     public void onAuthenticationSuccess(HttpServletRequest request, HttpServletResponse response,
             Authentication authentication) throws IOException, ServletException {
         Account account = accountService.findByName(authentication.getName());
         if (account.getFailedAttempt() > 0) {
             accountService.resetFailedAttempts(account);
         }
-         
+
         super.onAuthenticationSuccess(request, response, authentication);
     }
 

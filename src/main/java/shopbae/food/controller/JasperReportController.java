@@ -92,6 +92,6 @@ public class JasperReportController {
 		Order order2= orderService.findById(orderId);
 		order2.setPdf(fileName);
 		orderService.update(order2);
-		return "account/test/index";
+		return "merchant/view-report";
 	}
 }
